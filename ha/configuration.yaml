@@ -1,0 +1,572 @@
+# packages/foxess-p3-modbus.yaml
+# Pełna integracja Modbus TCP dla FoxESS P3-10.0-SH (komercyjny hybrydowy)
+# Dokument: FOX commercial inverter Modbus V1.05.03.00 (2025-01-15)
+# Slave ID: 247 (najczęściej w P3 – jeśli nie działa, przetestuj 1)
+# IP inwertera: 192.168.1.100 – zmień na swój
+
+modbus:
+  - name: foxess_p3
+    type: tcp
+    host: 192.168.1.100
+    port: 502
+    timeout: 5
+    delay: 0
+    message_wait_milliseconds: 30
+
+    sensors:
+      # ────────────────────────────────────────────────
+      # 1. Informacje statyczne o inwerterze i firmware
+      # ────────────────────────────────────────────────
+      - name: FoxESS Model Name
+        slave: 247
+        address: 30000
+        data_type: string
+        count: 16
+        scan_interval: 300
+
+      - name: FoxESS Serial Number
+        slave: 247
+        address: 30016
+        data_type: string
+        count: 16
+        scan_interval: 300
+
+      - name: FoxESS MFG ID
+        slave: 247
+        address: 30032
+        data_type: string
+        count: 16
+        scan_interval: 300
+
+      - name: FoxESS Master Version
+        slave: 247
+        address: 36001
+        data_type: uint16
+        scan_interval: 300
+
+      - name: FoxESS Slave Version
+        slave: 247
+        address: 36002
+        data_type: uint16
+        scan_interval: 300
+
+      - name: FoxESS Manager Version
+        slave: 247
+        address: 36003
+        data_type: uint16
+        scan_interval: 300
+
+      # Meter1 / Meter2 – podstawowe informacje
+      - name: Meter1 SN
+        slave: 247
+        address: 36100
+        data_type: string
+        count: 16
+        scan_interval: 300
+
+      - name: Meter1 MFG ID
+        slave: 247
+        address: 36116
+        data_type: string
+        count: 16
+        scan_interval: 300
+
+      - name: Meter1 Type
+        slave: 247
+        address: 36132
+        data_type: string
+        count: 16
+        scan_interval: 300
+
+      - name: Meter1 Version
+        slave: 247
+        address: 36148
+        data_type: string
+        count: 1
+        scan_interval: 300
+
+      - name: Meter2 SN
+        slave: 247
+        address: 36200
+        data_type: string
+        count: 16
+        scan_interval: 300
+
+      # ────────────────────────────────────────────────
+      # 2. BMS1 – pełna lista z PDF (str. 6-7)
+      # ────────────────────────────────────────────────
+      - name: BMS1 Connection Status
+        slave: 247
+        address: 37002
+        data_type: uint16
+        scan_interval: 10
+
+      - name: BMS1 Voltage
+        slave: 247
+        address: 37609
+        data_type: uint16
+        scale: 0.1
+        unit_of_measurement: V
+        precision: 1
+        scan_interval: 10
+
+      - name: BMS1 Current
+        slave: 247
+        address: 37610
+        data_type: int16
+        scale: 0.1
+        unit_of_measurement: A
+        precision: 1
+        scan_interval: 10
+
+      - name: BMS1 Ambient Temperature
+        slave: 247
+        address: 37611
+        data_type: int16
+        scale: 0.1
+        unit_of_measurement: "°C"
+        precision: 1
+        scan_interval: 30
+
+      - name: BMS1 SoC
+        slave: 247
+        address: 37612
+        data_type: uint16
+        unit_of_measurement: "%"
+        precision: 0
+        scan_interval: 10
+
+      - name: BMS1 Max Temperature
+        slave: 247
+        address: 37617
+        data_type: int16
+        scale: 0.1
+        unit_of_measurement: "°C"
+        precision: 1
+        scan_interval: 30
+
+      - name: BMS1 Min Temperature
+        slave: 247
+        address: 37618
+        data_type: int16
+        scale: 0.1
+        unit_of_measurement: "°C"
+        precision: 1
+        scan_interval: 30
+
+      - name: BMS1 Max Cell Voltage
+        slave: 247
+        address: 37619
+        data_type: uint16
+        unit_of_measurement: mV
+        precision: 0
+        scan_interval: 30
+
+      - name: BMS1 Min Cell Voltage
+        slave: 247
+        address: 37620
+        data_type: uint16
+        unit_of_measurement: mV
+        precision: 0
+        scan_interval: 30
+
+      - name: BMS1 SOH
+        slave: 247
+        address: 37624
+        data_type: uint16
+        unit_of_measurement: "%"
+        precision: 0
+        scan_interval: 60
+
+      - name: BMS1 Remain Energy
+        slave: 247
+        address: 37632
+        data_type: uint16
+        scale: 0.1
+        unit_of_measurement: Wh
+        precision: 1
+        scan_interval: 60
+
+      - name: BMS1 FCC Capacity
+        slave: 247
+        address: 37633
+        data_type: uint16
+        scale: 0.1
+        unit_of_measurement: Ah
+        precision: 1
+        scan_interval: 300
+
+      - name: BMS1 Design Energy
+        slave: 247
+        address: 37635
+        data_type: uint16
+        scale: 0.1
+        unit_of_measurement: Wh
+        precision: 1
+        scan_interval: 300
+
+      # BMS1 Faults – surowe wartości (dodaj template w HA do bitów)
+      - name: BMS1 Fault1 Raw
+        slave: 247
+        address: 37626
+        data_type: uint16
+        scan_interval: 30
+
+      - name: BMS1 Fault2 Raw
+        slave: 247
+        address: 37627
+        data_type: uint16
+        scan_interval: 30
+
+      - name: BMS1 Fault3 Raw
+        slave: 247
+        address: 37628
+        data_type: uint16
+        scan_interval: 30
+
+      - name: BMS1 Fault4 Raw
+        slave: 247
+        address: 37629
+        data_type: uint16
+        scan_interval: 30
+
+      - name: BMS1 Fault5 Raw
+        slave: 247
+        address: 37630
+        data_type: uint16
+        scan_interval: 30
+
+      - name: BMS1 Fault6 Raw
+        slave: 247
+        address: 37631
+        data_type: uint16
+        scan_interval: 30
+
+      # BMS2 – podstawowe (pełne analogicznie do BMS1, ale tylko kluczowe dla krótszego pliku)
+      - name: BMS2 Connection Status
+        slave: 247
+        address: 37700
+        data_type: uint16
+        scan_interval: 10
+
+      - name: BMS2 Voltage
+        slave: 247
+        address: 38307
+        data_type: uint16
+        scale: 0.1
+        unit_of_measurement: V
+        precision: 1
+        scan_interval: 10
+
+      - name: BMS2 Current
+        slave: 247
+        address: 38308
+        data_type: int16
+        scale: 0.1
+        unit_of_measurement: A
+        precision: 1
+        scan_interval: 10
+
+      - name: BMS2 SoC
+        slave: 247
+        address: 38310
+        data_type: uint16
+        unit_of_measurement: "%"
+        precision: 0
+        scan_interval: 10
+
+      - name: BMS2 SOH
+        slave: 247
+        address: 38322
+        data_type: uint16
+        unit_of_measurement: "%"
+        precision: 0
+        scan_interval: 60
+
+      - name: BMS2 Remain Energy
+        slave: 247
+        address: 38330
+        data_type: uint16
+        scale: 0.1
+        unit_of_measurement: Wh
+        precision: 1
+        scan_interval: 60
+
+      # ────────────────────────────────────────────────
+      # 3. Meter1/CT1 – pełna trójfazowa sieć (kluczowe dla P3)
+      # ────────────────────────────────────────────────
+      - name: Meter1 Connection State
+        slave: 247
+        address: 38801
+        data_type: uint16
+        scan_interval: 10
+
+      - name: Grid R Phase Voltage
+        slave: 247
+        address: 38802
+        data_type: int32
+        scale: 0.1
+        unit_of_measurement: V
+        precision: 1
+        scan_interval: 5
+
+      - name: Grid S Phase Voltage
+        slave: 247
+        address: 38804
+        data_type: int32
+        scale: 0.1
+        unit_of_measurement: V
+        precision: 1
+        scan_interval: 5
+
+      - name: Grid T Phase Voltage
+        slave: 247
+        address: 38806
+        data_type: int32
+        scale: 0.1
+        unit_of_measurement: V
+        precision: 1
+        scan_interval: 5
+
+      - name: Grid R Phase Current
+        slave: 247
+        address: 38808
+        data_type: int32
+        scale: 0.001
+        unit_of_measurement: A
+        precision: 3
+        scan_interval: 5
+
+      - name: Grid S Phase Current
+        slave: 247
+        address: 38810
+        data_type: int32
+        scale: 0.001
+        unit_of_measurement: A
+        precision: 3
+        scan_interval: 5
+
+      - name: Grid T Phase Current
+        slave: 247
+        address: 38812
+        data_type: int32
+        scale: 0.001
+        unit_of_measurement: A
+        precision: 3
+        scan_interval: 5
+
+      - name: Grid Combined Active Power
+        slave: 247
+        address: 38814
+        data_type: int32
+        scale: 0.1
+        unit_of_measurement: W
+        precision: 1
+        scan_interval: 5
+
+      - name: Grid R Phase Active Power
+        slave: 247
+        address: 38816
+        data_type: int32
+        scale: 0.1
+        unit_of_measurement: W
+        precision: 1
+        scan_interval: 5
+
+      - name: Grid S Phase Active Power
+        slave: 247
+        address: 38818
+        data_type: int32
+        scale: 0.1
+        unit_of_measurement: W
+        precision: 1
+        scan_interval: 5
+
+      - name: Grid T Phase Active Power
+        slave: 247
+        address: 38820
+        data_type: int32
+        scale: 0.1
+        unit_of_measurement: W
+        precision: 1
+        scan_interval: 5
+
+      - name: Grid Frequency
+        slave: 247
+        address: 38846
+        data_type: int32
+        scale: 0.01
+        unit_of_measurement: Hz
+        precision: 2
+        scan_interval: 10
+
+      # ────────────────────────────────────────────────
+      # 4. PV – liczba stringów + 4 przykładowe (dodaj więcej jeśli potrzeba)
+      # ────────────────────────────────────────────────
+      - name: Number of PV Strings
+        slave: 247
+        address: 39051
+        data_type: uint16
+        scan_interval: 60
+
+      - name: PV1 Voltage
+        slave: 247
+        address: 39070
+        data_type: int16
+        scale: 0.1
+        unit_of_measurement: V
+        precision: 1
+        scan_interval: 10
+
+      - name: PV1 Current
+        slave: 247
+        address: 39071
+        data_type: int16
+        scale: 0.01
+        unit_of_measurement: A
+        precision: 2
+        scan_interval: 10
+
+      - name: PV2 Voltage
+        slave: 247
+        address: 39072
+        data_type: int16
+        scale: 0.1
+        unit_of_measurement: V
+        precision: 1
+        scan_interval: 10
+
+      - name: PV2 Current
+        slave: 247
+        address: 39073
+        data_type: int16
+        scale: 0.01
+        unit_of_measurement: A
+        precision: 2
+        scan_interval: 10
+
+      - name: PV3 Voltage
+        slave: 247
+        address: 39074
+        data_type: int16
+        scale: 0.1
+        unit_of_measurement: V
+        precision: 1
+        scan_interval: 10
+
+      - name: PV3 Current
+        slave: 247
+        address: 39075
+        data_type: int16
+        scale: 0.01
+        unit_of_measurement: A
+        precision: 2
+        scan_interval: 10
+
+      - name: PV4 Voltage
+        slave: 247
+        address: 39076
+        data_type: int16
+        scale: 0.1
+        unit_of_measurement: V
+        precision: 1
+        scan_interval: 10
+
+      - name: PV4 Current
+        slave: 247
+        address: 39077
+        data_type: int16
+        scale: 0.01
+        unit_of_measurement: A
+        precision: 2
+        scan_interval: 10
+
+      - name: Total PV Input Power
+        slave: 247
+        address: 39118
+        data_type: int32
+        scale: 0.001
+        unit_of_measurement: kW
+        precision: 3
+        scan_interval: 5
+
+      # ────────────────────────────────────────────────
+      # 5. Inwerter / Load / EPS / Runtime
+      # ────────────────────────────────────────────────
+      - name: Inverter Active Power
+        slave: 247
+        address: 39134
+        data_type: int32
+        scale: 0.001
+        unit_of_measurement: kW
+        precision: 3
+        scan_interval: 5
+
+      - name: Load Combined Power
+        slave: 247
+        address: 39225
+        data_type: int32
+        scale: 1
+        unit_of_measurement: W
+        precision: 0
+        scan_interval: 5
+
+      - name: EPS Combined Power
+        slave: 247
+        address: 39216
+        data_type: int32
+        scale: 1
+        unit_of_measurement: W
+        precision: 0
+        scan_interval: 10
+
+      - name: Cumulative Power Generation
+        slave: 247
+        address: 39149
+        data_type: uint32
+        scale: 0.01
+        unit_of_measurement: kWh
+        precision: 2
+        scan_interval: 60
+
+      # ────────────────────────────────────────────────
+      # 6. Energie kumulacyjne i dzienne
+      # ────────────────────────────────────────────────
+      - name: Total PV Energy
+        slave: 247
+        address: 39601
+        data_type: uint32
+        scale: 0.01
+        unit_of_measurement: kWh
+        precision: 2
+        scan_interval: 300
+
+      - name: Daily PV Energy
+        slave: 247
+        address: 39603
+        data_type: uint32
+        scale: 0.01
+        unit_of_measurement: kWh
+        precision: 2
+        scan_interval: 300
+
+      # Dodaj więcej (Battery Charge Total 39605, Discharge 39609, Load Total 39629 itd.) wg potrzeb
+
+    binary_sensors:
+      - name: BMS1 Online
+        slave: 247
+        address: 37002
+        input_type: holding
+        scan_interval: 10
+
+      - name: BMS2 Online
+        slave: 247
+        address: 37700
+        input_type: holding
+        scan_interval: 10
+
+      - name: Meter1 Connected
+        slave: 247
+        address: 38801
+        input_type: holding
+        scan_interval: 10
