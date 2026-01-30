@@ -34,7 +34,7 @@ Projekt ma na celu zebranie i porównanie **pełnych rejestrów Modbus** dla inw
 ├── scripts/
 │   └── test_modbus.py            ← prosty skrypt Python (pymodbus) do testów rejestrów
 └── docs/
-└── foxess-commercial-modbus-v1.05.03.00.pdf  ← oryginalny dokument PDF (opcjonalnie dołączony)
+└── FoxESS Modbus Protocol--20250115 (V1.05.03.00).pdf  ← oryginalny dokument PDF
 
 
 ## Porównanie H3 vs P3 – kluczowe różnice
@@ -55,6 +55,7 @@ Pełne porównanie → [COMPARISON.md](COMPARISON.md)
 
 1. Dodaj do `configuration.yaml`:
 
+```yaml
 modbus:
   - name: foxess_p3
     type: tcp
@@ -86,6 +87,7 @@ modbus:
         scan_interval: 5
 
       # Dodaj więcej z COMPARISON.md
+```
 
 2. Restart HA → sprawdź encje w Ustawienia → Urządzenia i usługi.
 
