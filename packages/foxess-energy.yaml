@@ -1,11 +1,6 @@
-# Włącz integrację Riemann sum (kumulacja energii z mocy)
-# w configuration.yaml
-# riemann: {}
-
 # packages/foxess-energy.yaml
-# MINIMALNA konfiguracja TYLKO do panelu Energia (2026)
-# FoxESS P3 – Modbus TCP + Riemann + Utility Meter
-# Zmodyfikuj IP i slave jeśli potrzeba
+# Minimalna konfiguracja TYLKO do panelu Energia (PV + bateria + sieć + dom)
+# FoxESS P3 – Modbus TCP
 
 modbus:
   - name: foxess_p3
@@ -17,7 +12,7 @@ modbus:
     message_wait_milliseconds: 30
 
     sensors:
-      # PRODUKCJA PV
+      # PV – całkowita i dzienna energia + moc chwilowa
       - name: PV Total Energy
         slave: 247
         address: 39601
@@ -51,7 +46,7 @@ modbus:
         precision: 3
         scan_interval: 5
 
-      # BATERIA
+      # Bateria – SoC + pozostała energia + moc
       - name: Battery SoC
         slave: 247
         address: 37612
@@ -83,7 +78,7 @@ modbus:
         precision: 0
         scan_interval: 5
 
-      # SIEĆ i DOM
+      # Sieć i dom – moc chwilowa
       - name: Grid Power
         slave: 247
         address: 38814
@@ -176,10 +171,6 @@ utility_meter:
   pv_production_daily:
     source: sensor.pv_total_energy
     cycle: daily
-
-  pv_production_monthly:
-    source: sensor.pv_total_energy
-    cycle: monthly
 
   grid_import_daily:
     source: sensor.grid_imported_energy
