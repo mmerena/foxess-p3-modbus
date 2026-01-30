@@ -1,0 +1,173 @@
+# packages/foxess-energy.yaml
+# Minimalna konfiguracja Modbus tylko do panelu Energia w Home Assistant
+# FoxESS P3-10.0-SH (na podstawie protokołu V1.05.03.00 / V1.02.00.00)
+# Slave: 247, IP: 192.168.1.100 – zmień na swoje wartości
+
+# Wejdź w Ustawienia → Energia → dodaj źródła:
+# Solar production → sensor.pv_production_daily (lub monthly)
+# Grid consumption → sensor.grid_import_daily
+# Grid return → sensor.grid_export_daily
+# Home consumption → sensor.home_consumption_daily
+# Battery → sensor.battery_soc + sensor.battery_remaining_energy
+
+modbus:
+  - name: foxess_p3
+    type: tcp
+    host: 192.168.1.100
+    port: 502
+    timeout: 5
+    delay: 0
+    message_wait_milliseconds: 30
+
+    sensors:
+      # ────────────────────────────────────────────────
+      # PRODUKCJA PV – całkowita i dzienna (Solar production)
+      # ────────────────────────────────────────────────
+      - name: PV Total Energy
+        slave: 247
+        address: 39601
+        data_type: uint32
+        scale: 0.01
+        unit_of_measurement: kWh
+        device_class: energy
+        state_class: total_increasing
+        precision: 2
+        scan_interval: 300
+
+      - name: PV Daily Energy
+        slave: 247
+        address: 39603
+        data_type: uint32
+        scale: 0.01
+        unit_of_measurement: kWh
+        device_class: energy
+        state_class: total_increasing
+        precision: 2
+        scan_interval: 300
+
+      # ────────────────────────────────────────────────
+      # MOC CHWILOWA PV (do power flow)
+      # ────────────────────────────────────────────────
+      - name: PV Power
+        slave: 247
+        address: 39118
+        data_type: int32
+        scale: 0.001
+        unit_of_measurement: kW
+        device_class: power
+        state_class: measurement
+        precision: 3
+        scan_interval: 5
+
+      # ────────────────────────────────────────────────
+      # BATERIA – SoC i pozostała energia
+      # ────────────────────────────────────────────────
+      - name: Battery SoC
+        slave: 247
+        address: 37612               # BMS1 SoC (lub 39423 dla system SoC)
+        data_type: uint16
+        unit_of_measurement: "%"
+        device_class: battery
+        state_class: measurement
+        precision: 0
+        scan_interval: 10
+
+      - name: Battery Remaining Energy
+        slave: 247
+        address: 37632               # BMS1 Remain Energy (Wh)
+        data_type: uint16
+        scale: 0.001                 # Wh → kWh
+        unit_of_measurement: kWh
+        device_class: energy
+        state_class: measurement
+        precision: 2
+        scan_interval: 60
+
+      # ────────────────────────────────────────────────
+      # MOC BATERII (charge/discharge) – ujemna = rozładowanie
+      # ────────────────────────────────────────────────
+      - name: Battery Power
+        slave: 247
+        address: 39230               # Battery1 Power (runtime)
+        data_type: int32
+        unit_of_measurement: W
+        device_class: power
+        state_class: measurement
+        precision: 0
+        scan_interval: 5
+
+      # ────────────────────────────────────────────────
+      # SIEĆ – moc chwilowa (dodatnia = eksport, ujemna = import)
+      # ────────────────────────────────────────────────
+      - name: Grid Power
+        slave: 247
+        address: 38814               # Meter1 Combined Active Power
+        data_type: int32
+        scale: 0.1
+        unit_of_measurement: W
+        device_class: power
+        state_class: measurement
+        precision: 1
+        scan_interval: 5
+
+      # ────────────────────────────────────────────────
+      # ZUŻYCIE DOMU – moc chwilowa
+      # ────────────────────────────────────────────────
+      - name: Home Power
+        slave: 247
+        address: 39225               # Load Combined Power
+        data_type: int32
+        unit_of_measurement: W
+        device_class: power
+        state_class: measurement
+        precision: 0
+        scan_interval: 5
+
+# ────────────────────────────────────────────────
+# UTILITY METER – dzienne i miesięczne liczniki (konieczne!)
+# ────────────────────────────────────────────────
+
+utility_meter:
+  pv_production_daily:
+    source: sensor.pv_total_energy
+    cycle: daily
+    unique_id: pv_production_daily
+
+  pv_production_monthly:
+    source: sensor.pv_total_energy
+    cycle: monthly
+    unique_id: pv_production_monthly
+
+  home_consumption_daily:
+    source: sensor.home_power
+    cycle: daily
+    net_consumption: true
+    unique_id: home_consumption_daily
+
+  grid_import_daily:
+    source: sensor.grid_power
+    cycle: daily
+    delta_values: true
+    net_consumption: true
+    unique_id: grid_import_daily
+
+  grid_export_daily:
+    source: sensor.grid_power
+    cycle: daily
+    delta_values: true
+    net_consumption: false
+    unique_id: grid_export_daily
+
+  battery_charge_daily:
+    source: sensor.battery_power
+    cycle: daily
+    delta_values: true
+    net_consumption: true
+    unique_id: battery_charge_daily
+
+  battery_discharge_daily:
+    source: sensor.battery_power
+    cycle: daily
+    delta_values: true
+    net_consumption: false
+    unique_id: battery_discharge_daily
