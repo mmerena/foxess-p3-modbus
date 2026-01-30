@@ -95,6 +95,7 @@ Pełna konfiguracja → ha/configuration.yaml
 
 ## Jak zacząć – ESPHome (most Modbus → HA)
 
+```yaml
 modbus_controller:
   - id: foxess_p3
     address: 247
@@ -120,6 +121,7 @@ sensor:
       - multiply: 0.001
     unit_of_measurement: kW
     update_interval: 10s
+```
 
 Pełna konfiguracja → esphome/foxess-p3.yaml
 
