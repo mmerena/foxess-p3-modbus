@@ -127,6 +127,7 @@ Pełna konfiguracja → esphome/foxess-p3.yaml
 
 ## Testowanie rejestrów (Python + pymodbus)
 
+```python
 # scripts/test_modbus.py
 from pymodbus.client import ModbusTcpClient
 
@@ -140,7 +141,7 @@ if not result.isError():
     print("Model:", model)
 
 client.close()
-
+```
 Uruchom: python scripts/test_modbus.py
 
 ## Licencja
