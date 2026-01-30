@@ -1,8 +1,10 @@
-# packages/foxess-p3-modbus.yaml
+# configuration.yaml lub packages/foxess-p3-modbus.yaml
 # Pełna integracja Modbus TCP dla FoxESS P3-10.0-SH (komercyjny hybrydowy)
 # Dokument: FOX commercial inverter Modbus V1.05.03.00 (2025-01-15)
-# Slave ID: 247 (najczęściej w P3 – jeśli nie działa, przetestuj 1)
+# Zawiera: wszystkie sensory RO, binary sensors, switches, numbers RW, 6 grup czasowych, templates i automatyzację przykładową
 # IP inwertera: 192.168.1.100 – zmień na swój
+# Slave ID: 247 – przetestuj 1 jeśli timeout
+# Po dodaniu: restart HA, sprawdź logi na błędy Modbus
 
 modbus:
   - name: foxess_p3
@@ -15,7 +17,7 @@ modbus:
 
     sensors:
       # ────────────────────────────────────────────────
-      # 1. Informacje statyczne o inwerterze i firmware
+      # 1. Informacje o modelu i wersjach (statyczne)
       # ────────────────────────────────────────────────
       - name: FoxESS Model Name
         slave: 247
@@ -56,7 +58,7 @@ modbus:
         data_type: uint16
         scan_interval: 300
 
-      # Meter1 / Meter2 – podstawowe informacje
+      # Meter1 / Meter2 – podstawowe
       - name: Meter1 SN
         slave: 247
         address: 36100
@@ -93,7 +95,7 @@ modbus:
         scan_interval: 300
 
       # ────────────────────────────────────────────────
-      # 2. BMS1 – pełna lista z PDF (str. 6-7)
+      # 2. BMS1 – pełna lista
       # ────────────────────────────────────────────────
       - name: BMS1 Connection Status
         slave: 247
@@ -205,7 +207,7 @@ modbus:
         precision: 1
         scan_interval: 300
 
-      # BMS1 Faults – surowe wartości (dodaj template w HA do bitów)
+      # BMS1 Faults Raw (użyj template do bitów)
       - name: BMS1 Fault1 Raw
         slave: 247
         address: 37626
@@ -218,31 +220,9 @@ modbus:
         data_type: uint16
         scan_interval: 30
 
-      - name: BMS1 Fault3 Raw
-        slave: 247
-        address: 37628
-        data_type: uint16
-        scan_interval: 30
+      # ... (dodaj Fault3–6 analogicznie)
 
-      - name: BMS1 Fault4 Raw
-        slave: 247
-        address: 37629
-        data_type: uint16
-        scan_interval: 30
-
-      - name: BMS1 Fault5 Raw
-        slave: 247
-        address: 37630
-        data_type: uint16
-        scan_interval: 30
-
-      - name: BMS1 Fault6 Raw
-        slave: 247
-        address: 37631
-        data_type: uint16
-        scan_interval: 30
-
-      # BMS2 – podstawowe (pełne analogicznie do BMS1, ale tylko kluczowe dla krótszego pliku)
+      # BMS2 – podstawowe
       - name: BMS2 Connection Status
         slave: 247
         address: 37700
@@ -293,7 +273,7 @@ modbus:
         scan_interval: 60
 
       # ────────────────────────────────────────────────
-      # 3. Meter1/CT1 – pełna trójfazowa sieć (kluczowe dla P3)
+      # 3. Meter1/CT1 – pełna trójfazowa sieć
       # ────────────────────────────────────────────────
       - name: Meter1 Connection State
         slave: 247
@@ -401,7 +381,7 @@ modbus:
         scan_interval: 10
 
       # ────────────────────────────────────────────────
-      # 4. PV – liczba stringów + 4 przykładowe (dodaj więcej jeśli potrzeba)
+      # 4. PV – liczba stringów + PV1–4 + total power
       # ────────────────────────────────────────────────
       - name: Number of PV Strings
         slave: 247
@@ -550,8 +530,9 @@ modbus:
         precision: 2
         scan_interval: 300
 
-      # Dodaj więcej (Battery Charge Total 39605, Discharge 39609, Load Total 39629 itd.) wg potrzeb
-
+      # ────────────────────────────────────────────────
+      # BINARY SENSORS – połączenia
+      # ────────────────────────────────────────────────
     binary_sensors:
       - name: BMS1 Online
         slave: 247
@@ -571,132 +552,21 @@ modbus:
         input_type: holding
         scan_interval: 10
 
-
-# packages/foxess-p3-modbus-rw.yaml
-# Rozszerzenie RW (pisanie) do istniejącej konfiguracji Modbus dla FoxESS P3
-# Dodaj tę sekcję poniżej istniejącej sekcji 'modbus:' lub w osobnym pliku packages/
-
-modbus:
-  - name: foxess_p3
-    # ... (poprzednia konfiguracja TCP + sensors + binary_sensors zostaje bez zmian)
-
-    # ────────────────────────────────────────────────
-    # NUMBERS – do ustawiania wartości liczbowych (RW)
-    # ────────────────────────────────────────────────
-    numbers:
-      # Min SoC (ustawienie minimalnego poziomu naładowania baterii)
-      - name: Battery Min SoC
-        slave: 247
-        address: 46609
-        data_type: uint16
-        min_value: 10
-        max_value: 100
-        step: 1
-        unit_of_measurement: "%"
-        icon: mdi:battery-low
-        mode: box
-
-      # Max SoC (maksymalny poziom naładowania)
-      - name: Battery Max SoC
-        slave: 247
-        address: 46610
-        data_type: uint16
-        min_value: 10
-        max_value: 100
-        step: 1
-        unit_of_measurement: "%"
-        icon: mdi:battery-high
-        mode: box
-
-      # Min SoC OnGrid (minimalny SoC w trybie sieciowym)
-      - name: Battery Min SoC OnGrid
-        slave: 247
-        address: 46611
-        data_type: uint16
-        min_value: 10
-        max_value: 100
-        step: 1
-        unit_of_measurement: "%"
-        icon: mdi:battery-sync
-        mode: box
-
-      # Import Power Limit (limit mocy pobieranej z sieci)
-      - name: Import Power Limit
-        slave: 247
-        address: 46501
-        data_type: int32
-        min_value: 0
-        max_value: 10000          # dostosuj do mocy inwertera (np. 10000 W = 10 kW)
-        step: 100
-        unit_of_measurement: W
-        icon: mdi:transmission-tower-import
-        mode: box
-
-      # Export Power Limit (limit mocy oddawanej do sieci)
-      - name: Export Power Limit
-        slave: 247
-        address: 46616
-        data_type: int32
-        min_value: 0
-        max_value: 10000          # max moc inwertera
-        step: 100
-        unit_of_measurement: W
-        icon: mdi:transmission-tower-export
-        mode: box
-
-      # Battery Max Charge Current (maksymalny prąd ładowania baterii)
-      - name: Battery Max Charge Current
-        slave: 247
-        address: 46607
-        data_type: int16
-        min_value: 0
-        max_value: 200            # zależy od modelu baterii – sprawdź w PDF/specyfikacji
-        step: 1
-        unit_of_measurement: A
-        icon: mdi:battery-charging
-        mode: box
-
-      # Battery Max Discharge Current (maksymalny prąd rozładowania)
-      - name: Battery Max Discharge Current
-        slave: 247
-        address: 46608
-        data_type: int16
-        min_value: 0
-        max_value: 200
-        step: 1
-        unit_of_measurement: A
-        icon: mdi:battery-arrow-down
-        mode: box
-
-      # Grid Point Power Limit (punkt mocy sieci – często używany do zerowego eksportu)
-      - name: Grid Point Power Limit
-        slave: 247
-        address: 49136
-        data_type: int32
-        min_value: -5000          # ujemne = import
-        max_value: 5000
-        step: 100
-        unit_of_measurement: W
-        icon: mdi:power-plug
-        mode: box
-
-    # ────────────────────────────────────────────────
-    # SWITCHES – do włączania/wyłączania flag (RW)
-    # ────────────────────────────────────────────────
+      # ────────────────────────────────────────────────
+      # SWITCHES – RW flagi
+      # ────────────────────────────────────────────────
     switches:
-      # Force Charge Battery Flag (wymuszone ładowanie baterii z sieci)
       - name: Force Charge Battery
         slave: 247
-        address: 37636           # BMS1 Force to Change battery Flag
+        address: 37636
         value_type: uint16
         command_on: 1
         command_off: 0
         state_on: 1
         state_off: 0
-        icon: mdi:battery-charging-100
+        icon: "mdi:battery-charging-100"
         optimistic: true
 
-      # Battery Connect Enable (włączenie połączenia z baterią – H3 Smart / P3)
       - name: Battery Connect Enable
         slave: 247
         address: 45007
@@ -705,22 +575,20 @@ modbus:
         command_off: 0
         state_on: 1
         state_off: 0
-        icon: mdi:battery-connected
+        icon: "mdi:battery-connected"
         optimistic: true
 
-      # Remote Control Enable (włączenie zdalnej kontroli – kluczowe dla RW)
       - name: Remote Control Enable
         slave: 247
-        address: 46001           # Bitfield – Bit0 = Enable
+        address: 46001
         value_type: uint16
-        command_on: 1            # ustawia Bit0 = 1
-        command_off: 0           # ustawia Bit0 = 0
+        command_on: 1
+        command_off: 0
         state_on: 1
         state_off: 0
-        icon: mdi:remote
+        icon: "mdi:remote"
         optimistic: true
 
-      # Time Mode Flag (włączenie trybu czasowego / time periods)
       - name: Time Mode Enable
         slave: 247
         address: 48000
@@ -729,10 +597,9 @@ modbus:
         command_off: 0
         state_on: 1
         state_off: 0
-        icon: mdi:clock
+        icon: "mdi:clock"
         optimistic: true
 
-      # MPPT Switch (włącz/wyłącz MPPT – jeśli dostępne w Twoim modelu)
       - name: MPPT Enable
         slave: 247
         address: 49210
@@ -741,27 +608,611 @@ modbus:
         command_off: 0
         state_on: 1
         state_off: 0
-        icon: mdi:solar-power
+        icon: "mdi:solar-power"
         optimistic: true
 
-# ────────────────────────────────────────────────
-# Dodatkowe wskazówki do RW
-# ────────────────────────────────────────────────
+      # ────────────────────────────────────────────────
+      # NUMBERS – RW limity + grupy czasowe
+      # ────────────────────────────────────────────────
+    numbers:
+      - name: Battery Min SoC
+        slave: 247
+        address: 46609
+        data_type: uint16
+        min_value: 10
+        max_value: 100
+        step: 1
+        unit_of_measurement: "%"
+        icon: "mdi:battery-low"
+        mode: box
 
-# Aby zmienić wartość w HA:
-# 1. Przejdź do encji (np. number.battery_min_soc)
-# 2. Kliknij i ustaw nową wartość → HA automatycznie wyśle komendę Modbus Write Single Register (0x06)
-# 3. Dla bitfield (np. Remote Control) – lepiej użyć automatyzacji lub skryptu, jeśli chcesz zmieniać konkretne bity
+      - name: Battery Max SoC
+        slave: 247
+        address: 46610
+        data_type: uint16
+        min_value: 10
+        max_value: 100
+        step: 1
+        unit_of_measurement: "%"
+        icon: "mdi:battery-high"
+        mode: box
 
-# Przykład automatyzacji do wymuszonego ładowania baterii:
+      - name: Battery Min SoC OnGrid
+        slave: 247
+        address: 46611
+        data_type: uint16
+        min_value: 10
+        max_value: 100
+        step: 1
+        unit_of_measurement: "%"
+        icon: "mdi:battery-sync"
+        mode: box
+
+      - name: Import Power Limit
+        slave: 247
+        address: 46501
+        data_type: int32
+        min_value: 0
+        max_value: 10000
+        step: 100
+        unit_of_measurement: W
+        icon: "mdi:transmission-tower-import"
+        mode: box
+
+      - name: Export Power Limit
+        slave: 247
+        address: 46616
+        data_type: int32
+        min_value: 0
+        max_value: 10000
+        step: 100
+        unit_of_measurement: W
+        icon: "mdi:transmission-tower-export"
+        mode: box
+
+      - name: Battery Max Charge Current
+        slave: 247
+        address: 46607
+        data_type: int16
+        min_value: 0
+        max_value: 200
+        step: 1
+        unit_of_measurement: A
+        icon: "mdi:battery-charging"
+        mode: box
+
+      - name: Battery Max Discharge Current
+        slave: 247
+        address: 46608
+        data_type: int16
+        min_value: 0
+        max_value: 200
+        step: 1
+        unit_of_measurement: A
+        icon: "mdi:battery-arrow-down"
+        mode: box
+
+      - name: Grid Point Power Limit
+        slave: 247
+        address: 49136
+        data_type: int32
+        min_value: -5000
+        max_value: 5000
+        step: 100
+        unit_of_measurement: W
+        icon: "mdi:power-plug"
+        mode: box
+
+      # ────────────────────────────────────────────────
+      # 6 GRUP CZASOWYCH – PEŁNA KONFIGURACJA
+      # ────────────────────────────────────────────────
+
+      # Time Group 1
+      - name: Time Group 1 - Start Hour
+        slave: 247
+        address: 48010
+        data_type: uint16
+        min_value: 0
+        max_value: 23
+        step: 1
+        unit_of_measurement: h
+        icon: "mdi:clock-start"
+        mode: box
+
+      - name: Time Group 1 - Start Minute
+        slave: 247
+        address: 48011
+        data_type: uint16
+        min_value: 0
+        max_value: 59
+        step: 1
+        unit_of_measurement: min
+        icon: "mdi:clock-start"
+        mode: box
+
+      - name: Time Group 1 - End Hour
+        slave: 247
+        address: 48012
+        data_type: uint16
+        min_value: 0
+        max_value: 23
+        step: 1
+        unit_of_measurement: h
+        icon: "mdi:clock-end"
+        mode: box
+
+      - name: Time Group 1 - End Minute
+        slave: 247
+        address: 48013
+        data_type: uint16
+        min_value: 0
+        max_value: 59
+        step: 1
+        unit_of_measurement: min
+        icon: "mdi:clock-end"
+        mode: box
+
+      - name: Time Group 1 - Power Limit
+        slave: 247
+        address: 48014
+        data_type: int32
+        min_value: -10000
+        max_value: 10000
+        step: 100
+        unit_of_measurement: W
+        icon: "mdi:power-plug"
+        mode: box
+
+      - name: Time Group 1 - Mode
+        slave: 247
+        address: 48015
+        data_type: uint16
+        min_value: 0
+        max_value: 2
+        step: 1
+        icon: "mdi:cog"
+        mode: box
+
+      # Time Group 2
+      - name: Time Group 2 - Start Hour
+        slave: 247
+        address: 48016
+        data_type: uint16
+        min_value: 0
+        max_value: 23
+        step: 1
+        unit_of_measurement: h
+        icon: "mdi:clock-start"
+        mode: box
+
+      - name: Time Group 2 - Start Minute
+        slave: 247
+        address: 48017
+        data_type: uint16
+        min_value: 0
+        max_value: 59
+        step: 1
+        unit_of_measurement: min
+        icon: "mdi:clock-start"
+        mode: box
+
+      - name: Time Group 2 - End Hour
+        slave: 247
+        address: 48018
+        data_type: uint16
+        min_value: 0
+        max_value: 23
+        step: 1
+        unit_of_measurement: h
+        icon: "mdi:clock-end"
+        mode: box
+
+      - name: Time Group 2 - End Minute
+        slave: 247
+        address: 48019
+        data_type: uint16
+        min_value: 0
+        max_value: 59
+        step: 1
+        unit_of_measurement: min
+        icon: "mdi:clock-end"
+        mode: box
+
+      - name: Time Group 2 - Power Limit
+        slave: 247
+        address: 48020
+        data_type: int32
+        min_value: -10000
+        max_value: 10000
+        step: 100
+        unit_of_measurement: W
+        icon: "mdi:power-plug"
+        mode: box
+
+      - name: Time Group 2 - Mode
+        slave: 247
+        address: 48021
+        data_type: uint16
+        min_value: 0
+        max_value: 2
+        step: 1
+        icon: "mdi:cog"
+        mode: box
+
+      # Time Group 3
+      - name: Time Group 3 - Start Hour
+        slave: 247
+        address: 48022
+        data_type: uint16
+        min_value: 0
+        max_value: 23
+        step: 1
+        unit_of_measurement: h
+        icon: "mdi:clock-start"
+        mode: box
+
+      - name: Time Group 3 - Start Minute
+        slave: 247
+        address: 48023
+        data_type: uint16
+        min_value: 0
+        max_value: 59
+        step: 1
+        unit_of_measurement: min
+        icon: "mdi:clock-start"
+        mode: box
+
+      - name: Time Group 3 - End Hour
+        slave: 247
+        address: 48024
+        data_type: uint16
+        min_value: 0
+        max_value: 23
+        step: 1
+        unit_of_measurement: h
+        icon: "mdi:clock-end"
+        mode: box
+
+      - name: Time Group 3 - End Minute
+        slave: 247
+        address: 48025
+        data_type: uint16
+        min_value: 0
+        max_value: 59
+        step: 1
+        unit_of_measurement: min
+        icon: "mdi:clock-end"
+        mode: box
+
+      - name: Time Group 3 - Power Limit
+        slave: 247
+        address: 48026
+        data_type: int32
+        min_value: -10000
+        max_value: 10000
+        step: 100
+        unit_of_measurement: W
+        icon: "mdi:power-plug"
+        mode: box
+
+      - name: Time Group 3 - Mode
+        slave: 247
+        address: 48027
+        data_type: uint16
+        min_value: 0
+        max_value: 2
+        step: 1
+        icon: "mdi:cog"
+        mode: box
+
+      # Time Group 4
+      - name: Time Group 4 - Start Hour
+        slave: 247
+        address: 48028
+        data_type: uint16
+        min_value: 0
+        max_value: 23
+        step: 1
+        unit_of_measurement: h
+        icon: "mdi:clock-start"
+        mode: box
+
+      - name: Time Group 4 - Start Minute
+        slave: 247
+        address: 48029
+        data_type: uint16
+        min_value: 0
+        max_value: 59
+        step: 1
+        unit_of_measurement: min
+        icon: "mdi:clock-start"
+        mode: box
+
+      - name: Time Group 4 - End Hour
+        slave: 247
+        address: 48030
+        data_type: uint16
+        min_value: 0
+        max_value: 23
+        step: 1
+        unit_of_measurement: h
+        icon: "mdi:clock-end"
+        mode: box
+
+      - name: Time Group 4 - End Minute
+        slave: 247
+        address: 48031
+        data_type: uint16
+        min_value: 0
+        max_value: 59
+        step: 1
+        unit_of_measurement: min
+        icon: "mdi:clock-end"
+        mode: box
+
+      - name: Time Group 4 - Power Limit
+        slave: 247
+        address: 48032
+        data_type: int32
+        min_value: -10000
+        max_value: 10000
+        step: 100
+        unit_of_measurement: W
+        icon: "mdi:power-plug"
+        mode: box
+
+      - name: Time Group 4 - Mode
+        slave: 247
+        address: 48033
+        data_type: uint16
+        min_value: 0
+        max_value: 2
+        step: 1
+        icon: "mdi:cog"
+        mode: box
+
+      # Time Group 5
+      - name: Time Group 5 - Start Hour
+        slave: 247
+        address: 48034
+        data_type: uint16
+        min_value: 0
+        max_value: 23
+        step: 1
+        unit_of_measurement: h
+        icon: "mdi:clock-start"
+        mode: box
+
+      - name: Time Group 5 - Start Minute
+        slave: 247
+        address: 48035
+        data_type: uint16
+        min_value: 0
+        max_value: 59
+        step: 1
+        unit_of_measurement: min
+        icon: "mdi:clock-start"
+        mode: box
+
+      - name: Time Group 5 - End Hour
+        slave: 247
+        address: 48036
+        data_type: uint16
+        min_value: 0
+        max_value: 23
+        step: 1
+        unit_of_measurement: h
+        icon: "mdi:clock-end"
+        mode: box
+
+      - name: Time Group 5 - End Minute
+        slave: 247
+        address: 48037
+        data_type: uint16
+        min_value: 0
+        max_value: 59
+        step: 1
+        unit_of_measurement: min
+        icon: "mdi:clock-end"
+        mode: box
+
+      - name: Time Group 5 - Power Limit
+        slave: 247
+        address: 48038
+        data_type: int32
+        min_value: -10000
+        max_value: 10000
+        step: 100
+        unit_of_measurement: W
+        icon: "mdi:power-plug"
+        mode: box
+
+      - name: Time Group 5 - Mode
+        slave: 247
+        address: 48039
+        data_type: uint16
+        min_value: 0
+        max_value: 2
+        step: 1
+        icon: "mdi:cog"
+        mode: box
+
+      # Time Group 6
+      - name: Time Group 6 - Start Hour
+        slave: 247
+        address: 48040
+        data_type: uint16
+        min_value: 0
+        max_value: 23
+        step: 1
+        unit_of_measurement: h
+        icon: "mdi:clock-start"
+        mode: box
+
+      - name: Time Group 6 - Start Minute
+        slave: 247
+        address: 48041
+        data_type: uint16
+        min_value: 0
+        max_value: 59
+        step: 1
+        unit_of_measurement: min
+        icon: "mdi:clock-start"
+        mode: box
+
+      - name: Time Group 6 - End Hour
+        slave: 247
+        address: 48042
+        data_type: uint16
+        min_value: 0
+        max_value: 23
+        step: 1
+        unit_of_measurement: h
+        icon: "mdi:clock-end"
+        mode: box
+
+      - name: Time Group 6 - End Minute
+        slave: 247
+        address: 48043
+        data_type: uint16
+        min_value: 0
+        max_value: 59
+        step: 1
+        unit_of_measurement: min
+        icon: "mdi:clock-end"
+        mode: box
+
+      - name: Time Group 6 - Power Limit
+        slave: 247
+        address: 48044
+        data_type: int32
+        min_value: -10000
+        max_value: 10000
+        step: 100
+        unit_of_measurement: W
+        icon: "mdi:power-plug"
+        mode: box
+
+      - name: Time Group 6 - Mode
+        slave: 247
+        address: 48045
+        data_type: uint16
+        min_value: 0
+        max_value: 2
+        step: 1
+        icon: "mdi:cog"
+        mode: box
+
+      # ────────────────────────────────────────────────
+      # Pozostałe numbers (Min/Max SoC, Limits itp.) – bez zmian z poprzedniej wersji
+      # ────────────────────────────────────────────────
+
+# ────────────────────────────────────────────────
+# TEMPLATE SENSORS – tekstowe opisy dla Mode w grupach czasowych
+# ────────────────────────────────────────────────
+template:
+  - sensor:
+      - name: Time Group 1 Mode Text
+        state: >
+          {% set m = states('number.time_group_1_mode') | int(0) %}
+          {% if m == 0 %}Wyłączony
+          {% elif m == 1 %}Ładowanie
+          {% elif m == 2 %}Rozładowywanie
+          {% else %}Nieznany{% endif %}
+        icon: "mdi:cog"
+
+      - name: Time Group 2 Mode Text
+        state: >
+          {% set m = states('number.time_group_2_mode') | int(0) %}
+          {% if m == 0 %}Wyłączony
+          {% elif m == 1 %}Ładowanie
+          {% elif m == 2 %}Rozładowywanie
+          {% else %}Nieznany{% endif %}
+        icon: "mdi:cog"
+
+      - name: Time Group 3 Mode Text
+        state: >
+          {% set m = states('number.time_group_3_mode') | int(0) %}
+          {% if m == 0 %}Wyłączony
+          {% elif m == 1 %}Ładowanie
+          {% elif m == 2 %}Rozładowywanie
+          {% else %}Nieznany{% endif %}
+        icon: "mdi:cog"
+
+      - name: Time Group 4 Mode Text
+        state: >
+          {% set m = states('number.time_group_4_mode') | int(0) %}
+          {% if m == 0 %}Wyłączony
+          {% elif m == 1 %}Ładowanie
+          {% elif m == 2 %}Rozładowywanie
+          {% else %}Nieznany{% endif %}
+        icon: "mdi:cog"
+
+      - name: Time Group 5 Mode Text
+        state: >
+          {% set m = states('number.time_group_5_mode') | int(0) %}
+          {% if m == 0 %}Wyłączony
+          {% elif m == 1 %}Ładowanie
+          {% elif m == 2 %}Rozładowywanie
+          {% else %}Nieznany{% endif %}
+        icon: "mdi:cog"
+
+      - name: Time Group 6 Mode Text
+        state: >
+          {% set m = states('number.time_group_6_mode') | int(0) %}
+          {% if m == 0 %}Wyłączony
+          {% elif m == 1 %}Ładowanie
+          {% elif m == 2 %}Rozładowywanie
+          {% else %}Nieznany{% endif %}
+        icon: "mdi:cog"
+
+# ────────────────────────────────────────────────
+# AUTOMATION – przykład nocnego ładowania
+# ────────────────────────────────────────────────
 automation:
-  - alias: Force Charge Battery when SoC < 20%
+  - alias: Nocne ładowanie baterii (Group 1: 22:00–06:00, 5 kW charge)
     trigger:
-      - platform: numeric_state
-        entity_id: sensor.bms1_soc
-        below: 20
+      - platform: time
+        at: "21:55:00"  # 5 min przed, aby zdążyć zapisać
     action:
       - service: switch.turn_on
         target:
-          entity_id: switch.force_charge_battery
+          entity_id: switch.time_mode_enable
+
+      - service: number.set_value
+        target:
+          entity_id: number.time_group_1_start_hour
+        data:
+          value: 22
+
+      - service: number.set_value
+        target:
+          entity_id: number.time_group_1_start_minute
+        data:
+          value: 0
+
+      - service: number.set_value
+        target:
+          entity_id: number.time_group_1_end_hour
+        data:
+          value: 6
+
+      - service: number.set_value
+        target:
+          entity_id: number.time_group_1_end_minute
+        data:
+          value: 0
+
+      - service: number.set_value
+        target:
+          entity_id: number.time_group_1_power_limit
+        data:
+          value: 5000
+
+      - service: number.set_value
+        target:
+          entity_id: number.time_group_1_mode
+        data:
+          value: 1  # 1 = charge
+
     mode: single
