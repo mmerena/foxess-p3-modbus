@@ -1,5 +1,6 @@
 # Włącz integrację Riemann sum (kumulacja energii z mocy)
-riemann: {}
+# w configuration.yaml
+# riemann: {}
 
 # packages/foxess-energy.yaml
 # MINIMALNA konfiguracja TYLKO do panelu Energia (2026)
