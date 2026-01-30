@@ -24,6 +24,8 @@ Projekt ma na celu zebranie i porównanie **pełnych rejestrów Modbus** dla inw
 - Projekt dostarcza gotowe konfiguracje dla **Home Assistant** (raw Modbus) i **ESPHome** + szczegółowe porównanie tabelaryczne
 
 ## Zawartość repozytorium
+
+```text
 .
 ├── README.md                     ← ten plik
 ├── COMPARISON.md                 ← maksymalnie rozbudowane porównanie H3 vs P3 (wszystkie rejestry z PDF)
@@ -35,7 +37,7 @@ Projekt ma na celu zebranie i porównanie **pełnych rejestrów Modbus** dla inw
 │   └── test_modbus.py            ← prosty skrypt Python (pymodbus) do testów rejestrów
 └── docs/
 └── FoxESS Modbus Protocol--20250115 (V1.05.03.00).pdf  ← oryginalny dokument PDF
-
+```
 
 ## Porównanie H3 vs P3 – kluczowe różnice
 
