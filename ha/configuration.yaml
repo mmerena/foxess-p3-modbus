@@ -570,3 +570,198 @@ modbus:
         address: 38801
         input_type: holding
         scan_interval: 10
+
+
+# packages/foxess-p3-modbus-rw.yaml
+# Rozszerzenie RW (pisanie) do istniejącej konfiguracji Modbus dla FoxESS P3
+# Dodaj tę sekcję poniżej istniejącej sekcji 'modbus:' lub w osobnym pliku packages/
+
+modbus:
+  - name: foxess_p3
+    # ... (poprzednia konfiguracja TCP + sensors + binary_sensors zostaje bez zmian)
+
+    # ────────────────────────────────────────────────
+    # NUMBERS – do ustawiania wartości liczbowych (RW)
+    # ────────────────────────────────────────────────
+    numbers:
+      # Min SoC (ustawienie minimalnego poziomu naładowania baterii)
+      - name: Battery Min SoC
+        slave: 247
+        address: 46609
+        data_type: uint16
+        min_value: 10
+        max_value: 100
+        step: 1
+        unit_of_measurement: "%"
+        icon: mdi:battery-low
+        mode: box
+
+      # Max SoC (maksymalny poziom naładowania)
+      - name: Battery Max SoC
+        slave: 247
+        address: 46610
+        data_type: uint16
+        min_value: 10
+        max_value: 100
+        step: 1
+        unit_of_measurement: "%"
+        icon: mdi:battery-high
+        mode: box
+
+      # Min SoC OnGrid (minimalny SoC w trybie sieciowym)
+      - name: Battery Min SoC OnGrid
+        slave: 247
+        address: 46611
+        data_type: uint16
+        min_value: 10
+        max_value: 100
+        step: 1
+        unit_of_measurement: "%"
+        icon: mdi:battery-sync
+        mode: box
+
+      # Import Power Limit (limit mocy pobieranej z sieci)
+      - name: Import Power Limit
+        slave: 247
+        address: 46501
+        data_type: int32
+        min_value: 0
+        max_value: 10000          # dostosuj do mocy inwertera (np. 10000 W = 10 kW)
+        step: 100
+        unit_of_measurement: W
+        icon: mdi:transmission-tower-import
+        mode: box
+
+      # Export Power Limit (limit mocy oddawanej do sieci)
+      - name: Export Power Limit
+        slave: 247
+        address: 46616
+        data_type: int32
+        min_value: 0
+        max_value: 10000          # max moc inwertera
+        step: 100
+        unit_of_measurement: W
+        icon: mdi:transmission-tower-export
+        mode: box
+
+      # Battery Max Charge Current (maksymalny prąd ładowania baterii)
+      - name: Battery Max Charge Current
+        slave: 247
+        address: 46607
+        data_type: int16
+        min_value: 0
+        max_value: 200            # zależy od modelu baterii – sprawdź w PDF/specyfikacji
+        step: 1
+        unit_of_measurement: A
+        icon: mdi:battery-charging
+        mode: box
+
+      # Battery Max Discharge Current (maksymalny prąd rozładowania)
+      - name: Battery Max Discharge Current
+        slave: 247
+        address: 46608
+        data_type: int16
+        min_value: 0
+        max_value: 200
+        step: 1
+        unit_of_measurement: A
+        icon: mdi:battery-arrow-down
+        mode: box
+
+      # Grid Point Power Limit (punkt mocy sieci – często używany do zerowego eksportu)
+      - name: Grid Point Power Limit
+        slave: 247
+        address: 49136
+        data_type: int32
+        min_value: -5000          # ujemne = import
+        max_value: 5000
+        step: 100
+        unit_of_measurement: W
+        icon: mdi:power-plug
+        mode: box
+
+    # ────────────────────────────────────────────────
+    # SWITCHES – do włączania/wyłączania flag (RW)
+    # ────────────────────────────────────────────────
+    switches:
+      # Force Charge Battery Flag (wymuszone ładowanie baterii z sieci)
+      - name: Force Charge Battery
+        slave: 247
+        address: 37636           # BMS1 Force to Change battery Flag
+        value_type: uint16
+        command_on: 1
+        command_off: 0
+        state_on: 1
+        state_off: 0
+        icon: mdi:battery-charging-100
+        optimistic: true
+
+      # Battery Connect Enable (włączenie połączenia z baterią – H3 Smart / P3)
+      - name: Battery Connect Enable
+        slave: 247
+        address: 45007
+        value_type: uint16
+        command_on: 1
+        command_off: 0
+        state_on: 1
+        state_off: 0
+        icon: mdi:battery-connected
+        optimistic: true
+
+      # Remote Control Enable (włączenie zdalnej kontroli – kluczowe dla RW)
+      - name: Remote Control Enable
+        slave: 247
+        address: 46001           # Bitfield – Bit0 = Enable
+        value_type: uint16
+        command_on: 1            # ustawia Bit0 = 1
+        command_off: 0           # ustawia Bit0 = 0
+        state_on: 1
+        state_off: 0
+        icon: mdi:remote
+        optimistic: true
+
+      # Time Mode Flag (włączenie trybu czasowego / time periods)
+      - name: Time Mode Enable
+        slave: 247
+        address: 48000
+        value_type: uint16
+        command_on: 1
+        command_off: 0
+        state_on: 1
+        state_off: 0
+        icon: mdi:clock
+        optimistic: true
+
+      # MPPT Switch (włącz/wyłącz MPPT – jeśli dostępne w Twoim modelu)
+      - name: MPPT Enable
+        slave: 247
+        address: 49210
+        value_type: uint16
+        command_on: 1
+        command_off: 0
+        state_on: 1
+        state_off: 0
+        icon: mdi:solar-power
+        optimistic: true
+
+# ────────────────────────────────────────────────
+# Dodatkowe wskazówki do RW
+# ────────────────────────────────────────────────
+
+# Aby zmienić wartość w HA:
+# 1. Przejdź do encji (np. number.battery_min_soc)
+# 2. Kliknij i ustaw nową wartość → HA automatycznie wyśle komendę Modbus Write Single Register (0x06)
+# 3. Dla bitfield (np. Remote Control) – lepiej użyć automatyzacji lub skryptu, jeśli chcesz zmieniać konkretne bity
+
+# Przykład automatyzacji do wymuszonego ładowania baterii:
+automation:
+  - alias: Force Charge Battery when SoC < 20%
+    trigger:
+      - platform: numeric_state
+        entity_id: sensor.bms1_soc
+        below: 20
+    action:
+      - service: switch.turn_on
+        target:
+          entity_id: switch.force_charge_battery
+    mode: single
