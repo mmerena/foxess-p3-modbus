@@ -1,7 +1,10 @@
+# Włącz integrację Riemann sum (kumulacja energii z mocy)
+riemann: {}
+
 # packages/foxess-energy.yaml
-# Minimalna konfiguracja Modbus + Riemann + Utility Meter tylko do panelu Energia w HA
-# FoxESS P3-10.0-SH – Modbus TCP
-# Zmodyfikuj IP, slave i adresy jeśli potrzeba
+# MINIMALNA konfiguracja TYLKO do panelu Energia (2026)
+# FoxESS P3 – Modbus TCP + Riemann + Utility Meter
+# Zmodyfikuj IP i slave jeśli potrzeba
 
 modbus:
   - name: foxess_p3
@@ -13,6 +16,7 @@ modbus:
     message_wait_milliseconds: 30
 
     sensors:
+      # PRODUKCJA PV
       - name: PV Total Energy
         slave: 247
         address: 39601
@@ -46,6 +50,7 @@ modbus:
         precision: 3
         scan_interval: 5
 
+      # BATERIA
       - name: Battery SoC
         slave: 247
         address: 37612
@@ -60,7 +65,7 @@ modbus:
         slave: 247
         address: 37632
         data_type: uint16
-        scale: 0.001                # Wh → kWh
+        scale: 0.001
         unit_of_measurement: kWh
         device_class: energy
         state_class: measurement
@@ -77,6 +82,7 @@ modbus:
         precision: 0
         scan_interval: 5
 
+      # SIEĆ i DOM
       - name: Grid Power
         slave: 247
         address: 38814
@@ -104,25 +110,25 @@ template:
         unit_of_measurement: W
         device_class: power
         state_class: measurement
-        state: "{{ [states('sensor.grid_power') | float(0) * -1, 0] | max | round(0) }}"
+        state: "{{ max(0, states('sensor.grid_power') | float(0) * -1) | round(0) }}"
 
       - name: Grid Export Power
         unit_of_measurement: W
         device_class: power
         state_class: measurement
-        state: "{{ [states('sensor.grid_power') | float(0), 0] | max | round(0) }}"
+        state: "{{ max(0, states('sensor.grid_power') | float(0)) | round(0) }}"
 
       - name: Battery Charge Power
         unit_of_measurement: W
         device_class: power
         state_class: measurement
-        state: "{{ [states('sensor.battery_power') | float(0), 0] | max | round(0) }}"
+        state: "{{ max(0, states('sensor.battery_power') | float(0)) | round(0) }}"
 
       - name: Battery Discharge Power
         unit_of_measurement: W
         device_class: power
         state_class: measurement
-        state: "{{ [states('sensor.battery_power') | float(0) * -1, 0] | max | round(0) }}"
+        state: "{{ max(0, states('sensor.battery_power') | float(0) * -1) | round(0) }}"
 
 riemann:
   - name: Grid Imported Energy
