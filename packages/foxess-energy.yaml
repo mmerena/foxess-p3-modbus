@@ -1,6 +1,8 @@
 # packages/foxess-energy.yaml
-# Minimalna konfiguracja TYLKO do panelu Energia (PV + bateria + sieć + dom)
+# Minimalna konfiguracja Modbus + Riemann tylko do panelu Energia w HA
 # FoxESS P3 – Modbus TCP
+# Używa bezpośrednich rejestrów kumulacyjnych (39601+), gdzie to możliwe
+# Dla grid (brak kumulacyjnego w PDF) – Riemann z mocy chwilowej
 
 modbus:
   - name: foxess_p3
@@ -12,7 +14,7 @@ modbus:
     message_wait_milliseconds: 30
 
     sensors:
-      # PV – całkowita i dzienna energia + moc chwilowa
+      # PRODUKCJA PV – bezpośrednie rejestry kumulacyjne (39601 total, 39603 daily)
       - name: PV Total Energy
         slave: 247
         address: 39601
@@ -35,6 +37,7 @@ modbus:
         precision: 2
         scan_interval: 300
 
+      # Moc PV chwilowa – do power flow (39118 total power kW)
       - name: PV Power
         slave: 247
         address: 39118
@@ -46,7 +49,7 @@ modbus:
         precision: 3
         scan_interval: 5
 
-      # Bateria – SoC + pozostała energia + moc
+      # BATERIA – SoC + kumulacyjna energia charge/discharge (39605 charge total, 39609 discharge total)
       - name: Battery SoC
         slave: 247
         address: 37612
@@ -68,6 +71,29 @@ modbus:
         precision: 2
         scan_interval: 60
 
+      - name: Battery Charge Total Energy
+        slave: 247
+        address: 39605
+        data_type: uint32
+        scale: 0.01
+        unit_of_measurement: kWh
+        device_class: energy
+        state_class: total_increasing
+        precision: 2
+        scan_interval: 300
+
+      - name: Battery Discharge Total Energy
+        slave: 247
+        address: 39609
+        data_type: uint32
+        scale: 0.01
+        unit_of_measurement: kWh
+        device_class: energy
+        state_class: total_increasing
+        precision: 2
+        scan_interval: 300
+
+      # Moc baterii chwilowa – do power flow (39230 Battery1 Power W)
       - name: Battery Power
         slave: 247
         address: 39230
@@ -78,7 +104,7 @@ modbus:
         precision: 0
         scan_interval: 5
 
-      # Sieć i dom – moc chwilowa
+      # SIEĆ – moc chwilowa (38814 Combined Active Power W) – do Riemann
       - name: Grid Power
         slave: 247
         address: 38814
@@ -89,6 +115,18 @@ modbus:
         state_class: measurement
         precision: 1
         scan_interval: 5
+
+      # ZUŻYCIE DOMU – kumulacyjne (39629 Load Energy Total kWh) + moc chwilowa
+      - name: Home Total Energy
+        slave: 247
+        address: 39629
+        data_type: uint32
+        scale: 0.01
+        unit_of_measurement: kWh
+        device_class: energy
+        state_class: total_increasing
+        precision: 2
+        scan_interval: 300
 
       - name: Home Power
         slave: 247
@@ -143,30 +181,6 @@ riemann:
     time_window: 3600
     round: 2
 
-  - name: Home Consumption Energy
-    source: sensor.home_power
-    unit_of_measurement: kWh
-    device_class: energy
-    state_class: total_increasing
-    time_window: 3600
-    round: 2
-
-  - name: Battery Charged Energy
-    source: sensor.battery_charge_power
-    unit_of_measurement: kWh
-    device_class: energy
-    state_class: total_increasing
-    time_window: 3600
-    round: 2
-
-  - name: Battery Discharged Energy
-    source: sensor.battery_discharge_power
-    unit_of_measurement: kWh
-    device_class: energy
-    state_class: total_increasing
-    time_window: 3600
-    round: 2
-
 utility_meter:
   pv_production_daily:
     source: sensor.pv_total_energy
@@ -181,13 +195,13 @@ utility_meter:
     cycle: daily
 
   home_consumption_daily:
-    source: sensor.home_consumption_energy
+    source: sensor.home_total_energy
     cycle: daily
 
   battery_charge_daily:
-    source: sensor.battery_charged_energy
+    source: sensor.battery_charge_total_energy
     cycle: daily
 
   battery_discharge_daily:
-    source: sensor.battery_discharged_energy
+    source: sensor.battery_discharge_total_energy
     cycle: daily
