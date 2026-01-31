@@ -1,21 +1,23 @@
 # packages/foxess-energy.yaml
-# Minimalna konfiguracja Modbus + Riemann tylko do panelu Energia w HA
-# FoxESS P3 – Modbus TCP
-# Używa bezpośrednich rejestrów kumulacyjnych (39601+), gdzie to możliwe
-# Dla grid (brak kumulacyjnego w PDF) – Riemann z mocy chwilowej
+# Kompletna minimalna konfiguracja Modbus + Riemann + Utility Meter TYLKO do panelu Energia
+# FoxESS P3-10.0-SH – Modbus TCP (V1.05.03.00)
+# Wszystkie encje mają unique_id
 
 modbus:
   - name: foxess_p3
     type: tcp
-    host: 192.168.1.100
+    host: 192.168.1.100           # ← zmień na IP Twojego inwertera
     port: 502
     timeout: 5
     delay: 0
     message_wait_milliseconds: 30
 
     sensors:
-      # PRODUKCJA PV – bezpośrednie rejestry kumulacyjne (39601 total, 39603 daily)
+      # ────────────────────────────────────────────────
+      # PRODUKCJA PV – całkowita i dzienna (bezpośrednio z PDF)
+      # ────────────────────────────────────────────────
       - name: PV Total Energy
+        unique_id: foxess_pv_total_energy
         slave: 247
         address: 39601
         data_type: uint32
@@ -27,6 +29,7 @@ modbus:
         scan_interval: 300
 
       - name: PV Daily Energy
+        unique_id: foxess_pv_daily_energy
         slave: 247
         address: 39603
         data_type: uint32
@@ -37,8 +40,9 @@ modbus:
         precision: 2
         scan_interval: 300
 
-      # Moc PV chwilowa – do power flow (39118 total power kW)
+      # Moc PV całkowita – do power flow
       - name: PV Power
+        unique_id: foxess_pv_power
         slave: 247
         address: 39118
         data_type: int32
@@ -49,8 +53,142 @@ modbus:
         precision: 3
         scan_interval: 5
 
-      # BATERIA – SoC + kumulacyjna energia charge/discharge (39605 charge total, 39609 discharge total)
+      # ────────────────────────────────────────────────
+      # PV PER STRING – moc chwilowa i wyliczona energia (Riemann)
+      # ────────────────────────────────────────────────
+      # PV1
+      - name: PV1 Voltage
+        unique_id: foxess_pv1_voltage
+        slave: 247
+        address: 39070
+        data_type: int16
+        scale: 0.1
+        unit_of_measurement: V
+        device_class: voltage
+        state_class: measurement
+        precision: 1
+        scan_interval: 10
+
+      - name: PV1 Current
+        unique_id: foxess_pv1_current
+        slave: 247
+        address: 39071
+        data_type: int16
+        scale: 0.01
+        unit_of_measurement: A
+        device_class: current
+        state_class: measurement
+        precision: 2
+        scan_interval: 10
+
+      - name: PV1 Power
+        unique_id: foxess_pv1_power
+        unit_of_measurement: W
+        device_class: power
+        state_class: measurement
+        state: "{{ (states('sensor.foxess_pv1_voltage') | float(0) * states('sensor.foxess_pv1_current') | float(0) * 1000) | round(0) }}"
+
+      # PV2
+      - name: PV2 Voltage
+        unique_id: foxess_pv2_voltage
+        slave: 247
+        address: 39072
+        data_type: int16
+        scale: 0.1
+        unit_of_measurement: V
+        device_class: voltage
+        state_class: measurement
+        precision: 1
+        scan_interval: 10
+
+      - name: PV2 Current
+        unique_id: foxess_pv2_current
+        slave: 247
+        address: 39073
+        data_type: int16
+        scale: 0.01
+        unit_of_measurement: A
+        device_class: current
+        state_class: measurement
+        precision: 2
+        scan_interval: 10
+
+      - name: PV2 Power
+        unique_id: foxess_pv2_power
+        unit_of_measurement: W
+        device_class: power
+        state_class: measurement
+        state: "{{ (states('sensor.foxess_pv2_voltage') | float(0) * states('sensor.foxess_pv2_current') | float(0) * 1000) | round(0) }}"
+
+      # PV3
+      - name: PV3 Voltage
+        unique_id: foxess_pv3_voltage
+        slave: 247
+        address: 39074
+        data_type: int16
+        scale: 0.1
+        unit_of_measurement: V
+        device_class: voltage
+        state_class: measurement
+        precision: 1
+        scan_interval: 10
+
+      - name: PV3 Current
+        unique_id: foxess_pv3_current
+        slave: 247
+        address: 39075
+        data_type: int16
+        scale: 0.01
+        unit_of_measurement: A
+        device_class: current
+        state_class: measurement
+        precision: 2
+        scan_interval: 10
+
+      - name: PV3 Power
+        unique_id: foxess_pv3_power
+        unit_of_measurement: W
+        device_class: power
+        state_class: measurement
+        state: "{{ (states('sensor.foxess_pv3_voltage') | float(0) * states('sensor.foxess_pv3_current') | float(0) * 1000) | round(0) }}"
+
+      # PV4
+      - name: PV4 Voltage
+        unique_id: foxess_pv4_voltage
+        slave: 247
+        address: 39076
+        data_type: int16
+        scale: 0.1
+        unit_of_measurement: V
+        device_class: voltage
+        state_class: measurement
+        precision: 1
+        scan_interval: 10
+
+      - name: PV4 Current
+        unique_id: foxess_pv4_current
+        slave: 247
+        address: 39077
+        data_type: int16
+        scale: 0.01
+        unit_of_measurement: A
+        device_class: current
+        state_class: measurement
+        precision: 2
+        scan_interval: 10
+
+      - name: PV4 Power
+        unique_id: foxess_pv4_power
+        unit_of_measurement: W
+        device_class: power
+        state_class: measurement
+        state: "{{ (states('sensor.foxess_pv4_voltage') | float(0) * states('sensor.foxess_pv4_current') | float(0) * 1000) | round(0) }}"
+
+      # ────────────────────────────────────────────────
+      # BATERIA – SoC + kumulacyjna energia + moc
+      # ────────────────────────────────────────────────
       - name: Battery SoC
+        unique_id: foxess_battery_soc
         slave: 247
         address: 37612
         data_type: uint16
@@ -61,6 +199,7 @@ modbus:
         scan_interval: 10
 
       - name: Battery Remaining Energy
+        unique_id: foxess_battery_remaining_energy
         slave: 247
         address: 37632
         data_type: uint16
@@ -72,6 +211,7 @@ modbus:
         scan_interval: 60
 
       - name: Battery Charge Total Energy
+        unique_id: foxess_battery_charge_total_energy
         slave: 247
         address: 39605
         data_type: uint32
@@ -83,6 +223,7 @@ modbus:
         scan_interval: 300
 
       - name: Battery Discharge Total Energy
+        unique_id: foxess_battery_discharge_total_energy
         slave: 247
         address: 39609
         data_type: uint32
@@ -93,8 +234,8 @@ modbus:
         precision: 2
         scan_interval: 300
 
-      # Moc baterii chwilowa – do power flow (39230 Battery1 Power W)
       - name: Battery Power
+        unique_id: foxess_battery_power
         slave: 247
         address: 39230
         data_type: int32
@@ -104,8 +245,11 @@ modbus:
         precision: 0
         scan_interval: 5
 
-      # SIEĆ – moc chwilowa (38814 Combined Active Power W) – do Riemann
+      # ────────────────────────────────────────────────
+      # SIEĆ – moc chwilowa (do Riemann)
+      # ────────────────────────────────────────────────
       - name: Grid Power
+        unique_id: foxess_grid_power
         slave: 247
         address: 38814
         data_type: int32
@@ -116,8 +260,11 @@ modbus:
         precision: 1
         scan_interval: 5
 
-      # ZUŻYCIE DOMU – kumulacyjne (39629 Load Energy Total kWh) + moc chwilowa
+      # ────────────────────────────────────────────────
+      # ZUŻYCIE DOMU – kumulacyjne + moc chwilowa
+      # ────────────────────────────────────────────────
       - name: Home Total Energy
+        unique_id: foxess_home_total_energy
         slave: 247
         address: 39629
         data_type: uint32
@@ -129,6 +276,7 @@ modbus:
         scan_interval: 300
 
       - name: Home Power
+        unique_id: foxess_home_power
         slave: 247
         address: 39225
         data_type: int32
@@ -138,35 +286,79 @@ modbus:
         precision: 0
         scan_interval: 5
 
+# ────────────────────────────────────────────────
+# TEMPLATE – rozdzielenie import/eksport i charge/discharge
+# ────────────────────────────────────────────────
+
 template:
   - sensor:
       - name: Grid Import Power
+        unique_id: foxess_grid_import_power
         unit_of_measurement: W
         device_class: power
         state_class: measurement
-        state: "{{ max(0, states('sensor.grid_power') | float(0) * -1) | round(0) }}"
+        state: "{{ max(0, states('sensor.foxess_grid_power') | float(0) * -1) | round(0) }}"
 
       - name: Grid Export Power
+        unique_id: foxess_grid_export_power
         unit_of_measurement: W
         device_class: power
         state_class: measurement
-        state: "{{ max(0, states('sensor.grid_power') | float(0)) | round(0) }}"
+        state: "{{ max(0, states('sensor.foxess_grid_power') | float(0)) | round(0) }}"
 
       - name: Battery Charge Power
+        unique_id: foxess_battery_charge_power
         unit_of_measurement: W
         device_class: power
         state_class: measurement
-        state: "{{ max(0, states('sensor.battery_power') | float(0)) | round(0) }}"
+        state: "{{ max(0, states('sensor.foxess_battery_power') | float(0)) | round(0) }}"
 
       - name: Battery Discharge Power
+        unique_id: foxess_battery_discharge_power
         unit_of_measurement: W
         device_class: power
         state_class: measurement
-        state: "{{ max(0, states('sensor.battery_power') | float(0) * -1) | round(0) }}"
+        state: "{{ max(0, states('sensor.foxess_battery_power') | float(0) * -1) | round(0) }}"
+
+# ────────────────────────────────────────────────
+# RIEMANN – kumulacja energii per string i inne
+# ────────────────────────────────────────────────
 
 riemann:
+  - name: PV1 Energy
+    source: sensor.foxess_pv1_power
+    unit_of_measurement: kWh
+    device_class: energy
+    state_class: total_increasing
+    time_window: 3600
+    round: 2
+
+  - name: PV2 Energy
+    source: sensor.foxess_pv2_power
+    unit_of_measurement: kWh
+    device_class: energy
+    state_class: total_increasing
+    time_window: 3600
+    round: 2
+
+  - name: PV3 Energy
+    source: sensor.foxess_pv3_power
+    unit_of_measurement: kWh
+    device_class: energy
+    state_class: total_increasing
+    time_window: 3600
+    round: 2
+
+  - name: PV4 Energy
+    source: sensor.foxess_pv4_power
+    unit_of_measurement: kWh
+    device_class: energy
+    state_class: total_increasing
+    time_window: 3600
+    round: 2
+
   - name: Grid Imported Energy
-    source: sensor.grid_import_power
+    source: sensor.foxess_grid_import_power
     unit_of_measurement: kWh
     device_class: energy
     state_class: total_increasing
@@ -174,16 +366,44 @@ riemann:
     round: 2
 
   - name: Grid Exported Energy
-    source: sensor.grid_export_power
+    source: sensor.foxess_grid_export_power
     unit_of_measurement: kWh
     device_class: energy
     state_class: total_increasing
     time_window: 3600
     round: 2
 
+  - name: Home Consumption Energy
+    source: sensor.foxess_home_power
+    unit_of_measurement: kWh
+    device_class: energy
+    state_class: total_increasing
+    time_window: 3600
+    round: 2
+
+  - name: Battery Charged Energy
+    source: sensor.foxess_battery_charge_power
+    unit_of_measurement: kWh
+    device_class: energy
+    state_class: total_increasing
+    time_window: 3600
+    round: 2
+
+  - name: Battery Discharged Energy
+    source: sensor.foxess_battery_discharge_power
+    unit_of_measurement: kWh
+    device_class: energy
+    state_class: total_increasing
+    time_window: 3600
+    round: 2
+
+# ────────────────────────────────────────────────
+# UTILITY METER – dzienne liczniki (wszystko z unique_id)
+# ────────────────────────────────────────────────
+
 utility_meter:
   pv_production_daily:
-    source: sensor.pv_total_energy
+    source: sensor.foxess_pv_total_energy
     cycle: daily
 
   grid_import_daily:
@@ -195,13 +415,29 @@ utility_meter:
     cycle: daily
 
   home_consumption_daily:
-    source: sensor.home_total_energy
+    source: sensor.foxess_home_total_energy
     cycle: daily
 
   battery_charge_daily:
-    source: sensor.battery_charge_total_energy
+    source: sensor.foxess_battery_charge_total_energy
     cycle: daily
 
   battery_discharge_daily:
-    source: sensor.battery_discharge_total_energy
+    source: sensor.foxess_battery_discharge_total_energy
+    cycle: daily
+
+  pv1_production_daily:
+    source: sensor.pv1_energy
+    cycle: daily
+
+  pv2_production_daily:
+    source: sensor.pv2_energy
+    cycle: daily
+
+  pv3_production_daily:
+    source: sensor.pv3_energy
+    cycle: daily
+
+  pv4_production_daily:
+    source: sensor.pv4_energy
     cycle: daily
