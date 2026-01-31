@@ -1,6 +1,7 @@
 # packages/foxess-energy.yaml
-# Kompletna minimalna konfiguracja Modbus + Riemann + Utility Meter TYLKO do panelu Energia
+# Minimalna konfiguracja Modbus + Riemann + Utility Meter TYLKO do panelu Energia
 # FoxESS P3-10.0-SH – Modbus TCP (V1.05.03.00)
+# PV per string – ograniczony do 3 (jak w instrukcji ENH3SmartP3SManualV1.3.pdf sekcja 4.1)
 # Wszystkie encje mają unique_id
 
 modbus:
@@ -54,7 +55,7 @@ modbus:
         scan_interval: 5
 
       # ────────────────────────────────────────────────
-      # PV PER STRING – moc chwilowa i wyliczona energia (Riemann)
+      # PV PER STRING – moc chwilowa i wyliczona energia (Riemann) – tylko 3 stringi
       # ────────────────────────────────────────────────
       # PV1
       - name: PV1 Voltage
@@ -151,38 +152,6 @@ modbus:
         device_class: power
         state_class: measurement
         state: "{{ (states('sensor.foxess_pv3_voltage') | float(0) * states('sensor.foxess_pv3_current') | float(0) * 1000) | round(0) }}"
-
-      # PV4
-      - name: PV4 Voltage
-        unique_id: foxess_pv4_voltage
-        slave: 247
-        address: 39076
-        data_type: int16
-        scale: 0.1
-        unit_of_measurement: V
-        device_class: voltage
-        state_class: measurement
-        precision: 1
-        scan_interval: 10
-
-      - name: PV4 Current
-        unique_id: foxess_pv4_current
-        slave: 247
-        address: 39077
-        data_type: int16
-        scale: 0.01
-        unit_of_measurement: A
-        device_class: current
-        state_class: measurement
-        precision: 2
-        scan_interval: 10
-
-      - name: PV4 Power
-        unique_id: foxess_pv4_power
-        unit_of_measurement: W
-        device_class: power
-        state_class: measurement
-        state: "{{ (states('sensor.foxess_pv4_voltage') | float(0) * states('sensor.foxess_pv4_current') | float(0) * 1000) | round(0) }}"
 
       # ────────────────────────────────────────────────
       # BATERIA – SoC + kumulacyjna energia + moc
@@ -321,7 +290,7 @@ template:
         state: "{{ max(0, states('sensor.foxess_battery_power') | float(0) * -1) | round(0) }}"
 
 # ────────────────────────────────────────────────
-# RIEMANN – kumulacja energii per string i inne
+# RIEMANN – kumulacja energii per string (do 3)
 # ────────────────────────────────────────────────
 
 riemann:
@@ -343,14 +312,6 @@ riemann:
 
   - name: PV3 Energy
     source: sensor.foxess_pv3_power
-    unit_of_measurement: kWh
-    device_class: energy
-    state_class: total_increasing
-    time_window: 3600
-    round: 2
-
-  - name: PV4 Energy
-    source: sensor.foxess_pv4_power
     unit_of_measurement: kWh
     device_class: energy
     state_class: total_increasing
@@ -381,24 +342,8 @@ riemann:
     time_window: 3600
     round: 2
 
-  - name: Battery Charged Energy
-    source: sensor.foxess_battery_charge_power
-    unit_of_measurement: kWh
-    device_class: energy
-    state_class: total_increasing
-    time_window: 3600
-    round: 2
-
-  - name: Battery Discharged Energy
-    source: sensor.foxess_battery_discharge_power
-    unit_of_measurement: kWh
-    device_class: energy
-    state_class: total_increasing
-    time_window: 3600
-    round: 2
-
 # ────────────────────────────────────────────────
-# UTILITY METER – dzienne liczniki (wszystko z unique_id)
+# UTILITY METER – dzienne liczniki
 # ────────────────────────────────────────────────
 
 utility_meter:
@@ -415,7 +360,7 @@ utility_meter:
     cycle: daily
 
   home_consumption_daily:
-    source: sensor.foxess_home_total_energy
+    source: sensor.home_consumption_energy
     cycle: daily
 
   battery_charge_daily:
@@ -436,8 +381,4 @@ utility_meter:
 
   pv3_production_daily:
     source: sensor.pv3_energy
-    cycle: daily
-
-  pv4_production_daily:
-    source: sensor.pv4_energy
     cycle: daily
