@@ -154,7 +154,7 @@ modbus:
         scale: 0.001
         unit_of_measurement: kWh
         device_class: energy
-        state_class: measurement
+        state_class: total_increasing
         precision: 2
         scan_interval: 60
 
