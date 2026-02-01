@@ -82,13 +82,6 @@ modbus:
         precision: 2
         scan_interval: 10
 
-      - name: PV1 Power
-        unique_id: foxess_pv1_power
-        unit_of_measurement: W
-        device_class: power
-        state_class: measurement
-        state: "{{ (states('sensor.foxess_pv1_voltage') | float(0) * states('sensor.foxess_pv1_current') | float(0) * 1000) | round(0) }}"
-
       # PV2
       - name: PV2 Voltage
         unique_id: foxess_pv2_voltage
@@ -114,13 +107,6 @@ modbus:
         precision: 2
         scan_interval: 10
 
-      - name: PV2 Power
-        unique_id: foxess_pv2_power
-        unit_of_measurement: W
-        device_class: power
-        state_class: measurement
-        state: "{{ (states('sensor.foxess_pv2_voltage') | float(0) * states('sensor.foxess_pv2_current') | float(0) * 1000) | round(0) }}"
-
       # PV3
       - name: PV3 Voltage
         unique_id: foxess_pv3_voltage
@@ -145,13 +131,6 @@ modbus:
         state_class: measurement
         precision: 2
         scan_interval: 10
-
-      - name: PV3 Power
-        unique_id: foxess_pv3_power
-        unit_of_measurement: W
-        device_class: power
-        state_class: measurement
-        state: "{{ (states('sensor.foxess_pv3_voltage') | float(0) * states('sensor.foxess_pv3_current') | float(0) * 1000) | round(0) }}"
 
       # ────────────────────────────────────────────────
       # BATERIA – SoC + kumulacyjna energia + moc
@@ -261,6 +240,27 @@ modbus:
 
 template:
   - sensor:
+      - name: PV1 Power
+        unique_id: foxess_pv1_power
+        unit_of_measurement: W
+        device_class: power
+        state_class: measurement
+        state: "{{ (states('sensor.foxess_pv1_voltage') | float(0) * states('sensor.foxess_pv1_current') | float(0) * 1000) | round(0) }}"
+
+      - name: PV2 Power
+        unique_id: foxess_pv2_power
+        unit_of_measurement: W
+        device_class: power
+        state_class: measurement
+        state: "{{ (states('sensor.foxess_pv2_voltage') | float(0) * states('sensor.foxess_pv2_current') | float(0) * 1000) | round(0) }}"
+
+      - name: PV3 Power
+        unique_id: foxess_pv3_power
+        unit_of_measurement: W
+        device_class: power
+        state_class: measurement
+        state: "{{ (states('sensor.foxess_pv3_voltage') | float(0) * states('sensor.foxess_pv3_current') | float(0) * 1000) | round(0) }}"
+
       - name: Grid Import Power
         unique_id: foxess_grid_import_power
         unit_of_measurement: W
