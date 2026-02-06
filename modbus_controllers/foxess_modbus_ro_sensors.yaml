@@ -1,0 +1,2445 @@
+# =============================================================================
+# foxess_modbus_ro_sensors.yaml
+# =============================================================================
+# Wszystkie sensory tylko do odczytu (RO) z dokumentacji FOX Inwerter Modbus
+# Wersja dokumentacji: V1.02.00.00
+# Slave ID / Modbus address: 247
+# Data ostatniej aktualizacji: luty 2026
+#
+# Zawiera:
+# - informacje o modelu, SN, protocol version
+# - PV strings (napięcia, prądy, moce, MPPT)
+# - bateria (napięcie, prąd, moc, SoC, energia ładowania/rozładowania)
+# - sieć / Meter1 i Meter2 (napięcia, prądy, moce czynne/bierne/pozorne, PF, freq)
+# - EPS / backup (napięcia, prądy, moce, częstotliwość)
+# - obciążenie (Load R/S/T + Combined)
+# - energia kumulowana (PV, bateria, sieć, zużycie, obciążenie – całkowita i dzienna)
+# - statusy inwertera (Status 1, Status 3, tryb off-grid/on-grid)
+#
+# Nastawy RW / sterowanie / automatyzacja – w osobnym pliku (foxess_modbus_rw_sensors.yaml)
+# Wszystkie sensory mają scan_interval dostosowany do typu danych
+# (60 s dla dynamicznych, 300–3600 s dla statycznych/energii)
+#
+# Wymagana konfiguracja w configuration.yaml:
+# modbus_controller: !include_dir_merge_list modbus_controllers
+# lub jeśli wolisz osobne include'y:
+# modbus_controller:
+#   - !include foxess_modbus_ro_sensors.yaml
+#   - !include foxess_modbus_rw_sensors.yaml
+# =============================================================================
+
+modbus_controller:
+  - id: foxess_ro
+    name: FoxESS Inwerter RO (odczyt)
+    type: tcp
+    host: 192.168.1.100
+    port: 502
+    timeout: 5
+    delay: 0.1
+    retry_count: 3
+
+    sensors:
+      - name: "FoxESS 001 Model Name"
+        unique_id: foxess_001_model_name
+        address: 30000
+        slave: 247
+        data_type: string
+        data_size: 16
+        scan_interval: 3600
+
+      - name: "FoxESS 002 Serial Number"
+        unique_id: foxess_002_serial_number
+        address: 30016
+        slave: 247
+        data_type: string
+        data_size: 16
+        scan_interval: 3600
+
+      - name: "FoxESS 003 MFG ID"
+        unique_id: foxess_003_mfg_id
+        address: 30032
+        slave: 247
+        data_type: string
+        data_size: 16
+        scan_interval: 3600
+
+      - name: "FoxESS 004 Master Version"
+        unique_id: foxess_004_master_version
+        address: 36001
+        slave: 247
+        data_type: uint16
+        data_size: 1
+        scan_interval: 3600
+
+      - name: "FoxESS 005 Slave Version"
+        unique_id: foxess_005_slave_version
+        address: 36002
+        slave: 247
+        data_type: uint16
+        data_size: 1
+        scan_interval: 3600
+
+      - name: "FoxESS 006 Manager Version"
+        unique_id: foxess_006_manager_version
+        address: 36003
+        slave: 247
+        data_type: uint16
+        data_size: 1
+        scan_interval: 3600
+
+      - name: "FoxESS 007 Meter1 SN"
+        unique_id: foxess_007_meter1_sn
+        address: 36100
+        slave: 247
+        data_type: string
+        data_size: 16
+        scan_interval: 3600
+
+      - name: "FoxESS 008 Meter1 MFG ID"
+        unique_id: foxess_008_meter1_mfg_id
+        address: 36116
+        slave: 247
+        data_type: string
+        data_size: 16
+        scan_interval: 3600
+
+      - name: "FoxESS 009 Meter1 TYPE"
+        unique_id: foxess_009_meter1_type
+        address: 36132
+        slave: 247
+        data_type: string
+        data_size: 16
+        scan_interval: 3600
+
+      - name: "FoxESS 010 Meter1 Version"
+        unique_id: foxess_010_meter1_version
+        address: 36148
+        slave: 247
+        data_type: string
+        data_size: 1
+        scan_interval: 3600
+
+      - name: "FoxESS 011 Meter2 SN"
+        unique_id: foxess_011_meter2_sn
+        address: 36200
+        slave: 247
+        data_type: string
+        data_size: 16
+        scan_interval: 3600
+
+      - name: "FoxESS 012 Meter2 MFG ID"
+        unique_id: foxess_012_meter2_mfg_id
+        address: 36216
+        slave: 247
+        data_type: string
+        data_size: 16
+        scan_interval: 3600
+
+      - name: "FoxESS 013 Meter2 TYPE"
+        unique_id: foxess_013_meter2_type
+        address: 36232
+        slave: 247
+        data_type: string
+        data_size: 16
+        scan_interval: 3600
+
+      - name: "FoxESS 014 Meter2 Version"
+        unique_id: foxess_014_meter2_version
+        address: 36248
+        slave: 247
+        data_type: string
+        data_size: 1
+        scan_interval: 3600
+
+      - name: "FoxESS 015 BMS1 Connection Status"
+        unique_id: foxess_015_bms1_connection_status
+        address: 37002
+        slave: 247
+        data_type: uint16
+        data_size: 1
+        scan_interval: 3600
+
+      - name: "FoxESS 016 BMS1 Master Version"
+        unique_id: foxess_016_bms1_master_version
+        address: 37003
+        slave: 247
+        data_type: uint16
+        data_size: 1
+        scan_interval: 3600
+
+      - name: "FoxESS 017 BMS1 Master Type"
+        unique_id: foxess_017_bms1_master_type
+        address: 37004
+        slave: 247
+        data_type: uint16
+        data_size: 1
+        scan_interval: 3600
+
+      - name: "FoxESS 018 BMS1 Master SN"
+        unique_id: foxess_018_bms1_master_sn
+        address: 37005
+        slave: 247
+        data_type: string
+        data_size: 16
+        scan_interval: 3600
+
+      - name: "FoxESS 019 BMS1 Slave Number"
+        unique_id: foxess_019_bms1_slave_number
+        address: 37032
+        slave: 247
+        data_type: uint16
+        data_size: 1
+        scan_interval: 3600
+
+      - name: "FoxESS 020 BMS1 Slave 1 Version"
+        unique_id: foxess_020_bms1_slave1_version
+        address: 37033
+        slave: 247
+        data_type: uint16
+        data_size: 1
+        scan_interval: 3600
+
+      - name: "FoxESS 021 BMS1 Slave 2 Version"
+        unique_id: foxess_021_bms1_slave2_version
+        address: 37034
+        slave: 247
+        data_type: uint16
+        data_size: 1
+        scan_interval: 3600
+
+      - name: "FoxESS 022 BMS1 Slave 1 SN"
+        unique_id: foxess_022_bms1_slave1_sn
+        address: 37097
+        slave: 247
+        data_type: string
+        data_size: 16
+        scan_interval: 3600
+
+      - name: "FoxESS 023 BMS1 Slave 2 SN"
+        unique_id: foxess_023_bms1_slave2_sn
+        address: 37113
+        slave: 247
+        data_type: string
+        data_size: 16
+        scan_interval: 3600
+
+      - name: "FoxESS 024 BMS1 Voltage"
+        unique_id: foxess_024_bms1_voltage
+        address: 37609
+        slave: 247
+        data_type: uint16
+        data_size: 1
+        value_template: "{{ value / 10 }}"
+        unit_of_measurement: V
+        device_class: voltage
+        state_class: measurement
+        scan_interval: 60
+
+      - name: "FoxESS 025 BMS1 Current"
+        unique_id: foxess_025_bms1_current
+        address: 37610
+        slave: 247
+        data_type: int16
+        data_size: 1
+        value_template: "{{ value / 10 }}"
+        unit_of_measurement: A
+        device_class: current
+        state_class: measurement
+        scan_interval: 60
+
+      - name: "FoxESS 026 BMS1 Ambient Temperature"
+        unique_id: foxess_026_bms1_ambient_temperature
+        address: 37611
+        slave: 247
+        data_type: int16
+        data_size: 1
+        value_template: "{{ value / 10 }}"
+        unit_of_measurement: °C
+        device_class: temperature
+        state_class: measurement
+        scan_interval: 60
+
+      - name: "FoxESS 027 BMS1 SoC"
+        unique_id: foxess_027_bms1_soc
+        address: 37612
+        slave: 247
+        data_type: uint16
+        data_size: 1
+        unit_of_measurement: "%"
+        device_class: battery
+        state_class: measurement
+        scan_interval: 60
+
+      - name: "FoxESS 028 BMS1 Max Temperature"
+        unique_id: foxess_028_bms1_max_temperature
+        address: 37617
+        slave: 247
+        data_type: int16
+        data_size: 1
+        value_template: "{{ value / 10 }}"
+        unit_of_measurement: °C
+        device_class: temperature
+        state_class: measurement
+        scan_interval: 60
+
+      - name: "FoxESS 029 BMS1 Min Temperature"
+        unique_id: foxess_029_bms1_min_temperature
+        address: 37618
+        slave: 247
+        data_type: int16
+        data_size: 1
+        value_template: "{{ value / 10 }}"
+        unit_of_measurement: °C
+        device_class: temperature
+        state_class: measurement
+        scan_interval: 60
+
+      - name: "FoxESS 030 BMS1 Max Cell Voltage"
+        unique_id: foxess_030_bms1_max_cell_voltage
+        address: 37619
+        slave: 247
+        data_type: uint16
+        data_size: 1
+        unit_of_measurement: mV
+        device_class: voltage
+        state_class: measurement
+        scan_interval: 60
+
+      - name: "FoxESS 031 BMS1 Min Cell Voltage"
+        unique_id: foxess_031_bms1_min_cell_voltage
+        address: 37620
+        slave: 247
+        data_type: uint16
+        data_size: 1
+        unit_of_measurement: mV
+        device_class: voltage
+        state_class: measurement
+        scan_interval: 60
+
+      - name: "FoxESS 032 BMS1 SOH"
+        unique_id: foxess_032_bms1_soh
+        address: 37624
+        slave: 247
+        data_type: uint16
+        data_size: 1
+        unit_of_measurement: "%"
+        device_class: battery
+        state_class: measurement
+        scan_interval: 300
+
+      - name: "FoxESS 033 BMS1 Fault1"
+        unique_id: foxess_033_bms1_fault1
+        address: 37626
+        slave: 247
+        data_type: uint16
+        data_size: 1
+        scan_interval: 60
+
+      - name: "FoxESS 034 BMS1 Fault2"
+        unique_id: foxess_034_bms1_fault2
+        address: 37627
+        slave: 247
+        data_type: uint16
+        data_size: 1
+        scan_interval: 60
+
+      - name: "FoxESS 035 BMS1 Fault3"
+        unique_id: foxess_035_bms1_fault3
+        address: 37628
+        slave: 247
+        data_type: uint16
+        data_size: 1
+        scan_interval: 60
+
+      - name: "FoxESS 036 BMS1 Fault4"
+        unique_id: foxess_036_bms1_fault4
+        address: 37629
+        slave: 247
+        data_type: uint16
+        data_size: 1
+        scan_interval: 60
+
+      - name: "FoxESS 037 BMS1 Fault5"
+        unique_id: foxess_037_bms1_fault5
+        address: 37630
+        slave: 247
+        data_type: uint16
+        data_size: 1
+        scan_interval: 60
+
+      - name: "FoxESS 038 BMS1 Fault6"
+        unique_id: foxess_038_bms1_fault6
+        address: 37631
+        slave: 247
+        data_type: uint16
+        data_size: 1
+        scan_interval: 60
+
+      - name: "FoxESS 039 BMS1 Remain Energy"
+        unique_id: foxess_039_bms1_remain_energy
+        address: 37632
+        slave: 247
+        data_type: uint16
+        data_size: 1
+        value_template: "{{ value / 10 }}"
+        unit_of_measurement: Wh
+        device_class: energy
+        state_class: measurement
+        scan_interval: 60
+
+      - name: "FoxESS 040 BMS1 FCC Capacity"
+        unique_id: foxess_040_bms1_fcc_capacity
+        address: 37633
+        slave: 247
+        data_type: uint16
+        data_size: 1
+        value_template: "{{ value / 10 }}"
+        unit_of_measurement: Ah
+        state_class: measurement
+        scan_interval: 300
+
+      - name: "FoxESS 042 BMS1 Design Energy"
+        unique_id: foxess_042_bms1_design_energy
+        address: 37635
+        slave: 247
+        data_type: uint16
+        data_size: 1
+        value_template: "{{ value / 10 }}"
+        unit_of_measurement: Wh
+        device_class: energy
+        state_class: measurement
+        scan_interval: 3600
+
+      - name: "FoxESS 043 BMS1 Force Charge Flag"
+        unique_id: foxess_043_bms1_force_charge_flag
+        address: 37636
+        slave: 247
+        data_type: uint16
+        data_size: 1
+        scan_interval: 60
+
+      - name: "FoxESS 044 BMS2 Connection Status"
+        unique_id: foxess_044_bms2_connection_status
+        address: 37700
+        slave: 247
+        data_type: uint16
+        data_size: 1
+        scan_interval: 60
+
+      - name: "FoxESS 045 BMS2 Master Version"
+        unique_id: foxess_045_bms2_master_version
+        address: 37701
+        slave: 247
+        data_type: uint16
+        data_size: 1
+        scan_interval: 3600
+
+      - name: "FoxESS 046 BMS2 Master Type"
+        unique_id: foxess_046_bms2_master_type
+        address: 37702
+        slave: 247
+        data_type: uint16
+        data_size: 1
+        scan_interval: 3600
+
+      - name: "FoxESS 047 BMS2 Master SN"
+        unique_id: foxess_047_bms2_master_sn
+        address: 37703
+        slave: 247
+        data_type: string
+        data_size: 16
+        scan_interval: 3600
+
+      - name: "FoxESS 048 BMS2 Slave Number"
+        unique_id: foxess_048_bms2_slave_number
+        address: 37730
+        slave: 247
+        data_type: uint16
+        data_size: 1
+        scan_interval: 3600
+
+      - name: "FoxESS 049 BMS2 Slave 1 Version"
+        unique_id: foxess_049_bms2_slave1_version
+        address: 37731
+        slave: 247
+        data_type: uint16
+        data_size: 1
+        scan_interval: 3600
+
+      - name: "FoxESS 050 BMS2 Slave 2 Version"
+        unique_id: foxess_050_bms2_slave2_version
+        address: 37732
+        slave: 247
+        data_type: uint16
+        data_size: 1
+        scan_interval: 3600
+
+      - name: "FoxESS 051 BMS2 Slave 1 SN"
+        unique_id: foxess_051_bms2_slave1_sn
+        address: 37795
+        slave: 247
+        data_type: string
+        data_size: 16
+        scan_interval: 3600
+
+      - name: "FoxESS 052 BMS2 Slave 2 SN"
+        unique_id: foxess_052_bms2_slave2_sn
+        address: 37811
+        slave: 247
+        data_type: string
+        data_size: 16
+        scan_interval: 3600
+
+      - name: "FoxESS 053 BMS2 Voltage"
+        unique_id: foxess_053_bms2_voltage
+        address: 38307
+        slave: 247
+        data_type: uint16
+        data_size: 1
+        value_template: "{{ value / 10 }}"
+        unit_of_measurement: V
+        device_class: voltage
+        state_class: measurement
+        scan_interval: 60
+
+      - name: "FoxESS 054 BMS2 Current"
+        unique_id: foxess_054_bms2_current
+        address: 38308
+        slave: 247
+        data_type: int16
+        data_size: 1
+        value_template: "{{ value / 10 }}"
+        unit_of_measurement: A
+        device_class: current
+        state_class: measurement
+        scan_interval: 60
+
+      - name: "FoxESS 055 BMS2 Ambient Temperature"
+        unique_id: foxess_055_bms2_ambient_temperature
+        address: 38309
+        slave: 247
+        data_type: int16
+        data_size: 1
+        value_template: "{{ value / 10 }}"
+        unit_of_measurement: °C
+        device_class: temperature
+        state_class: measurement
+        scan_interval: 60
+
+      - name: "FoxESS 056 BMS2 SoC"
+        unique_id: foxess_056_bms2_soc
+        address: 38310
+        slave: 247
+        data_type: uint16
+        data_size: 1
+        unit_of_measurement: "%"
+        device_class: battery
+        state_class: measurement
+        scan_interval: 60
+
+      - name: "FoxESS 057 BMS2 Max Temperature"
+        unique_id: foxess_057_bms2_max_temperature
+        address: 38315
+        slave: 247
+        data_type: int16
+        data_size: 1
+        value_template: "{{ value / 10 }}"
+        unit_of_measurement: °C
+        device_class: temperature
+        state_class: measurement
+        scan_interval: 60
+
+      - name: "FoxESS 058 BMS2 Min Temperature"
+        unique_id: foxess_058_bms2_min_temperature
+        address: 38316
+        slave: 247
+        data_type: int16
+        data_size: 1
+        value_template: "{{ value / 10 }}"
+        unit_of_measurement: °C
+        device_class: temperature
+        state_class: measurement
+        scan_interval: 60
+
+      - name: "FoxESS 059 BMS2 Max Cell Voltage"
+        unique_id: foxess_059_bms2_max_cell_voltage
+        address: 38317
+        slave: 247
+        data_type: uint16
+        data_size: 1
+        unit_of_measurement: mV
+        device_class: voltage
+        state_class: measurement
+        scan_interval: 60
+
+      - name: "FoxESS 060 BMS2 Min Cell Voltage"
+        unique_id: foxess_060_bms2_min_cell_voltage
+        address: 38318
+        slave: 247
+        data_type: uint16
+        data_size: 1
+        unit_of_measurement: mV
+        device_class: voltage
+        state_class: measurement
+        scan_interval: 60
+
+      - name: "FoxESS 061 BMS2 SOH"
+        unique_id: foxess_061_bms2_soh
+        address: 38322
+        slave: 247
+        data_type: uint16
+        data_size: 1
+        unit_of_measurement: "%"
+        device_class: battery
+        state_class: measurement
+        scan_interval: 300
+
+      - name: "FoxESS 062 BMS2 Fault1"
+        unique_id: foxess_062_bms2_fault1
+        address: 38324
+        slave: 247
+        data_type: uint16
+        data_size: 1
+        scan_interval: 60
+
+      - name: "FoxESS 063 BMS2 Fault2"
+        unique_id: foxess_063_bms2_fault2
+        address: 38325
+        slave: 247
+        data_type: uint16
+        data_size: 1
+        scan_interval: 60
+
+      - name: "FoxESS 064 BMS2 Fault3"
+        unique_id: foxess_064_bms2_fault3
+        address: 38326
+        slave: 247
+        data_type: uint16
+        data_size: 1
+        scan_interval: 60
+
+      - name: "FoxESS 065 BMS2 Fault4"
+        unique_id: foxess_065_bms2_fault4
+        address: 38327
+        slave: 247
+        data_type: uint16
+        data_size: 1
+        scan_interval: 60
+
+      - name: "FoxESS 066 BMS2 Fault5"
+        unique_id: foxess_066_bms2_fault5
+        address: 38328
+        slave: 247
+        data_type: uint16
+        data_size: 1
+        scan_interval: 60
+
+      - name: "FoxESS 067 BMS2 Fault6"
+        unique_id: foxess_067_bms2_fault6
+        address: 38329
+        slave: 247
+        data_type: uint16
+        data_size: 1
+        scan_interval: 60
+
+      - name: "FoxESS 068 BMS2 Remain Energy"
+        unique_id: foxess_068_bms2_remain_energy
+        address: 38330
+        slave: 247
+        data_type: uint16
+        data_size: 1
+        value_template: "{{ value / 10 }}"
+        unit_of_measurement: Wh
+        device_class: energy
+        state_class: measurement
+        scan_interval: 60
+
+      - name: "FoxESS 069 BMS2 FCC Capacity"
+        unique_id: foxess_069_bms2_fcc_capacity
+        address: 38331
+        slave: 247
+        data_type: uint16
+        data_size: 1
+        value_template: "{{ value / 10 }}"
+        unit_of_measurement: Ah
+        state_class: measurement
+        scan_interval: 300
+
+      - name: "FoxESS 071 BMS2 Design Energy"
+        unique_id: foxess_071_bms2_design_energy
+        address: 38333
+        slave: 247
+        data_type: uint16
+        data_size: 1
+        value_template: "{{ value / 10 }}"
+        unit_of_measurement: Wh
+        device_class: energy
+        state_class: measurement
+        scan_interval: 3600
+
+      - name: "FoxESS 072 BMS2 Force Charge Flag"
+        unique_id: foxess_072_bms2_force_charge_flag
+        address: 38334
+        slave: 247
+        data_type: uint16
+        data_size: 1
+        scan_interval: 60
+
+      - name: "FoxESS 073 Meter1 CT1 Connection State"
+        unique_id: foxess_073_meter1_ct1_connection_state
+        address: 38801
+        slave: 247
+        data_type: uint16
+        data_size: 1
+        scan_interval: 60
+
+      - name: "FoxESS 074 Meter1 CT1 R Phase Voltage"
+        unique_id: foxess_074_meter1_ct1_r_phase_voltage
+        address: 38802
+        slave: 247
+        data_type: int32
+        data_size: 2
+        value_template: "{{ value / 10 }}"
+        unit_of_measurement: V
+        device_class: voltage
+        state_class: measurement
+        scan_interval: 60
+
+      - name: "FoxESS 075 Meter1 CT1 S Phase Voltage"
+        unique_id: foxess_075_meter1_ct1_s_phase_voltage
+        address: 38804
+        slave: 247
+        data_type: int32
+        data_size: 2
+        value_template: "{{ value / 10 }}"
+        unit_of_measurement: V
+        device_class: voltage
+        state_class: measurement
+        scan_interval: 60
+
+      - name: "FoxESS 076 Meter1 CT1 T Phase Voltage"
+        unique_id: foxess_076_meter1_ct1_t_phase_voltage
+        address: 38806
+        slave: 247
+        data_type: int32
+        data_size: 2
+        value_template: "{{ value / 10 }}"
+        unit_of_measurement: V
+        device_class: voltage
+        state_class: measurement
+        scan_interval: 60
+
+      - name: "FoxESS 077 Meter1 CT1 R Phase Current"
+        unique_id: foxess_077_meter1_ct1_r_phase_current
+        address: 38808
+        slave: 247
+        data_type: int32
+        data_size: 2
+        value_template: "{{ value / 1000 }}"
+        unit_of_measurement: A
+        device_class: current
+        state_class: measurement
+        scan_interval: 60
+
+      - name: "FoxESS 078 Meter1 CT1 S Phase Current"
+        unique_id: foxess_078_meter1_ct1_s_phase_current
+        address: 38810
+        slave: 247
+        data_type: int32
+        data_size: 2
+        value_template: "{{ value / 1000 }}"
+        unit_of_measurement: A
+        device_class: current
+        state_class: measurement
+        scan_interval: 60
+
+      - name: "FoxESS 079 Meter1 CT1 T Phase Current"
+        unique_id: foxess_079_meter1_ct1_t_phase_current
+        address: 38812
+        slave: 247
+        data_type: int32
+        data_size: 2
+        value_template: "{{ value / 1000 }}"
+        unit_of_measurement: A
+        device_class: current
+        state_class: measurement
+        scan_interval: 60
+
+      - name: "FoxESS 080 Meter1 CT1 Combined Active Power"
+        unique_id: foxess_080_meter1_ct1_combined_active_power
+        address: 38814
+        slave: 247
+        data_type: int32
+        data_size: 2
+        value_template: "{{ value / 10 }}"
+        unit_of_measurement: W
+        device_class: power
+        state_class: measurement
+        scan_interval: 60
+
+      - name: "FoxESS 081 Meter1 CT1 R Phase Active Power"
+        unique_id: foxess_081_meter1_ct1_r_phase_active_power
+        address: 38816
+        slave: 247
+        data_type: int32
+        data_size: 2
+        value_template: "{{ value / 10 }}"
+        unit_of_measurement: W
+        device_class: power
+        state_class: measurement
+        scan_interval: 60
+
+      - name: "FoxESS 082 Meter1 CT1 S Phase Active Power"
+        unique_id: foxess_082_meter1_ct1_s_phase_active_power
+        address: 38818
+        slave: 247
+        data_type: int32
+        data_size: 2
+        value_template: "{{ value / 10 }}"
+        unit_of_measurement: W
+        device_class: power
+        state_class: measurement
+        scan_interval: 60
+
+      - name: "FoxESS 083 Meter1 CT1 T Phase Active Power"
+        unique_id: foxess_083_meter1_ct1_t_phase_active_power
+        address: 38820
+        slave: 247
+        data_type: int32
+        data_size: 2
+        value_template: "{{ value / 10 }}"
+        unit_of_measurement: W
+        device_class: power
+        state_class: measurement
+        scan_interval: 60
+
+      - name: "FoxESS 084 Meter1 CT1 Combined Reactive Power"
+        unique_id: foxess_084_meter1_ct1_combined_reactive_power
+        address: 38822
+        slave: 247
+        data_type: int32
+        data_size: 2
+        value_template: "{{ value / 10 }}"
+        unit_of_measurement: var
+        device_class: reactive_power
+        state_class: measurement
+        scan_interval: 60
+
+      - name: "FoxESS 085 Meter1 CT1 R Phase Reactive Power"
+        unique_id: foxess_085_meter1_ct1_r_phase_reactive_power
+        address: 38824
+        slave: 247
+        data_type: int32
+        data_size: 2
+        value_template: "{{ value / 10 }}"
+        unit_of_measurement: var
+        device_class: reactive_power
+        state_class: measurement
+        scan_interval: 60
+
+      - name: "FoxESS 086 Meter1 CT1 S Phase Reactive Power"
+        unique_id: foxess_086_meter1_ct1_s_phase_reactive_power
+        address: 38826
+        slave: 247
+        data_type: int32
+        data_size: 2
+        value_template: "{{ value / 10 }}"
+        unit_of_measurement: var
+        device_class: reactive_power
+        state_class: measurement
+        scan_interval: 60
+
+      - name: "FoxESS 087 Meter1 CT1 T Phase Reactive Power"
+        unique_id: foxess_087_meter1_ct1_t_phase_reactive_power
+        address: 38828
+        slave: 247
+        data_type: int32
+        data_size: 2
+        value_template: "{{ value / 10 }}"
+        unit_of_measurement: var
+        device_class: reactive_power
+        state_class: measurement
+        scan_interval: 60
+
+      - name: "FoxESS 088 Meter1 CT1 Combined Apparent Power"
+        unique_id: foxess_088_meter1_ct1_combined_apparent_power
+        address: 38830
+        slave: 247
+        data_type: int32
+        data_size: 2
+        value_template: "{{ value / 10 }}"
+        unit_of_measurement: VA
+        device_class: apparent_power
+        state_class: measurement
+        scan_interval: 60
+
+      - name: "FoxESS 089 Meter1 CT1 R Phase Apparent Power"
+        unique_id: foxess_089_meter1_ct1_r_phase_apparent_power
+        address: 38832
+        slave: 247
+        data_type: int32
+        data_size: 2
+        value_template: "{{ value / 10 }}"
+        unit_of_measurement: VA
+        device_class: apparent_power
+        state_class: measurement
+        scan_interval: 60
+
+      - name: "FoxESS 090 Meter1 CT1 S Phase Apparent Power"
+        unique_id: foxess_090_meter1_ct1_s_phase_apparent_power
+        address: 38834
+        slave: 247
+        data_type: int32
+        data_size: 2
+        value_template: "{{ value / 10 }}"
+        unit_of_measurement: VA
+        device_class: apparent_power
+        state_class: measurement
+        scan_interval: 60
+
+      - name: "FoxESS 091 Meter1 CT1 T Phase Apparent Power"
+        unique_id: foxess_091_meter1_ct1_t_phase_apparent_power
+        address: 38836
+        slave: 247
+        data_type: int32
+        data_size: 2
+        value_template: "{{ value / 10 }}"
+        unit_of_measurement: VA
+        device_class: apparent_power
+        state_class: measurement
+        scan_interval: 60
+
+      - name: "FoxESS 092 Meter1 CT1 Combined Power Factor"
+        unique_id: foxess_092_meter1_ct1_combined_power_factor
+        address: 38838
+        slave: 247
+        data_type: int32
+        data_size: 2
+        value_template: "{{ value / 1000 }}"
+        unit_of_measurement: ""
+        device_class: power_factor
+        state_class: measurement
+        scan_interval: 60
+
+      - name: "FoxESS 093 Meter1 CT1 R Phase Power Factor"
+        unique_id: foxess_093_meter1_ct1_r_phase_power_factor
+        address: 38840
+        slave: 247
+        data_type: int32
+        data_size: 2
+        value_template: "{{ value / 1000 }}"
+        unit_of_measurement: ""
+        device_class: power_factor
+        state_class: measurement
+        scan_interval: 60
+
+      - name: "FoxESS 094 Meter1 CT1 S Phase Power Factor"
+        unique_id: foxess_094_meter1_ct1_s_phase_power_factor
+        address: 38842
+        slave: 247
+        data_type: int32
+        data_size: 2
+        value_template: "{{ value / 1000 }}"
+        unit_of_measurement: ""
+        device_class: power_factor
+        state_class: measurement
+        scan_interval: 60
+
+      - name: "FoxESS 095 Meter1 CT1 T Phase Power Factor"
+        unique_id: foxess_095_meter1_ct1_t_phase_power_factor
+        address: 38844
+        slave: 247
+        data_type: int32
+        data_size: 2
+        value_template: "{{ value / 1000 }}"
+        unit_of_measurement: ""
+        device_class: power_factor
+        state_class: measurement
+        scan_interval: 60
+
+      - name: "FoxESS 096 Meter1 CT1 Frequency"
+        unique_id: foxess_096_meter1_ct1_frequency
+        address: 38846
+        slave: 247
+        data_type: int32
+        data_size: 2
+        value_template: "{{ value / 100 }}"
+        unit_of_measurement: Hz
+        device_class: frequency
+        state_class: measurement
+        scan_interval: 60
+
+      - name: "FoxESS 097 Meter2 CT2 Connection State"
+        unique_id: foxess_097_meter2_ct2_connection_state
+        address: 38901
+        slave: 247
+        data_type: uint16
+        data_size: 1
+        scan_interval: 60
+
+      - name: "FoxESS 098 Meter2 CT2 R Phase Voltage"
+        unique_id: foxess_098_meter2_ct2_r_phase_voltage
+        address: 38902
+        slave: 247
+        data_type: int32
+        data_size: 2
+        value_template: "{{ value / 10 }}"
+        unit_of_measurement: V
+        device_class: voltage
+        state_class: measurement
+        scan_interval: 60
+
+      - name: "FoxESS 099 Meter2 CT2 S Phase Voltage"
+        unique_id: foxess_099_meter2_ct2_s_phase_voltage
+        address: 38904
+        slave: 247
+        data_type: int32
+        data_size: 2
+        value_template: "{{ value / 10 }}"
+        unit_of_measurement: V
+        device_class: voltage
+        state_class: measurement
+        scan_interval: 60
+
+      - name: "FoxESS 100 Meter2 CT2 T Phase Voltage"
+        unique_id: foxess_100_meter2_ct2_t_phase_voltage
+        address: 38906
+        slave: 247
+        data_type: int32
+        data_size: 2
+        value_template: "{{ value / 10 }}"
+        unit_of_measurement: V
+        device_class: voltage
+        state_class: measurement
+        scan_interval: 60
+
+      - name: "FoxESS 101 Meter2 CT2 R Phase Current"
+        unique_id: foxess_101_meter2_ct2_r_phase_current
+        address: 38908
+        slave: 247
+        data_type: int32
+        data_size: 2
+        value_template: "{{ value / 1000 }}"
+        unit_of_measurement: A
+        device_class: current
+        state_class: measurement
+        scan_interval: 60
+
+      - name: "FoxESS 102 Meter2 CT2 S Phase Current"
+        unique_id: foxess_102_meter2_ct2_s_phase_current
+        address: 38910
+        slave: 247
+        data_type: int32
+        data_size: 2
+        value_template: "{{ value / 1000 }}"
+        unit_of_measurement: A
+        device_class: current
+        state_class: measurement
+        scan_interval: 60
+
+      - name: "FoxESS 103 Meter2 CT2 T Phase Current"
+        unique_id: foxess_103_meter2_ct2_t_phase_current
+        address: 38912
+        slave: 247
+        data_type: int32
+        data_size: 2
+        value_template: "{{ value / 1000 }}"
+        unit_of_measurement: A
+        device_class: current
+        state_class: measurement
+        scan_interval: 60
+
+      - name: "FoxESS 104 Meter2 CT2 Combined Active Power"
+        unique_id: foxess_104_meter2_ct2_combined_active_power
+        address: 38914
+        slave: 247
+        data_type: int32
+        data_size: 2
+        value_template: "{{ value / 10 }}"
+        unit_of_measurement: W
+        device_class: power
+        state_class: measurement
+        scan_interval: 60
+
+      - name: "FoxESS 105 Meter2 CT2 R Phase Active Power"
+        unique_id: foxess_105_meter2_ct2_r_phase_active_power
+        address: 38916
+        slave: 247
+        data_type: int32
+        data_size: 2
+        value_template: "{{ value / 10 }}"
+        unit_of_measurement: W
+        device_class: power
+        state_class: measurement
+        scan_interval: 60
+
+      - name: "FoxESS 106 Meter2 CT2 S Phase Active Power"
+        unique_id: foxess_106_meter2_ct2_s_phase_active_power
+        address: 38918
+        slave: 247
+        data_type: int32
+        data_size: 2
+        value_template: "{{ value / 10 }}"
+        unit_of_measurement: W
+        device_class: power
+        state_class: measurement
+        scan_interval: 60
+
+      - name: "FoxESS 107 Meter2 CT2 T Phase Active Power"
+        unique_id: foxess_107_meter2_ct2_t_phase_active_power
+        address: 38920
+        slave: 247
+        data_type: int32
+        data_size: 2
+        value_template: "{{ value / 10 }}"
+        unit_of_measurement: W
+        device_class: power
+        state_class: measurement
+        scan_interval: 60
+
+      - name: "FoxESS 108 Meter2 CT2 Combined Reactive Power"
+        unique_id: foxess_108_meter2_ct2_combined_reactive_power
+        address: 38922
+        slave: 247
+        data_type: int32
+        data_size: 2
+        value_template: "{{ value / 10 }}"
+        unit_of_measurement: var
+        device_class: reactive_power
+        state_class: measurement
+        scan_interval: 60
+
+      - name: "FoxESS 109 Meter2 CT2 R Phase Reactive Power"
+        unique_id: foxess_109_meter2_ct2_r_phase_reactive_power
+        address: 38924
+        slave: 247
+        data_type: int32
+        data_size: 2
+        value_template: "{{ value / 10 }}"
+        unit_of_measurement: var
+        device_class: reactive_power
+        state_class: measurement
+        scan_interval: 60
+
+      - name: "FoxESS 110 Meter2 CT2 S Phase Reactive Power"
+        unique_id: foxess_110_meter2_ct2_s_phase_reactive_power
+        address: 38926
+        slave: 247
+        data_type: int32
+        data_size: 2
+        value_template: "{{ value / 10 }}"
+        unit_of_measurement: var
+        device_class: reactive_power
+        state_class: measurement
+        scan_interval: 60
+
+      - name: "FoxESS 111 Meter2 CT2 T Phase Reactive Power"
+        unique_id: foxess_111_meter2_ct2_t_phase_reactive_power
+        address: 38928
+        slave: 247
+        data_type: int32
+        data_size: 2
+        value_template: "{{ value / 10 }}"
+        unit_of_measurement: var
+        device_class: reactive_power
+        state_class: measurement
+        scan_interval: 60
+
+      - name: "FoxESS 112 Meter2 CT2 Combined Apparent Power"
+        unique_id: foxess_112_meter2_ct2_combined_apparent_power
+        address: 38930
+        slave: 247
+        data_type: int32
+        data_size: 2
+        value_template: "{{ value / 10 }}"
+        unit_of_measurement: VA
+        device_class: apparent_power
+        state_class: measurement
+        scan_interval: 60
+
+      - name: "FoxESS 113 Meter2 CT2 R Phase Apparent Power"
+        unique_id: foxess_113_meter2_ct2_r_phase_apparent_power
+        address: 38932
+        slave: 247
+        data_type: int32
+        data_size: 2
+        value_template: "{{ value / 10 }}"
+        unit_of_measurement: VA
+        device_class: apparent_power
+        state_class: measurement
+        scan_interval: 60
+
+      - name: "FoxESS 114 Meter2 CT2 S Phase Apparent Power"
+        unique_id: foxess_114_meter2_ct2_s_phase_apparent_power
+        address: 38934
+        slave: 247
+        data_type: int32
+        data_size: 2
+        value_template: "{{ value / 10 }}"
+        unit_of_measurement: VA
+        device_class: apparent_power
+        state_class: measurement
+        scan_interval: 60
+
+      - name: "FoxESS 115 Meter2 CT2 T Phase Apparent Power"
+        unique_id: foxess_115_meter2_ct2_t_phase_apparent_power
+        address: 38936
+        slave: 247
+        data_type: int32
+        data_size: 2
+        value_template: "{{ value / 10 }}"
+        unit_of_measurement: VA
+        device_class: apparent_power
+        state_class: measurement
+        scan_interval: 60
+
+      - name: "FoxESS 116 Meter2 CT2 Combined Power Factor"
+        unique_id: foxess_116_meter2_ct2_combined_power_factor
+        address: 38938
+        slave: 247
+        data_type: int32
+        data_size: 2
+        value_template: "{{ value / 1000 }}"
+        unit_of_measurement: ""
+        device_class: power_factor
+        state_class: measurement
+        scan_interval: 60
+
+      - name: "FoxESS 117 Meter2 CT2 R Phase Power Factor"
+        unique_id: foxess_117_meter2_ct2_r_phase_power_factor
+        address: 38940
+        slave: 247
+        data_type: int32
+        data_size: 2
+        value_template: "{{ value / 1000 }}"
+        unit_of_measurement: ""
+        device_class: power_factor
+        state_class: measurement
+        scan_interval: 60
+
+      - name: "FoxESS 118 Meter2 CT2 S Phase Power Factor"
+        unique_id: foxess_118_meter2_ct2_s_phase_power_factor
+        address: 38942
+        slave: 247
+        data_type: int32
+        data_size: 2
+        value_template: "{{ value / 1000 }}"
+        unit_of_measurement: ""
+        device_class: power_factor
+        state_class: measurement
+        scan_interval: 60
+
+      - name: "FoxESS 119 Meter2 CT2 T Phase Power Factor"
+        unique_id: foxess_119_meter2_ct2_t_phase_power_factor
+        address: 38944
+        slave: 247
+        data_type: int32
+        data_size: 2
+        value_template: "{{ value / 1000 }}"
+        unit_of_measurement: ""
+        device_class: power_factor
+        state_class: measurement
+        scan_interval: 60
+
+      - name: "FoxESS 120 Meter2 CT2 Frequency"
+        unique_id: foxess_120_meter2_ct2_frequency
+        address: 38946
+        slave: 247
+        data_type: int32
+        data_size: 2
+        value_template: "{{ value / 100 }}"
+        unit_of_measurement: Hz
+        device_class: frequency
+        state_class: measurement
+        scan_interval: 60
+
+      - name: "FoxESS 121 Protocol Version"
+        unique_id: foxess_121_protocol_version
+        address: 39000
+        slave: 247
+        data_type: uint32
+        data_size: 2
+        scan_interval: 3600
+
+      - name: "FoxESS 122 Model Name"
+        unique_id: foxess_122_model_name
+        address: 39002
+        slave: 247
+        data_type: string
+        data_size: 16
+        scan_interval: 3600
+
+      - name: "FoxESS 123 SN"
+        unique_id: foxess_123_sn
+        address: 39018
+        slave: 247
+        data_type: string
+        data_size: 16
+        scan_interval: 3600
+
+      - name: "FoxESS 124 PN"
+        unique_id: foxess_124_pn
+        address: 39034
+        slave: 247
+        data_type: string
+        data_size: 16
+        scan_interval: 3600
+
+      - name: "FoxESS 125 Model ID"
+        unique_id: foxess_125_model_id
+        address: 39050
+        slave: 247
+        data_type: uint16
+        data_size: 1
+        scan_interval: 3600
+
+      - name: "FoxESS 126 Number of Strings"
+        unique_id: foxess_126_number_of_strings
+        address: 39051
+        slave: 247
+        data_type: uint16
+        data_size: 1
+        scan_interval: 3600
+
+      - name: "FoxESS 127 Number of MPPTs"
+        unique_id: foxess_127_number_of_mppts
+        address: 39052
+        slave: 247
+        data_type: uint16
+        data_size: 1
+        scan_interval: 3600
+
+      - name: "FoxESS 128 Rated Power Pn"
+        unique_id: foxess_128_rated_power_pn
+        address: 39053
+        slave: 247
+        data_type: int32
+        data_size: 2
+        value_template: "{{ value / 1000 }}"
+        unit_of_measurement: kW
+        device_class: power
+        state_class: measurement
+        scan_interval: 3600
+
+      - name: "FoxESS 129 Maximum Active Power Pmax"
+        unique_id: foxess_129_maximum_active_power_pmax
+        address: 39055
+        slave: 247
+        data_type: int32
+        data_size: 2
+        value_template: "{{ value / 1000 }}"
+        unit_of_measurement: kW
+        device_class: power
+        state_class: measurement
+        scan_interval: 3600
+
+      - name: "FoxESS 130 Maximum Apparent Power Smax"
+        unique_id: foxess_130_maximum_apparent_power_smax
+        address: 39057
+        slave: 247
+        data_type: int32
+        data_size: 2
+        value_template: "{{ value / 1000 }}"
+        unit_of_measurement: kVA
+        device_class: apparent_power
+        state_class: measurement
+        scan_interval: 3600
+
+      - name: "FoxESS 131 Maximum Reactive Power Qmax fed"
+        unique_id: foxess_131_maximum_reactive_power_qmax_fed
+        address: 39059
+        slave: 247
+        data_type: int32
+        data_size: 2
+        value_template: "{{ value / 1000 }}"
+        unit_of_measurement: kvar
+        device_class: reactive_power
+        state_class: measurement
+        scan_interval: 3600
+
+      - name: "FoxESS 132 Maximum Reactive Power Qmax absorbed"
+        unique_id: foxess_132_maximum_reactive_power_qmax_absorbed
+        address: 39061
+        slave: 247
+        data_type: int32
+        data_size: 2
+        value_template: "{{ value / 1000 }}"
+        unit_of_measurement: kvar
+        device_class: reactive_power
+        state_class: measurement
+        scan_interval: 3600
+
+      - name: "FoxESS 133 Status 1"
+        unique_id: foxess_133_status1
+        address: 39063
+        slave: 247
+        data_type: uint16
+        data_size: 1
+        scan_interval: 60
+
+      - name: "FoxESS 135 Status 3"
+        unique_id: foxess_135_status3
+        address: 39065
+        slave: 247
+        data_type: uint16
+        data_size: 1
+        scan_interval: 60
+
+      - name: "FoxESS 139 PV1 Voltage"
+        unique_id: foxess_139_pv1_voltage
+        address: 39070
+        slave: 247
+        data_type: int16
+        data_size: 1
+        value_template: "{{ value / 10 }}"
+        unit_of_measurement: V
+        device_class: voltage
+        state_class: measurement
+        scan_interval: 60
+
+      - name: "FoxESS 140 PV1 Current"
+        unique_id: foxess_140_pv1_current
+        address: 39071
+        slave: 247
+        data_type: int16
+        data_size: 1
+        value_template: "{{ value / 100 }}"
+        unit_of_measurement: A
+        device_class: current
+        state_class: measurement
+        scan_interval: 60
+
+      - name: "FoxESS 141 PV2 Voltage"
+        unique_id: foxess_141_pv2_voltage
+        address: 39072
+        slave: 247
+        data_type: int16
+        data_size: 1
+        value_template: "{{ value / 10 }}"
+        unit_of_measurement: V
+        device_class: voltage
+        state_class: measurement
+        scan_interval: 60
+
+      - name: "FoxESS 142 PV2 Current"
+        unique_id: foxess_142_pv2_current
+        address: 39073
+        slave: 247
+        data_type: int16
+        data_size: 1
+        value_template: "{{ value / 100 }}"
+        unit_of_measurement: A
+        device_class: current
+        state_class: measurement
+        scan_interval: 60
+
+      - name: "FoxESS 143 PV3 Voltage"
+        unique_id: foxess_143_pv3_voltage
+        address: 39074
+        slave: 247
+        data_type: int16
+        data_size: 1
+        value_template: "{{ value / 10 }}"
+        unit_of_measurement: V
+        device_class: voltage
+        state_class: measurement
+        scan_interval: 60
+
+      - name: "FoxESS 144 PV3 Current"
+        unique_id: foxess_144_pv3_current
+        address: 39075
+        slave: 247
+        data_type: int16
+        data_size: 1
+        value_template: "{{ value / 100 }}"
+        unit_of_measurement: A
+        device_class: current
+        state_class: measurement
+        scan_interval: 60
+
+      - name: "FoxESS 145 PV4 Voltage"
+        unique_id: foxess_145_pv4_voltage
+        address: 39076
+        slave: 247
+        data_type: int16
+        data_size: 1
+        value_template: "{{ value / 10 }}"
+        unit_of_measurement: V
+        device_class: voltage
+        state_class: measurement
+        scan_interval: 60
+
+      - name: "FoxESS 146 PV4 Current"
+        unique_id: foxess_146_pv4_current
+        address: 39077
+        slave: 247
+        data_type: int16
+        data_size: 1
+        value_template: "{{ value / 100 }}"
+        unit_of_measurement: A
+        device_class: current
+        state_class: measurement
+        scan_interval: 60
+
+      - name: "FoxESS 147 Total PV Input Power"
+        unique_id: foxess_147_total_pv_input_power
+        address: 39118
+        slave: 247
+        data_type: int32
+        data_size: 2
+        value_template: "{{ value / 1000 }}"
+        unit_of_measurement: kW
+        device_class: power
+        state_class: measurement
+        scan_interval: 60
+
+      - name: "FoxESS 151 Grid R Phase Voltage"
+        unique_id: foxess_151_grid_r_phase_voltage
+        address: 39123
+        slave: 247
+        data_type: int16
+        data_size: 1
+        value_template: "{{ value / 10 }}"
+        unit_of_measurement: V
+        device_class: voltage
+        state_class: measurement
+        scan_interval: 60
+
+      - name: "FoxESS 152 Grid S Phase Voltage"
+        unique_id: foxess_152_grid_s_phase_voltage
+        address: 39124
+        slave: 247
+        data_type: int16
+        data_size: 1
+        value_template: "{{ value / 10 }}"
+        unit_of_measurement: V
+        device_class: voltage
+        state_class: measurement
+        scan_interval: 60
+
+      - name: "FoxESS 153 Grid T Phase Voltage"
+        unique_id: foxess_153_grid_t_phase_voltage
+        address: 39125
+        slave: 247
+        data_type: int16
+        data_size: 1
+        value_template: "{{ value / 10 }}"
+        unit_of_measurement: V
+        device_class: voltage
+        state_class: measurement
+        scan_interval: 60
+
+      - name: "FoxESS 154 Inverter R Phase Current"
+        unique_id: foxess_154_inverter_r_phase_current
+        address: 39126
+        slave: 247
+        data_type: int32
+        data_size: 2
+        value_template: "{{ value / 1000 }}"
+        unit_of_measurement: A
+        device_class: current
+        state_class: measurement
+        scan_interval: 60
+
+      - name: "FoxESS 155 Inverter S Phase Current"
+        unique_id: foxess_155_inverter_s_phase_current
+        address: 39128
+        slave: 247
+        data_type: int32
+        data_size: 2
+        value_template: "{{ value / 1000 }}"
+        unit_of_measurement: A
+        device_class: current
+        state_class: measurement
+        scan_interval: 60
+
+      - name: "FoxESS 156 Inverter T Phase Current"
+        unique_id: foxess_156_inverter_t_phase_current
+        address: 39130
+        slave: 247
+        data_type: int32
+        data_size: 2
+        value_template: "{{ value / 1000 }}"
+        unit_of_measurement: A
+        device_class: current
+        state_class: measurement
+        scan_interval: 60
+
+      - name: "FoxESS 158 Active Power"
+        unique_id: foxess_158_active_power
+        address: 39134
+        slave: 247
+        data_type: int32
+        data_size: 2
+        value_template: "{{ value / 1000 }}"
+        unit_of_measurement: kW
+        device_class: power
+        state_class: measurement
+        scan_interval: 60
+
+      - name: "FoxESS 159 Reactive Power"
+        unique_id: foxess_159_reactive_power
+        address: 39136
+        slave: 247
+        data_type: int32
+        data_size: 2
+        value_template: "{{ value / 1000 }}"
+        unit_of_measurement: kvar
+        device_class: reactive_power
+        state_class: measurement
+        scan_interval: 60
+
+      - name: "FoxESS 160 Power Factor"
+        unique_id: foxess_160_power_factor
+        address: 39138
+        slave: 247
+        data_type: int16
+        data_size: 1
+        value_template: "{{ value / 1000 }}"
+        unit_of_measurement: ""
+        device_class: power_factor
+        state_class: measurement
+        scan_interval: 60
+
+      - name: "FoxESS 161 Grid Frequency"
+        unique_id: foxess_161_grid_frequency
+        address: 39139
+        slave: 247
+        data_type: int16
+        data_size: 1
+        value_template: "{{ value / 100 }}"
+        unit_of_measurement: Hz
+        device_class: frequency
+        state_class: measurement
+        scan_interval: 60
+
+      - name: "FoxESS 163 Internal Temperature"
+        unique_id: foxess_163_internal_temperature
+        address: 39141
+        slave: 247
+        data_type: int16
+        data_size: 1
+        value_template: "{{ value / 10 }}"
+        unit_of_measurement: °C
+        device_class: temperature
+        state_class: measurement
+        scan_interval: 60
+
+      - name: "FoxESS 169 Cumulative Power Generation"
+        unique_id: foxess_169_cumulative_power_generation
+        address: 39149
+        slave: 247
+        data_type: uint32
+        data_size: 2
+        value_template: "{{ value / 100 }}"
+        unit_of_measurement: kWh
+        device_class: energy
+        state_class: total_increasing
+        scan_interval: 300
+
+      - name: "FoxESS 170 Power Generation Today"
+        unique_id: foxess_170_power_generation_today
+        address: 39151
+        slave: 247
+        data_type: uint32
+        data_size: 2
+        value_template: "{{ value / 100 }}"
+        unit_of_measurement: kWh
+        device_class: energy
+        state_class: total_increasing
+        scan_interval: 300
+
+      - name: "FoxESS 178 Battery1 Charge Discharge Power"
+        unique_id: foxess_178_battery1_charge_discharge_power
+        address: 39162
+        slave: 247
+        data_type: int32
+        data_size: 2
+        unit_of_measurement: W
+        device_class: power
+        state_class: measurement
+        scan_interval: 60
+
+      - name: "FoxESS 181 Meter Active Power"
+        unique_id: foxess_181_meter_active_power
+        address: 39168
+        slave: 247
+        data_type: int32
+        data_size: 2
+        unit_of_measurement: W
+        device_class: power
+        state_class: measurement
+        scan_interval: 60
+
+      - name: "FoxESS 186 EPS R Phase Voltage"
+        unique_id: foxess_186_eps_r_phase_voltage
+        address: 39201
+        slave: 247
+        data_type: uint16
+        data_size: 1
+        value_template: "{{ value / 10 }}"
+        unit_of_measurement: V
+        device_class: voltage
+        state_class: measurement
+        scan_interval: 60
+
+      - name: "FoxESS 187 EPS S Phase Voltage"
+        unique_id: foxess_187_eps_s_phase_voltage
+        address: 39202
+        slave: 247
+        data_type: uint16
+        data_size: 1
+        value_template: "{{ value / 10 }}"
+        unit_of_measurement: V
+        device_class: voltage
+        state_class: measurement
+        scan_interval: 60
+
+      - name: "FoxESS 188 EPS T Phase Voltage"
+        unique_id: foxess_188_eps_t_phase_voltage
+        address: 39203
+        slave: 247
+        data_type: uint16
+        data_size: 1
+        value_template: "{{ value / 10 }}"
+        unit_of_measurement: V
+        device_class: voltage
+        state_class: measurement
+        scan_interval: 60
+
+      - name: "FoxESS 189 EPS R Phase Current"
+        unique_id: foxess_189_eps_r_phase_current
+        address: 39204
+        slave: 247
+        data_type: int32
+        data_size: 2
+        value_template: "{{ value / 1000 }}"
+        unit_of_measurement: A
+        device_class: current
+        state_class: measurement
+        scan_interval: 60
+
+      - name: "FoxESS 190 EPS S Phase Current"
+        unique_id: foxess_190_eps_s_phase_current
+        address: 39206
+        slave: 247
+        data_type: int32
+        data_size: 2
+        value_template: "{{ value / 1000 }}"
+        unit_of_measurement: A
+        device_class: current
+        state_class: measurement
+        scan_interval: 60
+
+      - name: "FoxESS 191 EPS T Phase Current"
+        unique_id: foxess_191_eps_t_phase_current
+        address: 39208
+        slave: 247
+        data_type: int32
+        data_size: 2
+        value_template: "{{ value / 1000 }}"
+        unit_of_measurement: A
+        device_class: current
+        state_class: measurement
+        scan_interval: 60
+
+      - name: "FoxESS 192 EPS R Phase Power"
+        unique_id: foxess_192_eps_r_phase_power
+        address: 39210
+        slave: 247
+        data_type: int32
+        data_size: 2
+        unit_of_measurement: W
+        device_class: power
+        state_class: measurement
+        scan_interval: 60
+
+      - name: "FoxESS 193 EPS S Phase Power"
+        unique_id: foxess_193_eps_s_phase_power
+        address: 39212
+        slave: 247
+        data_type: int32
+        data_size: 2
+        unit_of_measurement: W
+        device_class: power
+        state_class: measurement
+        scan_interval: 60
+
+      - name: "FoxESS 194 EPS T Phase Power"
+        unique_id: foxess_194_eps_t_phase_power
+        address: 39214
+        slave: 247
+        data_type: int32
+        data_size: 2
+        unit_of_measurement: W
+        device_class: power
+        state_class: measurement
+        scan_interval: 60
+
+      - name: "FoxESS 195 EPS Combined Power"
+        unique_id: foxess_195_eps_combined_power
+        address: 39216
+        slave: 247
+        data_type: int32
+        data_size: 2
+        unit_of_measurement: W
+        device_class: power
+        state_class: measurement
+        scan_interval: 60
+
+      - name: "FoxESS 196 EPS Frequency"
+        unique_id: foxess_196_eps_frequency
+        address: 39218
+        slave: 247
+        data_type: int16
+        data_size: 1
+        value_template: "{{ value / 100 }}"
+        unit_of_measurement: Hz
+        device_class: frequency
+        state_class: measurement
+        scan_interval: 60
+
+      - name: "FoxESS 197 Load R Phase Power"
+        unique_id: foxess_197_load_r_phase_power
+        address: 39219
+        slave: 247
+        data_type: int32
+        data_size: 2
+        unit_of_measurement: W
+        device_class: power
+        state_class: measurement
+        scan_interval: 60
+
+      - name: "FoxESS 198 Load S Phase Power"
+        unique_id: foxess_198_load_s_phase_power
+        address: 39221
+        slave: 247
+        data_type: int32
+        data_size: 2
+        unit_of_measurement: W
+        device_class: power
+        state_class: measurement
+        scan_interval: 60
+
+      - name: "FoxESS 199 Load T Phase Power"
+        unique_id: foxess_199_load_t_phase_power
+        address: 39223
+        slave: 247
+        data_type: int32
+        data_size: 2
+        unit_of_measurement: W
+        device_class: power
+        state_class: measurement
+        scan_interval: 60
+
+      - name: "FoxESS 200 Load Combined Power"
+        unique_id: foxess_200_load_combined_power
+        address: 39225
+        slave: 247
+        data_type: int32
+        data_size: 2
+        unit_of_measurement: W
+        device_class: power
+        state_class: measurement
+        scan_interval: 60
+
+      - name: "FoxESS 201 Battery1 Voltage"
+        unique_id: foxess_201_battery1_voltage
+        address: 39227
+        slave: 247
+        data_type: int16
+        data_size: 1
+        value_template: "{{ value / 10 }}"
+        unit_of_measurement: V
+        device_class: voltage
+        state_class: measurement
+        scan_interval: 60
+
+      - name: "FoxESS 202 Battery1 Current"
+        unique_id: foxess_202_battery1_current
+        address: 39228
+        slave: 247
+        data_type: int32
+        data_size: 2
+        value_template: "{{ value / 1000 }}"
+        unit_of_measurement: A
+        device_class: current
+        state_class: measurement
+        scan_interval: 60
+
+      - name: "FoxESS 203 Battery1 Power"
+        unique_id: foxess_203_battery1_power
+        address: 39230
+        slave: 247
+        data_type: int32
+        data_size: 2
+        unit_of_measurement: W
+        device_class: power
+        state_class: measurement
+        scan_interval: 60
+
+      - name: "FoxESS 204 Battery2 Voltage"
+        unique_id: foxess_204_battery2_voltage
+        address: 39232
+        slave: 247
+        data_type: int16
+        data_size: 1
+        value_template: "{{ value / 10 }}"
+        unit_of_measurement: V
+        device_class: voltage
+        state_class: measurement
+        scan_interval: 60
+
+      - name: "FoxESS 205 Battery2 Current"
+        unique_id: foxess_205_battery2_current
+        address: 39233
+        slave: 247
+        data_type: int32
+        data_size: 2
+        value_template: "{{ value / 1000 }}"
+        unit_of_measurement: A
+        device_class: current
+        state_class: measurement
+        scan_interval: 60
+
+      - name: "FoxESS 206 Battery2 Power"
+        unique_id: foxess_206_battery2_power
+        address: 39235
+        slave: 247
+        data_type: int32
+        data_size: 2
+        unit_of_measurement: W
+        device_class: power
+        state_class: measurement
+        scan_interval: 60
+
+      - name: "FoxESS 207 Battery Combined Power"
+        unique_id: foxess_207_battery_combined_power
+        address: 39237
+        slave: 247
+        data_type: int32
+        data_size: 2
+        unit_of_measurement: W
+        device_class: power
+        state_class: measurement
+        scan_interval: 60
+
+      - name: "FoxESS 214 INV R Phase Active Power"
+        unique_id: foxess_214_inv_r_phase_active_power
+        address: 39248
+        slave: 247
+        data_type: int32
+        data_size: 2
+        unit_of_measurement: W
+        device_class: power
+        state_class: measurement
+        scan_interval: 60
+
+      - name: "FoxESS 215 INV S Phase Active Power"
+        unique_id: foxess_215_inv_s_phase_active_power
+        address: 39250
+        slave: 247
+        data_type: int32
+        data_size: 2
+        unit_of_measurement: W
+        device_class: power
+        state_class: measurement
+        scan_interval: 60
+
+      - name: "FoxESS 216 INV T Phase Active Power"
+        unique_id: foxess_216_inv_t_phase_active_power
+        address: 39252
+        slave: 247
+        data_type: int32
+        data_size: 2
+        unit_of_measurement: W
+        device_class: power
+        state_class: measurement
+        scan_interval: 60
+
+      - name: "FoxESS 218 INV R Phase Reactive Power"
+        unique_id: foxess_218_inv_r_phase_reactive_power
+        address: 39256
+        slave: 247
+        data_type: int32
+        data_size: 2
+        unit_of_measurement: var
+        device_class: reactive_power
+        state_class: measurement
+        scan_interval: 60
+
+      - name: "FoxESS 219 INV S Phase Reactive Power"
+        unique_id: foxess_219_inv_s_phase_reactive_power
+        address: 39258
+        slave: 247
+        data_type: int32
+        data_size: 2
+        unit_of_measurement: var
+        device_class: reactive_power
+        state_class: measurement
+        scan_interval: 60
+
+      - name: "FoxESS 220 INV T Phase Reactive Power"
+        unique_id: foxess_220_inv_t_phase_reactive_power
+        address: 39260
+        slave: 247
+        data_type: int32
+        data_size: 2
+        unit_of_measurement: var
+        device_class: reactive_power
+        state_class: measurement
+        scan_interval: 60
+
+      - name: "FoxESS 222 INV R Phase Apparent Power"
+        unique_id: foxess_222_inv_r_phase_apparent_power
+        address: 39264
+        slave: 247
+        data_type: int32
+        data_size: 2
+        unit_of_measurement: VA
+        device_class: apparent_power
+        state_class: measurement
+        scan_interval: 60
+
+      - name: "FoxESS 223 INV S Phase Apparent Power"
+        unique_id: foxess_223_inv_s_phase_apparent_power
+        address: 39266
+        slave: 247
+        data_type: int32
+        data_size: 2
+        unit_of_measurement: VA
+        device_class: apparent_power
+        state_class: measurement
+        scan_interval: 60
+
+      - name: "FoxESS 224 INV T Phase Apparent Power"
+        unique_id: foxess_224_inv_t_phase_apparent_power
+        address: 39268
+        slave: 247
+        data_type: int32
+        data_size: 2
+        unit_of_measurement: VA
+        device_class: apparent_power
+        state_class: measurement
+        scan_interval: 60
+
+      - name: "FoxESS 225 INV Combined Apparent Power"
+        unique_id: foxess_225_inv_combined_apparent_power
+        address: 39270
+        slave: 247
+        data_type: int32
+        data_size: 2
+        unit_of_measurement: VA
+        device_class: apparent_power
+        state_class: measurement
+        scan_interval: 60
+
+      - name: "FoxESS 226 INV Frequency R"
+        unique_id: foxess_226_inv_frequency_r
+        address: 39272
+        slave: 247
+        data_type: int16
+        data_size: 1
+        value_template: "{{ value / 100 }}"
+        unit_of_measurement: Hz
+        device_class: frequency
+        state_class: measurement
+        scan_interval: 60
+
+      - name: "FoxESS 227 INV Frequency S"
+        unique_id: foxess_227_inv_frequency_s
+        address: 39273
+        slave: 247
+        data_type: int16
+        data_size: 1
+        value_template: "{{ value / 100 }}"
+        unit_of_measurement: Hz
+        device_class: frequency
+        state_class: measurement
+        scan_interval: 60
+
+      - name: "FoxESS 228 INV Frequency T"
+        unique_id: foxess_228_inv_frequency_t
+        address: 39274
+        slave: 247
+        data_type: int16
+        data_size: 1
+        value_template: "{{ value / 100 }}"
+        unit_of_measurement: Hz
+        device_class: frequency
+        state_class: measurement
+        scan_interval: 60
+
+      - name: "FoxESS 229 Available Import Power"
+        unique_id: foxess_229_available_import_power
+        address: 39275
+        slave: 247
+        data_type: int32
+        data_size: 2
+        unit_of_measurement: W
+        device_class: power
+        state_class: measurement
+        scan_interval: 60
+
+      - name: "FoxESS 230 Available Export Power"
+        unique_id: foxess_230_available_export_power
+        address: 39277
+        slave: 247
+        data_type: int32
+        data_size: 2
+        unit_of_measurement: W
+        device_class: power
+        state_class: measurement
+        scan_interval: 60
+
+      - name: "FoxESS 231 PV1 Power"
+        unique_id: foxess_231_pv1_power
+        address: 39279
+        slave: 247
+        data_type: int32
+        data_size: 2
+        unit_of_measurement: W
+        device_class: power
+        state_class: measurement
+        scan_interval: 60
+
+      - name: "FoxESS 232 PV2 Power"
+        unique_id: foxess_232_pv2_power
+        address: 39281
+        slave: 247
+        data_type: int32
+        data_size: 2
+        unit_of_measurement: W
+        device_class: power
+        state_class: measurement
+        scan_interval: 60
+
+      - name: "FoxESS 233 PV3 Power"
+        unique_id: foxess_233_pv3_power
+        address: 39283
+        slave: 247
+        data_type: int32
+        data_size: 2
+        unit_of_measurement: W
+        device_class: power
+        state_class: measurement
+        scan_interval: 60
+
+      - name: "FoxESS 234 PV4 Power"
+        unique_id: foxess_234_pv4_power
+        address: 39285
+        slave: 247
+        data_type: int32
+        data_size: 2
+        unit_of_measurement: W
+        device_class: power
+        state_class: measurement
+        scan_interval: 60
+
+      - name: "FoxESS 235 MPPT1 Voltage"
+        unique_id: foxess_235_mppt1_voltage
+        address: 39327
+        slave: 247
+        data_type: int16
+        data_size: 1
+        value_template: "{{ value / 10 }}"
+        unit_of_measurement: V
+        device_class: voltage
+        state_class: measurement
+        scan_interval: 60
+
+      - name: "FoxESS 236 MPPT1 Current"
+        unique_id: foxess_236_mppt1_current
+        address: 39328
+        slave: 247
+        data_type: int16
+        data_size: 1
+        value_template: "{{ value / 100 }}"
+        unit_of_measurement: A
+        device_class: current
+        state_class: measurement
+        scan_interval: 60
+
+      - name: "FoxESS 237 MPPT1 Power"
+        unique_id: foxess_237_mppt1_power
+        address: 39329
+        slave: 247
+        data_type: int32
+        data_size: 2
+        unit_of_measurement: W
+        device_class: power
+        state_class: measurement
+        scan_interval: 60
+
+      - name: "FoxESS 238 MPPT2 Voltage"
+        unique_id: foxess_238_mppt2_voltage
+        address: 39331
+        slave: 247
+        data_type: int16
+        data_size: 1
+        value_template: "{{ value / 10 }}"
+        unit_of_measurement: V
+        device_class: voltage
+        state_class: measurement
+        scan_interval: 60
+
+      - name: "FoxESS 239 MPPT2 Current"
+        unique_id: foxess_239_mppt2_current
+        address: 39332
+        slave: 247
+        data_type: int16
+        data_size: 1
+        value_template: "{{ value / 100 }}"
+        unit_of_measurement: A
+        device_class: current
+        state_class: measurement
+        scan_interval: 60
+
+      - name: "FoxESS 240 MPPT2 Power"
+        unique_id: foxess_240_mppt2_power
+        address: 39333
+        slave: 247
+        data_type: int32
+        data_size: 2
+        unit_of_measurement: W
+        device_class: power
+        state_class: measurement
+        scan_interval: 60
+
+      - name: "FoxESS 241 MPPT3 Voltage"
+        unique_id: foxess_241_mppt3_voltage
+        address: 39335
+        slave: 247
+        data_type: int16
+        data_size: 1
+        value_template: "{{ value / 10 }}"
+        unit_of_measurement: V
+        device_class: voltage
+        state_class: measurement
+        scan_interval: 60
+
+      - name: "FoxESS 242 MPPT3 Current"
+        unique_id: foxess_242_mppt3_current
+        address: 39336
+        slave: 247
+        data_type: int16
+        data_size: 1
+        value_template: "{{ value / 100 }}"
+        unit_of_measurement: A
+        device_class: current
+        state_class: measurement
+        scan_interval: 60
+
+      - name: "FoxESS 243 MPPT3 Power"
+        unique_id: foxess_243_mppt3_power
+        address: 39337
+        slave: 247
+        data_type: int32
+        data_size: 2
+        unit_of_measurement: W
+        device_class: power
+        state_class: measurement
+        scan_interval: 60
+
+      - name: "FoxESS 244 System SoC"
+        unique_id: foxess_244_system_soc
+        address: 39423
+        slave: 247
+        data_type: uint16
+        data_size: 1
+        unit_of_measurement: "%"
+        device_class: battery
+        state_class: measurement
+        scan_interval: 60
+
+      - name: "FoxESS 246 PV Total Energy"
+        unique_id: foxess_246_pv_total_energy
+        address: 39601
+        slave: 247
+        data_type: uint32
+        data_size: 2
+        value_template: "{{ value / 100 }}"
+        unit_of_measurement: kWh
+        device_class: energy
+        state_class: total_increasing
+        scan_interval: 300
+
+      - name: "FoxESS 247 Total PV Power Today"
+        unique_id: foxess_247_total_pv_power_today
+        address: 39603
+        slave: 247
+        data_type: uint32
+        data_size: 2
+        value_template: "{{ value / 100 }}"
+        unit_of_measurement: kWh
+        device_class: energy
+        state_class: total_increasing
+        scan_interval: 300
+
+      - name: "FoxESS 248 Total Charging Capacity"
+        unique_id: foxess_248_total_charging_capacity
+        address: 39605
+        slave: 247
+        data_type: uint32
+        data_size: 2
+        value_template: "{{ value / 100 }}"
+        unit_of_measurement: kWh
+        device_class: energy
+        state_class: total_increasing
+        scan_interval: 300
+
+      - name: "FoxESS 249 Today's Total Charging Capacity"
+        unique_id: foxess_249_todays_total_charging_capacity
+        address: 39607
+        slave: 247
+        data_type: uint32
+        data_size: 2
+        value_template: "{{ value / 100 }}"
+        unit_of_measurement: kWh
+        device_class: energy
+        state_class: total_increasing
+        scan_interval: 300
+
+      - name: "FoxESS 250 Total Discharge Energy"
+        unique_id: foxess_250_total_discharge_energy
+        address: 39609
+        slave: 247
+        data_type: uint32
+        data_size: 2
+        value_template: "{{ value / 100 }}"
+        unit_of_measurement: kWh
+        device_class: energy
+        state_class: total_increasing
+        scan_interval: 300
+
+      - name: "FoxESS 251 Today's Total Discharge Energy"
+        unique_id: foxess_251_todays_total_discharge_energy
+        address: 39611
+        slave: 247
+        data_type: uint32
+        data_size: 2
+        value_template: "{{ value / 100 }}"
+        unit_of_measurement: kWh
+        device_class: energy
+        state_class: total_increasing
+        scan_interval: 300
+
+      - name: "FoxESS 252 Total Feeder Network Energy"
+        unique_id: foxess_252_total_feeder_network_energy
+        address: 39613
+        slave: 247
+        data_type: uint32
+        data_size: 2
+        value_template: "{{ value / 100 }}"
+        unit_of_measurement: kWh
+        device_class: energy
+        state_class: total_increasing
+        scan_interval: 300
+
+      - name: "FoxESS 253 Today's Total Feeder Energy"
+        unique_id: foxess_253_todays_total_feeder_energy
+        address: 39615
+        slave: 247
+        data_type: uint32
+        data_size: 2
+        value_template: "{{ value / 100 }}"
+        unit_of_measurement: kWh
+        device_class: energy
+        state_class: total_increasing
+        scan_interval: 300
+
+      - name: "FoxESS 254 Total Power Taken"
+        unique_id: foxess_254_total_power_taken
+        address: 39617
+        slave: 247
+        data_type: uint32
+        data_size: 2
+        value_template: "{{ value / 100 }}"
+        unit_of_measurement: kWh
+        device_class: energy
+        state_class: total_increasing
+        scan_interval: 300
+
+      - name: "FoxESS 255 Today's Total Electricity Consumption"
+        unique_id: foxess_255_todays_total_electricity_consumption
+        address: 39619
+        slave: 247
+        data_type: uint32
+        data_size: 2
+        value_template: "{{ value / 100 }}"
+        unit_of_measurement: kWh
+        device_class: energy
+        state_class: total_increasing
+        scan_interval: 300
+
+      - name: "FoxESS 256 Output Total Energy"
+        unique_id: foxess_256_output_total_energy
+        address: 39621
+        slave: 247
+        data_type: uint32
+        data_size: 2
+        value_template: "{{ value / 100 }}"
+        unit_of_measurement: kWh
+        device_class: energy
+        state_class: total_increasing
+        scan_interval: 300
+
+      - name: "FoxESS 257 Total Power Output Today"
+        unique_id: foxess_257_total_power_output_today
+        address: 39623
+        slave: 247
+        data_type: uint32
+        data_size: 2
+        value_template: "{{ value / 100 }}"
+        unit_of_measurement: kWh
+        device_class: energy
+        state_class: total_increasing
+        scan_interval: 300
+
+      - name: "FoxESS 258 Enter Total Energy"
+        unique_id: foxess_258_enter_total_energy
+        address: 39625
+        slave: 247
+        data_type: uint32
+        data_size: 2
+        value_template: "{{ value / 100 }}"
+        unit_of_measurement: kWh
+        device_class: energy
+        state_class: total_increasing
+        scan_interval: 300
+
+      - name: "FoxESS 259 Enter Total Energy Today"
+        unique_id: foxess_259_enter_total_energy_today
+        address: 39627
+        slave: 247
+        data_type: uint32
+        data_size: 2
+        value_template: "{{ value / 100 }}"
+        unit_of_measurement: kWh
+        device_class: energy
+        state_class: total_increasing
+        scan_interval: 300
+
+      - name: "FoxESS 260 Total Load Energy"
+        unique_id: foxess_260_total_load_energy
+        address: 39629
+        slave: 247
+        data_type: uint32
+        data_size: 2
+        value_template: "{{ value / 100 }}"
+        unit_of_measurement: kWh
+        device_class: energy
+        state_class: total_increasing
+        scan_interval: 300
+
+      - name: "FoxESS 261 Total Load Energy Today"
+        unique_id: foxess_261_total_load_energy_today
+        address: 39631
+        slave: 247
+        data_type: uint32
+        data_size: 2
+        value_template: "{{ value / 100 }}"
+        unit_of_measurement: kWh
+        device_class: energy
+        state_class: total_increasing
+        scan_interval: 300
