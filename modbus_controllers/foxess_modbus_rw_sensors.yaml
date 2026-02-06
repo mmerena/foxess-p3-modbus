@@ -1,0 +1,178 @@
+# =============================================================================
+# foxess_modbus_rw_sensors.yaml
+# =============================================================================
+# Nastawy RW (zapis) dla FoxESS Inwertera
+# Rejestry: 271 (Remote Control – Bitfield 16) + 309 (Time Mode Flag – U16)
+# Slave ID: 247
+# Wersja dokumentacji: V1.02.00.00
+# Data: luty 2026
+#
+# Zawiera:
+# - Pełny dostęp do rejestru 271 (zdalne sterowanie, kierunek mocy, cel sterowania)
+# - Włącz/wyłącz trybu Time Period (rejestr 309)
+# - Czytelne opisy po polsku w text_sensor
+#
+# W configuration.yaml dodaj:
+# modbus_controller: !include foxess_modbus_rw_sensors.yaml
+# (lub !include_dir_merge_list jeśli masz folder)
+# =============================================================================
+
+modbus_controller:
+  - id: foxess_rw
+    name: FoxESS Inwerter RW (nastawy / sterowanie)
+    type: tcp
+    host: 192.168.1.100           # Zmień na IP swojego inwertera
+    port: 502
+    timeout: 5
+    delay: 0.1
+    retry_count: 3
+
+    # ────────────────────────────────────────────────────────────────
+    # NUMBER – pełna wartość rejestru 271 (do ręcznego zapisu 0–65535)
+    # ────────────────────────────────────────────────────────────────
+    number:
+      - name: "FoxESS Remote Control – Pełna wartość (271)"
+        unique_id: foxess_remote_control_full_value
+        address: 46001
+        slave: 247
+        data_type: uint16
+        data_size: 1
+        min_value: 0
+        max_value: 65535
+        step: 1
+        mode: box
+        icon: "mdi:remote"
+        entity_category: config
+
+    # ────────────────────────────────────────────────────────────────
+    # SWITCH – włącz/wyłącz zdalne sterowanie (Bit 0 rejestru 271)
+    # ────────────────────────────────────────────────────────────────
+    switch:
+      - name: "FoxESS Remote Control – Zdalne sterowanie włączone"
+        unique_id: foxess_remote_control_enable
+        address: 46001
+        slave: 247
+        bitmask: 1                  # Bit 0
+        state_on: 1
+        state_off: 0
+        icon: "mdi:remote"
+        entity_category: config
+
+      - name: "FoxESS Time Period Mode – Włączony"
+        unique_id: foxess_time_period_mode_enable
+        address: 48000
+        slave: 247
+        bitmask: 1                  # Bit 0
+        state_on: 1
+        state_off: 0
+        icon: "mdi:clock-outline"
+        entity_category: config
+
+    # ────────────────────────────────────────────────────────────────
+    # SELECT – kierunek mocy (Bit 1 rejestru 271)
+    # ────────────────────────────────────────────────────────────────
+    select:
+      - name: "FoxESS Remote Control – Kierunek mocy"
+        unique_id: foxess_remote_control_direction
+        address: 46001
+        slave: 247
+        options:
+          0: "Power-generation system"
+          1: "Power-consumption system"
+        bitmask: 2                  # Bit 1
+        icon: "mdi:arrow-decision"
+        entity_category: config
+
+      - name: "FoxESS Remote Control – Cel sterowania (Bits 3:2)"
+        unique_id: foxess_remote_control_target
+        address: 46001
+        slave: 247
+        options:
+          0: "AC"
+          1: "Battery"
+          2: "Grid (CT/Meter)"
+          3: "AC (Grid first)"
+        bitmask: 12                 # Bits 3:2 = 4 + 8 = 12
+        icon: "mdi:target"
+        entity_category: config
+
+    # ────────────────────────────────────────────────────────────────
+    # BINARY_SENSOR – tylko do odczytu – aktualne stany bitów
+    # ────────────────────────────────────────────────────────────────
+    binary_sensor:
+      - name: "FoxESS Remote Control – Zdalne sterowanie aktywne"
+        unique_id: foxess_remote_control_enabled_readonly
+        address: 46001
+        slave: 247
+        bitmask: 1
+        device_class: connectivity
+        icon: "mdi:remote"
+
+      - name: "FoxESS Remote Control – Kierunek mocy = Power-consumption"
+        unique_id: foxess_remote_control_power_consumption
+        address: 46001
+        slave: 247
+        bitmask: 2
+        device_class: problem
+        icon: "mdi:arrow-down-bold"
+
+      - name: "FoxESS Remote Control – Cel sterowania = Battery"
+        unique_id: foxess_remote_control_target_battery
+        address: 46001
+        slave: 247
+        bitmask: 4                  # Bit 2
+        device_class: battery
+        icon: "mdi:battery"
+
+      - name: "FoxESS Remote Control – Cel sterowania = Grid"
+        unique_id: foxess_remote_control_target_grid
+        address: 46001
+        slave: 247
+        bitmask: 8                  # Bit 3
+        device_class: plug
+        icon: "mdi:transmission-tower"
+
+      - name: "FoxESS Time Period Mode – Aktywny"
+        unique_id: foxess_time_period_mode_active
+        address: 48000
+        slave: 247
+        bitmask: 1
+        device_class: connectivity
+        icon: "mdi:clock-check-outline"
+
+    # ────────────────────────────────────────────────────────────────
+    # TEXT_SENSOR – czytelne podsumowanie obu rejestrów
+    # ────────────────────────────────────────────────────────────────
+    text_sensor:
+      - name: "FoxESS Remote Control – Aktualna konfiguracja"
+        unique_id: foxess_remote_control_status_text
+        address: 46001
+        slave: 247
+        data_type: uint16
+        data_size: 1
+        scan_interval: 60
+        value_template: >
+          {% set val = value | int(0) %}
+          {% set remote = 'WŁĄCZONE' if val & 1 else 'WYŁĄCZONE' %}
+          {% set direction = 'Power-generation' if (val & 2) == 0 else 'Power-consumption' %}
+          {% set target_val = (val >> 2) & 3 %}
+          {% set target_map = {0: 'AC', 1: 'Battery', 2: 'Grid (CT/Meter)', 3: 'AC (Grid first)'} %}
+          {% set target = target_map[target_val] %}
+          Zdalne sterowanie: {{ remote }}  
+          Kierunek mocy: {{ direction }}  
+          Cel sterowania: {{ target }}
+
+      - name: "FoxESS Time Period Mode – Status"
+        unique_id: foxess_time_period_mode_status
+        address: 48000
+        slave: 247
+        data_type: uint16
+        data_size: 1
+        scan_interval: 60
+        value_template: >
+          {% if value | int(0) & 1 %}
+            WŁĄCZONY (Time Period Mode aktywny)
+          {% else %}
+            WYŁĄCZONY (Time Period Mode nieaktywny)
+          {% endif %}
+        icon: "mdi:clock"
