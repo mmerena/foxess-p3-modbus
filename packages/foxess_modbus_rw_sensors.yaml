@@ -17,7 +17,7 @@
 # (lub !include_dir_merge_list jeśli masz folder)
 # =============================================================================
 
-foxess:
+foxess_rw:
   modbus:
     - name: foxess_modbus_rw
       type: tcp
