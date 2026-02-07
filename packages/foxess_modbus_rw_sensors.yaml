@@ -17,77 +17,78 @@
 # (lub !include_dir_merge_list jeśli masz folder)
 # =============================================================================
 
-modbus:
-  - name: foxess_rw
-    type: tcp
-    host: 192.168.1.100
-    port: 502
-    timeout: 5
-    delay: 0
-    message_wait_milliseconds: 30
+foxess:
+  modbus:
+    - name: foxess_modbus_rw
+      type: tcp
+      host: 192.168.1.100
+      port: 502
+      timeout: 5
+      delay: 0
+      message_wait_milliseconds: 30
 
-    switch:
-      - name: FoxESS Remote Control – Zdalne sterowanie włączone
-        slave: 247
-        address: 46001
-        bitmask: 1
-        state_on: 1
-        state_off: 0
-        icon: "mdi:remote"
-        entity_category: config
+      switch:
+        - name: FoxESS Remote Control – Zdalne sterowanie włączone
+          slave: 247
+          address: 46001
+          bitmask: 1
+          state_on: 1
+          state_off: 0
+          icon: "mdi:remote"
+          entity_category: config
 
-      - name: FoxESS Time Period Mode – Włączony
-        slave: 247
-        address: 48000
-        bitmask: 1
-        state_on: 1
-        state_off: 0
-        icon: "mdi:clock-outline"
-        entity_category: config
+        - name: FoxESS Time Period Mode – Włączony
+          slave: 247
+          address: 48000
+          bitmask: 1
+          state_on: 1
+          state_off: 0
+          icon: "mdi:clock-outline"
+          entity_category: config
 
-    select:
-      - name: FoxESS Remote Control – Kierunek mocy
-        slave: 247
-        address: 46001
-        options:
-          0: "Power-generation system"
-          1: "Power-consumption system"
-        bitmask: 2
-        icon: "mdi:arrow-decision"
-        entity_category: config
+      select:
+        - name: FoxESS Remote Control – Kierunek mocy
+          slave: 247
+          address: 46001
+          options:
+            0: "Power-generation system"
+            1: "Power-consumption system"
+          bitmask: 2
+          icon: "mdi:arrow-decision"
+          entity_category: config
 
-      - name: FoxESS Remote Control – Cel sterowania
-        slave: 247
-        address: 46001
-        options:
-          0: "AC"
-          1: "Battery"
-          2: "Grid (CT/Meter)"
-          3: "AC (Grid first)"
-        bitmask: 12
-        icon: "mdi:target"
-        entity_category: config
+        - name: FoxESS Remote Control – Cel sterowania
+          slave: 247
+          address: 46001
+          options:
+            0: "AC"
+            1: "Battery"
+            2: "Grid (CT/Meter)"
+            3: "AC (Grid first)"
+          bitmask: 12
+          icon: "mdi:target"
+          entity_category: config
 
-    text_sensor:
-      - name: "FoxESS Remote Control – Aktualna konfiguracja"
-        slave: 247
-        address: 46001
-        data_type: uint16
-        value_template: >
-          {% set val = value | int(0) %}
-          {% set remote = 'WŁĄCZONE' if val & 1 else 'WYŁĄCZONE' %}
-          {% set direction = 'Power-generation' if (val & 2) == 0 else 'Power-consumption' %}
-          {% set target_val = (val >> 2) & 3 %}
-          {% set target_map = {0: 'AC', 1: 'Battery', 2: 'Grid (CT/Meter)', 3: 'AC (Grid first)'} %}
-          Zdalne sterowanie: {{ remote }}  
-          Kierunek mocy: {{ direction }}  
-          Cel sterowania: {{ target_map[target_val] }}
-        scan_interval: 60
+      text_sensor:
+        - name: "FoxESS Remote Control – Aktualna konfiguracja"
+          slave: 247
+          address: 46001
+          data_type: uint16
+          value_template: >
+            {% set val = value | int(0) %}
+            {% set remote = 'WŁĄCZONE' if val & 1 else 'WYŁĄCZONE' %}
+            {% set direction = 'Power-generation' if (val & 2) == 0 else 'Power-consumption' %}
+            {% set target_val = (val >> 2) & 3 %}
+            {% set target_map = {0: 'AC', 1: 'Battery', 2: 'Grid (CT/Meter)', 3: 'AC (Grid first)'} %}
+            Zdalne sterowanie: {{ remote }}  
+            Kierunek mocy: {{ direction }}  
+            Cel sterowania: {{ target_map[target_val] }}
+          scan_interval: 60
 
-      - name: "FoxESS Time Period Mode – Status"
-        slave: 247
-        address: 48000
-        data_type: uint16
-        value_template: >
-          {% if value | int(0) & 1 %}WŁĄCZONY{% else %}WYŁĄCZONY{% endif %}
-        scan_interval: 60
+        - name: "FoxESS Time Period Mode – Status"
+          slave: 247
+          address: 48000
+          data_type: uint16
+          value_template: >
+            {% if value | int(0) & 1 %}WŁĄCZONY{% else %}WYŁĄCZONY{% endif %}
+          scan_interval: 60
