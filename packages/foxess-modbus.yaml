@@ -1,0 +1,2548 @@
+# =============================================================================
+# foxess-modbus.yaml
+# =============================================================================
+# Pełna, profesjonalna integracja inwertera FoxESS przez Modbus (RO + RW)
+# Dokumentacja źródłowa: FOX Inverter Modbus Protocol V1.02.00.00
+# Slave ID: 247
+# Typ połączenia: TCP
+# Data przygotowania: luty 2026
+# Autor: przygotowane specjalnie dla instalacji trójfazowej z monitoringiem pełnym
+#
+# Zakres integracji:
+# • Wszystkie dostępne rejestry tylko do odczytu (RO) – numery 001–261
+# • Podstawowe nastawy zapisywalne (RW) – rejestry 271 (Remote Control) i 309 (Time Mode Flag)
+# • Czytelne nazwy sensorów po angielsku, komentarze i struktura po polsku
+# • Konsekwentne formatowanie: precision tam, gdzie ma sens, jednostki, device_class, state_class
+# • Optymalne interwały odczytu: 60 s (dynamiczne), 300 s (energia dzienna), 3600 s (statyczne)
+#
+# Wymagania w configuration.yaml:
+# homeassistant:
+#   packages: !include_dir_merge_named packages
+#
+# Po wczytaniu sprawdź:
+# • Entities → filtr „foxess” → powinno być ~223 sensory RO + ~11 RW
+# • Logi → brak błędów Modbus read/write
+# • Panel Energia → podpięte źródła (Solar, Battery, Grid, Dom)
+#
+# Aktualizacja / rozszerzenie: dodawanie kolejnych rejestrów RW (harmonogramy, limity mocy)
+# jest możliwe w tej samej strukturze – wystarczy rozszerzyć sekcję RW.
+# =============================================================================
+
+foxess:
+  modbus:
+    - name: foxess_modbus
+      type: tcp
+      host: 192.168.1.100           # Zmień na IP swojego inwertera
+      port: 502
+      timeout: 5
+      delay: 0
+      message_wait_milliseconds: 30
+
+      sensors:
+        # 001–003: Model, SN, MFG ID
+        - name: FoxESS 001 Model Name
+          slave: 247
+          address: 30000
+          data_type: string
+          count: 16
+          scan_interval: 3600
+
+        - name: FoxESS 002 Serial Number
+          slave: 247
+          address: 30016
+          data_type: string
+          count: 16
+          scan_interval: 3600
+
+        - name: FoxESS 003 MFG ID
+          slave: 247
+          address: 30032
+          data_type: string
+          count: 16
+          scan_interval: 3600
+
+        # 004–006: Wersje Master/Slave/Manager
+        - name: FoxESS 004 Master Version
+          slave: 247
+          address: 36001
+          data_type: uint16
+                  
+          precision: 0
+          scan_interval: 3600
+
+        - name: FoxESS 005 Slave Version
+          slave: 247
+          address: 36002
+          data_type: uint16
+                  
+          precision: 0
+          scan_interval: 3600
+
+        - name: FoxESS 006 Manager Version
+          slave: 247
+          address: 36003
+          data_type: uint16
+                  
+          precision: 0
+          scan_interval: 3600
+
+        # 007–014: Meter1 i Meter2 – SN, MFG ID, TYPE, Version
+        - name: FoxESS 007 Meter1 SN
+          slave: 247
+          address: 36100
+          data_type: string
+          count: 16
+          scan_interval: 3600
+
+        - name: FoxESS 008 Meter1 MFG ID
+          slave: 247
+          address: 36116
+          data_type: string
+          count: 16
+          scan_interval: 3600
+
+        - name: FoxESS 009 Meter1 TYPE
+          slave: 247
+          address: 36132
+          data_type: string
+          count: 16
+          scan_interval: 3600
+
+        - name: FoxESS 010 Meter1 Version
+          slave: 247
+          address: 36148
+          data_type: string
+          count: 1
+          scan_interval: 3600
+
+        - name: FoxESS 011 Meter2 SN
+          slave: 247
+          address: 36200
+          data_type: string
+          count: 16
+          scan_interval: 3600
+
+        - name: FoxESS 012 Meter2 MFG ID
+          slave: 247
+          address: 36216
+          data_type: string
+          count: 16
+          scan_interval: 3600
+
+        - name: FoxESS 013 Meter2 TYPE
+          slave: 247
+          address: 36232
+          data_type: string
+          count: 16
+          scan_interval: 3600
+
+        - name: FoxESS 014 Meter2 Version
+          slave: 247
+          address: 36248
+          data_type: string
+          count: 1
+          scan_interval: 3600
+
+        # 015–023: BMS1 – status, wersje, SN
+        - name: FoxESS 015 BMS1 Connection Status
+          slave: 247
+          address: 37002
+          data_type: uint16
+                  
+          precision: 0
+          scan_interval: 60
+                                                                                                                        
+
+        - name: FoxESS 016 BMS1 Master Version
+          slave: 247
+          address: 37003
+          data_type: uint16
+                  
+          precision: 0
+          scan_interval: 3600
+
+        - name: FoxESS 017 BMS1 Master Type
+          slave: 247
+          address: 37004
+          data_type: uint16
+                  
+          precision: 0
+          scan_interval: 3600
+
+        - name: FoxESS 018 BMS1 Master SN
+          slave: 247
+          address: 37005
+          data_type: string
+          count: 16
+          scan_interval: 3600
+
+        - name: FoxESS 019 BMS1 Slave Number
+          slave: 247
+          address: 37032
+          data_type: uint16
+                  
+          precision: 0
+          scan_interval: 3600
+                                                                                                       
+
+        - name: FoxESS 020 BMS1 Slave 1 Version
+          slave: 247
+          address: 37033
+          data_type: uint16
+                  
+          precision: 0
+          scan_interval: 3600
+
+        - name: FoxESS 021 BMS1 Slave 2 Version
+          slave: 247
+          address: 37034
+          data_type: uint16
+                  
+          precision: 0
+          scan_interval: 3600
+
+        - name: FoxESS 022 BMS1 Slave 1 SN
+          slave: 247
+          address: 37097
+          data_type: string
+          count: 16
+          scan_interval: 3600
+
+        - name: FoxESS 023 BMS1 Slave 2 SN
+          slave: 247
+          address: 37113
+          data_type: string
+          count: 16
+          scan_interval: 3600
+
+        # 024–043: BMS1 parametry fizyczne i fault
+        - name: FoxESS 024 BMS1 Voltage
+          slave: 247
+          address: 37609
+          data_type: uint16
+          scale: 0.1
+          precision: 1
+          unit_of_measurement: V
+          device_class: voltage
+          state_class: measurement
+                      
+          scan_interval: 60
+
+        - name: FoxESS 025 BMS1 Current
+          slave: 247
+          address: 37610
+          data_type: int16
+          scale: 0.1
+          precision: 1
+          unit_of_measurement: A
+          device_class: current
+          state_class: measurement
+                      
+          scan_interval: 60
+
+        - name: FoxESS 026 BMS1 Ambient Temperature
+          slave: 247
+          address: 37611
+          data_type: int16
+          scale: 0.1
+          precision: 1
+          unit_of_measurement: °C
+          device_class: temperature
+          state_class: measurement
+                      
+          scan_interval: 60
+
+        - name: FoxESS 027 BMS1 SoC
+          slave: 247
+          address: 37612
+          data_type: uint16
+          precision: 0
+          unit_of_measurement: "%"
+          device_class: battery
+          state_class: measurement
+                      
+          scan_interval: 60
+
+        - name: FoxESS 028 BMS1 Max Temperature
+          slave: 247
+          address: 37617
+          data_type: int16
+          scale: 0.1
+          precision: 1
+          unit_of_measurement: °C
+          device_class: temperature
+          state_class: measurement
+                      
+          scan_interval: 60
+
+        - name: FoxESS 029 BMS1 Min Temperature
+          slave: 247
+          address: 37618
+          data_type: int16
+          scale: 0.1
+          precision: 1
+          unit_of_measurement: °C
+          device_class: temperature
+          state_class: measurement
+                      
+          scan_interval: 60
+
+        - name: FoxESS 030 BMS1 Max Cell Voltage
+          slave: 247
+          address: 37619
+          data_type: uint16
+          precision: 0
+          unit_of_measurement: mV
+          device_class: voltage
+          state_class: measurement
+                      
+          scan_interval: 60
+
+        - name: FoxESS 031 BMS1 Min Cell Voltage
+          slave: 247
+          address: 37620
+          data_type: uint16
+          precision: 0
+          unit_of_measurement: mV
+          device_class: voltage
+          state_class: measurement
+                      
+          scan_interval: 60
+
+        - name: FoxESS 032 BMS1 SOH
+          slave: 247
+          address: 37624
+          data_type: uint16
+          precision: 0
+          unit_of_measurement: "%"
+          device_class: battery
+          state_class: measurement
+                      
+          scan_interval: 300
+
+        - name: FoxESS 033 BMS1 Fault1
+          slave: 247
+          address: 37626
+          data_type: uint16
+                    
+          precision: 0
+          scan_interval: 60
+
+        - name: FoxESS 034 BMS1 Fault2
+          slave: 247
+          address: 37627
+          data_type: uint16
+                    
+          precision: 0
+          scan_interval: 60
+
+        - name: FoxESS 035 BMS1 Fault3
+          slave: 247
+          address: 37628
+          data_type: uint16
+                    
+          precision: 0
+          scan_interval: 60
+
+        - name: FoxESS 036 BMS1 Fault4
+          slave: 247
+          address: 37629
+          data_type: uint16
+                    
+          precision: 0
+          scan_interval: 60
+
+        - name: FoxESS 037 BMS1 Fault5
+          slave: 247
+          address: 37630
+          data_type: uint16
+                    
+          precision: 0
+          scan_interval: 60
+
+        - name: FoxESS 038 BMS1 Fault6
+          slave: 247
+          address: 37631
+          data_type: uint16
+                    
+          precision: 0
+          scan_interval: 60
+
+        - name: FoxESS 039 BMS1 Remain Energy
+          slave: 247
+          address: 37632
+          data_type: uint16
+          scale: 0.1
+          precision: 1
+          unit_of_measurement: Wh
+          device_class: energy
+          state_class: measurement
+                      
+          scan_interval: 60
+
+        - name: FoxESS 040 BMS1 FCC Capacity
+          slave: 247
+          address: 37633
+          data_type: uint16
+          scale: 0.1
+          precision: 1
+          unit_of_measurement: Ah
+          state_class: measurement
+                      
+          scan_interval: 300
+
+        - name: FoxESS 042 BMS1 Design Energy
+          slave: 247
+          address: 37635
+          data_type: uint16
+          scale: 0.1
+          precision: 1
+          unit_of_measurement: Wh
+          device_class: energy
+          state_class: measurement
+                      
+          scan_interval: 3600
+
+        - name: FoxESS 043 BMS1 Force Charge Flag
+          slave: 247
+          address: 37636
+          data_type: uint16
+                    
+          precision: 0
+          scan_interval: 60
+                                      
+                                                        
+                                                                                        
+
+        # 044–072: BMS2 – status, wersje, SN, parametry fizyczne, fault
+        - name: FoxESS 044 BMS2 Connection Status
+          slave: 247
+          address: 37700
+          data_type: uint16
+                    
+          precision: 0
+          scan_interval: 60
+                                 
+
+        - name: FoxESS 045 BMS2 Master Version
+          slave: 247
+          address: 37701
+          data_type: uint16
+                    
+          precision: 0
+          scan_interval: 3600
+
+        - name: FoxESS 046 BMS2 Master Type
+          slave: 247
+          address: 37702
+          data_type: uint16
+                    
+          precision: 0
+          scan_interval: 3600
+
+        - name: FoxESS 047 BMS2 Master SN
+          slave: 247
+          address: 37703
+          data_type: string
+          count: 16
+          scan_interval: 3600
+
+        - name: FoxESS 048 BMS2 Slave Number
+          slave: 247
+          address: 37730
+          data_type: uint16
+                    
+          precision: 0
+          scan_interval: 3600
+                                                                                              
+
+        - name: FoxESS 049 BMS2 Slave 1 Version
+          slave: 247
+          address: 37731
+          data_type: uint16
+                    
+          precision: 0
+          scan_interval: 3600
+
+        - name: FoxESS 050 BMS2 Slave 2 Version
+          slave: 247
+          address: 37732
+          data_type: uint16
+                    
+          precision: 0
+          scan_interval: 3600
+
+        - name: FoxESS 051 BMS2 Slave 1 SN
+          slave: 247
+          address: 37795
+          data_type: string
+          count: 16
+          scan_interval: 3600
+
+        - name: FoxESS 052 BMS2 Slave 2 SN
+          slave: 247
+          address: 37811
+          data_type: string
+          count: 16
+          scan_interval: 3600
+
+        - name: FoxESS 053 BMS2 Voltage
+          slave: 247
+          address: 38307
+          data_type: uint16
+          scale: 0.1
+          precision: 1
+          unit_of_measurement: V
+          device_class: voltage
+          state_class: measurement
+                      
+          scan_interval: 60
+
+        - name: FoxESS 054 BMS2 Current
+          slave: 247
+          address: 38308
+          data_type: int16
+          scale: 0.1
+          precision: 1
+          unit_of_measurement: A
+          device_class: current
+          state_class: measurement
+                      
+          scan_interval: 60
+
+        - name: FoxESS 055 BMS2 Ambient Temperature
+          slave: 247
+          address: 38309
+          data_type: int16
+          scale: 0.1
+          precision: 1
+          unit_of_measurement: °C
+          device_class: temperature
+          state_class: measurement
+                      
+          scan_interval: 60
+
+        - name: FoxESS 056 BMS2 SoC
+          slave: 247
+          address: 38310
+          data_type: uint16
+          precision: 0
+          unit_of_measurement: "%"
+          device_class: battery
+          state_class: measurement
+                      
+          scan_interval: 60
+
+        - name: FoxESS 057 BMS2 Max Temperature
+          slave: 247
+          address: 38315
+          data_type: int16
+          scale: 0.1
+          precision: 1
+          unit_of_measurement: °C
+          device_class: temperature
+          state_class: measurement
+                      
+          scan_interval: 60
+
+        - name: FoxESS 058 BMS2 Min Temperature
+          slave: 247
+          address: 38316
+          data_type: int16
+          scale: 0.1
+          precision: 1
+          unit_of_measurement: °C
+          device_class: temperature
+          state_class: measurement
+                      
+          scan_interval: 60
+
+        - name: FoxESS 059 BMS2 Max Cell Voltage
+          slave: 247
+          address: 38317
+          data_type: uint16
+          precision: 0
+          unit_of_measurement: mV
+          device_class: voltage
+          state_class: measurement
+                      
+          scan_interval: 60
+
+        - name: FoxESS 060 BMS2 Min Cell Voltage
+          slave: 247
+          address: 38318
+          data_type: uint16
+          precision: 0
+          unit_of_measurement: mV
+          device_class: voltage
+          state_class: measurement
+                      
+          scan_interval: 60
+
+        - name: FoxESS 061 BMS2 SOH
+          slave: 247
+          address: 38322
+          data_type: uint16
+          precision: 0
+          unit_of_measurement: "%"
+          device_class: battery
+          state_class: measurement
+                      
+          scan_interval: 300
+
+        - name: FoxESS 062 BMS2 Fault1
+          slave: 247
+          address: 38324
+          data_type: uint16
+                    
+          precision: 0
+          scan_interval: 60
+
+        - name: FoxESS 063 BMS2 Fault2
+          slave: 247
+          address: 38325
+          data_type: uint16
+                    
+          precision: 0
+          scan_interval: 60
+
+        - name: FoxESS 064 BMS2 Fault3
+          slave: 247
+          address: 38326
+          data_type: uint16
+                    
+          precision: 0
+          scan_interval: 60
+
+        - name: FoxESS 065 BMS2 Fault4
+          slave: 247
+          address: 38327
+          data_type: uint16
+                    
+          precision: 0
+          scan_interval: 60
+
+        - name: FoxESS 066 BMS2 Fault5
+          slave: 247
+          address: 38328
+          data_type: uint16
+                    
+          precision: 0
+          scan_interval: 60
+
+        - name: FoxESS 067 BMS2 Fault6
+          slave: 247
+          address: 38329
+          data_type: uint16
+                    
+          precision: 0
+          scan_interval: 60
+
+        - name: FoxESS 068 BMS2 Remain Energy
+          slave: 247
+          address: 38330
+          data_type: uint16
+          scale: 0.1
+          precision: 1
+          unit_of_measurement: Wh
+          device_class: energy
+          state_class: measurement
+                      
+          scan_interval: 60
+
+        - name: FoxESS 069 BMS2 FCC Capacity
+          slave: 247
+          address: 38331
+          data_type: uint16
+          scale: 0.1
+          precision: 1
+          unit_of_measurement: Ah
+          state_class: measurement
+                      
+          scan_interval: 300
+
+        - name: FoxESS 071 BMS2 Design Energy
+          slave: 247
+          address: 38333
+          data_type: uint16
+          scale: 0.1
+          precision: 1
+          unit_of_measurement: Wh
+          device_class: energy
+          state_class: measurement
+                      
+          scan_interval: 3600
+
+        - name: FoxESS 072 BMS2 Force Charge Flag
+          slave: 247
+          address: 38334
+          data_type: uint16
+                    
+          precision: 0
+          scan_interval: 60
+
+        # ------------------------------------------------------------------------
+        # 73–96: Meter1 / CT1 – parametry sieciowe
+        # ------------------------------------------------------------------------
+        - name: FoxESS 073 Meter1 CT1 Connection State
+          slave: 247
+          address: 38801
+          data_type: uint16
+                    
+          precision: 0
+          scan_interval: 60
+                                     
+
+        - name: FoxESS 074 Meter1 CT1 R Phase Voltage
+          slave: 247
+          address: 38802
+          data_type: int32
+          scale: 0.1
+          precision: 1
+          unit_of_measurement: V
+          device_class: voltage
+          state_class: measurement
+                      
+          scan_interval: 60
+
+        - name: FoxESS 075 Meter1 CT1 S Phase Voltage
+          slave: 247
+          address: 38804
+          data_type: int32
+          scale: 0.1
+          precision: 1
+          unit_of_measurement: V
+          device_class: voltage
+          state_class: measurement
+                      
+          scan_interval: 60
+
+        - name: FoxESS 076 Meter1 CT1 T Phase Voltage
+          slave: 247
+          address: 38806
+          data_type: int32
+          scale: 0.1
+          precision: 1
+          unit_of_measurement: V
+          device_class: voltage
+          state_class: measurement
+                      
+          scan_interval: 60
+
+        - name: FoxESS 077 Meter1 CT1 R Phase Current
+          slave: 247
+          address: 38808
+          data_type: int32
+          scale: 0.001
+          precision: 3
+          unit_of_measurement: A
+          device_class: current
+          state_class: measurement
+                      
+          scan_interval: 60
+
+        - name: FoxESS 078 Meter1 CT1 S Phase Current
+          slave: 247
+          address: 38810
+          data_type: int32
+          scale: 0.001
+          precision: 3
+          unit_of_measurement: A
+          device_class: current
+          state_class: measurement
+                      
+          scan_interval: 60
+
+        - name: FoxESS 079 Meter1 CT1 T Phase Current
+          slave: 247
+          address: 38812
+          data_type: int32
+          scale: 0.001
+          precision: 3
+          unit_of_measurement: A
+          device_class: current
+          state_class: measurement
+                      
+          scan_interval: 60
+
+        - name: FoxESS 080 Meter1 CT1 Combined Active Power
+          slave: 247
+          address: 38814
+          data_type: int32
+          scale: 0.1
+          precision: 1
+          unit_of_measurement: W
+          device_class: power
+          state_class: measurement
+                      
+          scan_interval: 60
+
+        - name: FoxESS 081 Meter1 CT1 R Phase Active Power
+          slave: 247
+          address: 38816
+          data_type: int32
+          scale: 0.1
+          precision: 1
+          unit_of_measurement: W
+          device_class: power
+          state_class: measurement
+                      
+          scan_interval: 60
+
+        - name: FoxESS 082 Meter1 CT1 S Phase Active Power
+          slave: 247
+          address: 38818
+          data_type: int32
+          scale: 0.1
+          precision: 1
+          unit_of_measurement: W
+          device_class: power
+          state_class: measurement
+                      
+          scan_interval: 60
+
+        - name: FoxESS 083 Meter1 CT1 T Phase Active Power
+          slave: 247
+          address: 38820
+          data_type: int32
+          scale: 0.1
+          precision: 1
+          unit_of_measurement: W
+          device_class: power
+          state_class: measurement
+                      
+          scan_interval: 60
+
+        - name: FoxESS 084 Meter1 CT1 Combined Reactive Power
+          slave: 247
+          address: 38822
+          data_type: int32
+          scale: 0.1
+          precision: 1
+          unit_of_measurement: var
+          device_class: reactive_power
+          state_class: measurement
+                      
+          scan_interval: 60
+
+        - name: FoxESS 085 Meter1 CT1 R Phase Reactive Power
+          slave: 247
+          address: 38824
+          data_type: int32
+          scale: 0.1
+          precision: 1
+          unit_of_measurement: var
+          device_class: reactive_power
+          state_class: measurement
+                      
+          scan_interval: 60
+
+        - name: FoxESS 086 Meter1 CT1 S Phase Reactive Power
+          slave: 247
+          address: 38826
+          data_type: int32
+          scale: 0.1
+          precision: 1
+          unit_of_measurement: var
+          device_class: reactive_power
+          state_class: measurement
+                      
+          scan_interval: 60
+
+        - name: FoxESS 087 Meter1 CT1 T Phase Reactive Power
+          slave: 247
+          address: 38828
+          data_type: int32
+          scale: 0.1
+          precision: 1
+          unit_of_measurement: var
+          device_class: reactive_power
+          state_class: measurement
+                      
+          scan_interval: 60
+
+        - name: FoxESS 088 Meter1 CT1 Combined Apparent Power
+          slave: 247
+          address: 38830
+          data_type: int32
+          scale: 0.1
+          precision: 1
+          unit_of_measurement: VA
+          device_class: apparent_power
+          state_class: measurement
+                      
+          scan_interval: 60
+
+        - name: FoxESS 089 Meter1 CT1 R Phase Apparent Power
+          slave: 247
+          address: 38832
+          data_type: int32
+          scale: 0.1
+          precision: 1
+          unit_of_measurement: VA
+          device_class: apparent_power
+          state_class: measurement
+                      
+          scan_interval: 60
+
+        - name: FoxESS 090 Meter1 CT1 S Phase Apparent Power
+          slave: 247
+          address: 38834
+          data_type: int32
+          scale: 0.1
+          precision: 1
+          unit_of_measurement: VA
+          device_class: apparent_power
+          state_class: measurement
+                      
+          scan_interval: 60
+
+        - name: FoxESS 091 Meter1 CT1 T Phase Apparent Power
+          slave: 247
+          address: 38836
+          data_type: int32
+          scale: 0.1
+          precision: 1
+          unit_of_measurement: VA
+          device_class: apparent_power
+          state_class: measurement
+                      
+          scan_interval: 60
+
+        - name: FoxESS 092 Meter1 CT1 Combined Power Factor
+          slave: 247
+          address: 38838
+          data_type: int32
+          scale: 0.001
+          precision: 3
+          unit_of_measurement: ""
+          device_class: power_factor
+          state_class: measurement
+                      
+          scan_interval: 60
+
+        - name: FoxESS 093 Meter1 CT1 R Phase Power Factor
+          slave: 247
+          address: 38840
+          data_type: int32
+          scale: 0.001
+          precision: 3
+          unit_of_measurement: ""
+          device_class: power_factor
+          state_class: measurement
+                      
+          scan_interval: 60
+
+        - name: FoxESS 094 Meter1 CT1 S Phase Power Factor
+          slave: 247
+          address: 38842
+          data_type: int32
+          scale: 0.001
+          precision: 3
+          unit_of_measurement: ""
+          device_class: power_factor
+          state_class: measurement
+                      
+          scan_interval: 60
+
+        - name: FoxESS 095 Meter1 CT1 T Phase Power Factor
+          slave: 247
+          address: 38844
+          data_type: int32
+          scale: 0.001
+          precision: 3
+          unit_of_measurement: ""
+          device_class: power_factor
+          state_class: measurement
+                      
+          scan_interval: 60
+
+        - name: FoxESS 096 Meter1 CT1 Frequency
+          slave: 247
+          address: 38846
+          data_type: int32
+          scale: 0.01
+          precision: 2
+          unit_of_measurement: Hz
+          device_class: frequency
+          state_class: measurement
+                      
+          scan_interval: 60
+
+        # ------------------------------------------------------------------------
+        # 097–120: Meter2 / CT2 – parametry sieciowe
+        # ------------------------------------------------------------------------
+        - name: FoxESS 097 Meter2 CT2 Connection State
+          slave: 247
+          address: 38901
+          data_type: uint16
+                    
+          precision: 0
+          scan_interval: 60
+                                                  
+
+        - name: FoxESS 098 Meter2 CT2 R Phase Voltage
+          slave: 247
+          address: 38902
+          data_type: int32
+          scale: 0.1
+          precision: 1
+          unit_of_measurement: V
+          device_class: voltage
+          state_class: measurement
+                      
+          scan_interval: 60
+
+        - name: FoxESS 099 Meter2 CT2 S Phase Voltage
+          slave: 247
+          address: 38904
+          data_type: int32
+          scale: 0.1
+          precision: 1
+          unit_of_measurement: V
+          device_class: voltage
+          state_class: measurement
+                      
+          scan_interval: 60
+
+        - name: FoxESS 100 Meter2 CT2 T Phase Voltage
+          slave: 247
+          address: 38906
+          data_type: int32
+          scale: 0.1
+          precision: 1
+          unit_of_measurement: V
+          device_class: voltage
+          state_class: measurement
+                      
+          scan_interval: 60
+
+        - name: FoxESS 101 Meter2 CT2 R Phase Current
+          slave: 247
+          address: 38908
+          data_type: int32
+          scale: 0.001
+          precision: 3
+          unit_of_measurement: A
+          device_class: current
+          state_class: measurement
+                      
+          scan_interval: 60
+
+        - name: FoxESS 102 Meter2 CT2 S Phase Current
+          slave: 247
+          address: 38910
+          data_type: int32
+          scale: 0.001
+          precision: 3
+          unit_of_measurement: A
+          device_class: current
+          state_class: measurement
+                      
+          scan_interval: 60
+
+        - name: FoxESS 103 Meter2 CT2 T Phase Current
+          slave: 247
+          address: 38912
+          data_type: int32
+          scale: 0.001
+          precision: 3
+          unit_of_measurement: A
+          device_class: current
+          state_class: measurement
+                      
+          scan_interval: 60
+
+        - name: FoxESS 104 Meter2 CT2 Combined Active Power
+          slave: 247
+          address: 38914
+          data_type: int32
+          scale: 0.1
+          precision: 1
+          unit_of_measurement: W
+          device_class: power
+          state_class: measurement
+                      
+          scan_interval: 60
+
+        - name: FoxESS 105 Meter2 CT2 R Phase Active Power
+          slave: 247
+          address: 38916
+          data_type: int32
+          scale: 0.1
+          precision: 1
+          unit_of_measurement: W
+          device_class: power
+          state_class: measurement
+                      
+          scan_interval: 60
+
+        - name: FoxESS 106 Meter2 CT2 S Phase Active Power
+          slave: 247
+          address: 38918
+          data_type: int32
+          scale: 0.1
+          precision: 1
+          unit_of_measurement: W
+          device_class: power
+          state_class: measurement
+                      
+          scan_interval: 60
+
+        - name: FoxESS 107 Meter2 CT2 T Phase Active Power
+          slave: 247
+          address: 38920
+          data_type: int32
+          scale: 0.1
+          precision: 1
+          unit_of_measurement: W
+          device_class: power
+          state_class: measurement
+                      
+          scan_interval: 60
+
+        - name: FoxESS 108 Meter2 CT2 Combined Reactive Power
+          slave: 247
+          address: 38922
+          data_type: int32
+          scale: 0.1
+          precision: 1
+          unit_of_measurement: var
+          device_class: reactive_power
+          state_class: measurement
+                      
+          scan_interval: 60
+
+        - name: FoxESS 109 Meter2 CT2 R Phase Reactive Power
+          slave: 247
+          address: 38924
+          data_type: int32
+          scale: 0.1
+          precision: 1
+          unit_of_measurement: var
+          device_class: reactive_power
+          state_class: measurement
+                      
+          scan_interval: 60
+
+        - name: FoxESS 110 Meter2 CT2 S Phase Reactive Power
+          slave: 247
+          address: 38926
+          data_type: int32
+          scale: 0.1
+          precision: 1
+          unit_of_measurement: var
+          device_class: reactive_power
+          state_class: measurement
+                      
+          scan_interval: 60
+
+        - name: FoxESS 111 Meter2 CT2 T Phase Reactive Power
+          slave: 247
+          address: 38928
+          data_type: int32
+          scale: 0.1
+          precision: 1
+          unit_of_measurement: var
+          device_class: reactive_power
+          state_class: measurement
+                      
+          scan_interval: 60
+
+        - name: FoxESS 112 Meter2 CT2 Combined Apparent Power
+          slave: 247
+          address: 38930
+          data_type: int32
+          scale: 0.1
+          precision: 1
+          unit_of_measurement: VA
+          device_class: apparent_power
+          state_class: measurement
+                      
+          scan_interval: 60
+
+        - name: FoxESS 113 Meter2 CT2 R Phase Apparent Power
+          slave: 247
+          address: 38932
+          data_type: int32
+          scale: 0.1
+          precision: 1
+          unit_of_measurement: VA
+          device_class: apparent_power
+          state_class: measurement
+                      
+          scan_interval: 60
+
+        - name: FoxESS 114 Meter2 CT2 S Phase Apparent Power
+          slave: 247
+          address: 38934
+          data_type: int32
+          scale: 0.1
+          precision: 1
+          unit_of_measurement: VA
+          device_class: apparent_power
+          state_class: measurement
+                      
+          scan_interval: 60
+
+        - name: FoxESS 115 Meter2 CT2 T Phase Apparent Power
+          slave: 247
+          address: 38936
+          data_type: int32
+          scale: 0.1
+          precision: 1
+          unit_of_measurement: VA
+          device_class: apparent_power
+          state_class: measurement
+                      
+          scan_interval: 60
+
+        - name: FoxESS 116 Meter2 CT2 Combined Power Factor
+          slave: 247
+          address: 38938
+          data_type: int32
+          scale: 0.001
+          precision: 3
+          unit_of_measurement: ""
+          device_class: power_factor
+          state_class: measurement
+                      
+          scan_interval: 60
+
+        - name: FoxESS 117 Meter2 CT2 R Phase Power Factor
+          slave: 247
+          address: 38940
+          data_type: int32
+          scale: 0.001
+          precision: 3
+          unit_of_measurement: ""
+          device_class: power_factor
+          state_class: measurement
+                      
+          scan_interval: 60
+
+        - name: FoxESS 118 Meter2 CT2 S Phase Power Factor
+          slave: 247
+          address: 38942
+          data_type: int32
+          scale: 0.001
+          precision: 3
+          unit_of_measurement: ""
+          device_class: power_factor
+          state_class: measurement
+                      
+          scan_interval: 60
+
+        - name: FoxESS 119 Meter2 CT2 T Phase Power Factor
+          slave: 247
+          address: 38944
+          data_type: int32
+          scale: 0.001
+          precision: 3
+          unit_of_measurement: ""
+          device_class: power_factor
+          state_class: measurement
+                      
+          scan_interval: 60
+
+        - name: FoxESS 120 Meter2 CT2 Frequency
+          slave: 247
+          address: 38946
+          data_type: int32
+          scale: 0.01
+          precision: 2
+          unit_of_measurement: Hz
+          device_class: frequency
+          state_class: measurement
+                      
+          scan_interval: 60
+
+        # ------------------------------------------------------------------------
+        # 121–132: Parametry znamionowe inwertera
+        # ------------------------------------------------------------------------
+        - name: FoxESS 121 Protocol Version
+          slave: 247
+          address: 39000
+          data_type: uint32
+                  
+          precision: 0
+          scan_interval: 3600
+
+        - name: FoxESS 122 Model Name
+          slave: 247
+          address: 39002
+          data_type: string
+          count: 16
+          scan_interval: 3600
+
+        - name: FoxESS 123 SN
+          slave: 247
+          address: 39018
+          data_type: string
+          count: 16
+          scan_interval: 3600
+
+        - name: FoxESS 124 PN
+          slave: 247
+          address: 39034
+          data_type: string
+          count: 16
+          scan_interval: 3600
+
+        - name: FoxESS 125 Model ID
+          slave: 247
+          address: 39050
+          data_type: uint16
+                  
+          precision: 0
+          scan_interval: 3600
+
+        - name: FoxESS 126 Number of Strings
+          slave: 247
+          address: 39051
+          data_type: uint16
+                  
+          precision: 0
+          scan_interval: 3600
+
+        - name: FoxESS 127 Number of MPPTs
+          slave: 247
+          address: 39052
+          data_type: uint16
+                  
+          precision: 0
+          scan_interval: 3600
+
+        - name: FoxESS 128 Rated Power Pn
+          slave: 247
+          address: 39053
+          data_type: int32
+          scale: 0.001
+          precision: 3
+          unit_of_measurement: kW
+          device_class: power
+          state_class: measurement
+                      
+          scan_interval: 3600
+
+        - name: FoxESS 129 Maximum Active Power Pmax
+          slave: 247
+          address: 39055
+          data_type: int32
+          scale: 0.001
+          precision: 3
+          unit_of_measurement: kW
+          device_class: power
+          state_class: measurement
+                      
+          scan_interval: 3600
+
+        - name: FoxESS 130 Maximum Apparent Power Smax
+          slave: 247
+          address: 39057
+          data_type: int32
+          scale: 0.001
+          precision: 3
+          unit_of_measurement: kVA
+          device_class: apparent_power
+          state_class: measurement
+                      
+          scan_interval: 3600
+
+        - name: FoxESS 131 Maximum Reactive Power Qmax fed
+          slave: 247
+          address: 39059
+          data_type: int32
+          scale: 0.001
+          precision: 3
+          unit_of_measurement: kvar
+          device_class: reactive_power
+          state_class: measurement
+                      
+          scan_interval: 3600
+
+        - name: FoxESS 132 Maximum Reactive Power Qmax absorbed
+          slave: 247
+          address: 39061
+          data_type: int32
+          scale: 0.001
+          precision: 3
+          unit_of_measurement: kvar
+          device_class: reactive_power
+          state_class: measurement
+                      
+          scan_interval: 3600
+
+        # ------------------------------------------------------------------------
+        # 133–135: Statusy inwertera
+        # ------------------------------------------------------------------------
+        - name: FoxESS 133 Status 1
+          slave: 247
+          address: 39063
+          data_type: uint16
+                  
+          precision: 0
+          scan_interval: 60
+
+        - name: FoxESS 135 Status 3
+          slave: 247
+          address: 39065
+          data_type: uint16
+                  
+          precision: 0
+          scan_interval: 60
+
+        # ------------------------------------------------------------------------
+        # 139–147: PV – napięcia, prądy stringów + całkowita moc PV
+        # ------------------------------------------------------------------------
+        - name: FoxESS 139 PV1 Voltage
+          slave: 247
+          address: 39070
+          data_type: int16
+          scale: 0.1
+          precision: 1
+          unit_of_measurement: V
+          device_class: voltage
+          state_class: measurement
+                      
+          scan_interval: 60
+
+        - name: FoxESS 140 PV1 Current
+          slave: 247
+          address: 39071
+          data_type: int16
+          scale: 0.01
+          precision: 2
+          unit_of_measurement: A
+          device_class: current
+          state_class: measurement
+                      
+          scan_interval: 60
+
+        - name: FoxESS 141 PV2 Voltage
+          slave: 247
+          address: 39072
+          data_type: int16
+          scale: 0.1
+          precision: 1
+          unit_of_measurement: V
+          device_class: voltage
+          state_class: measurement
+                      
+          scan_interval: 60
+
+        - name: FoxESS 142 PV2 Current
+          slave: 247
+          address: 39073
+          data_type: int16
+          scale: 0.01
+          precision: 2
+          unit_of_measurement: A
+          device_class: current
+          state_class: measurement
+                      
+          scan_interval: 60
+
+        - name: FoxESS 143 PV3 Voltage
+          slave: 247
+          address: 39074
+          data_type: int16
+          scale: 0.1
+          precision: 1
+          unit_of_measurement: V
+          device_class: voltage
+          state_class: measurement
+                      
+          scan_interval: 60
+
+        - name: FoxESS 144 PV3 Current
+          slave: 247
+          address: 39075
+          data_type: int16
+          scale: 0.01
+          precision: 2
+          unit_of_measurement: A
+          device_class: current
+          state_class: measurement
+                      
+          scan_interval: 60
+
+        - name: FoxESS 145 PV4 Voltage
+          slave: 247
+          address: 39076
+          data_type: int16
+          scale: 0.1
+          precision: 1
+          unit_of_measurement: V
+          device_class: voltage
+          state_class: measurement
+                      
+          scan_interval: 60
+
+        - name: FoxESS 146 PV4 Current
+          slave: 247
+          address: 39077
+          data_type: int16
+          scale: 0.01
+          precision: 2
+          unit_of_measurement: A
+          device_class: current
+          state_class: measurement
+                      
+          scan_interval: 60
+
+        - name: FoxESS 147 Total PV Input Power
+          slave: 247
+          address: 39118
+          data_type: int32
+          scale: 0.001
+          precision: 3
+          unit_of_measurement: kW
+          device_class: power
+          state_class: measurement
+                      
+          scan_interval: 60
+
+        # ------------------------------------------------------------------------
+        # 151–181: Grid / Inwerter fazowy, moc, temperatura, energia
+        # ------------------------------------------------------------------------
+        - name: FoxESS 151 Grid R Phase Voltage
+          slave: 247
+          address: 39123
+          data_type: int16
+          scale: 0.1
+          precision: 1
+          unit_of_measurement: V
+          device_class: voltage
+          state_class: measurement
+                      
+          scan_interval: 60
+
+        - name: FoxESS 152 Grid S Phase Voltage
+          slave: 247
+          address: 39124
+          data_type: int16
+          scale: 0.1
+          precision: 1
+          unit_of_measurement: V
+          device_class: voltage
+          state_class: measurement
+                      
+          scan_interval: 60
+
+        - name: FoxESS 153 Grid T Phase Voltage
+          slave: 247
+          address: 39125
+          data_type: int16
+          scale: 0.1
+          precision: 1
+          unit_of_measurement: V
+          device_class: voltage
+          state_class: measurement
+                      
+          scan_interval: 60
+
+        - name: FoxESS 154 Inverter R Phase Current
+          slave: 247
+          address: 39126
+          data_type: int32
+          scale: 0.001
+          precision: 3
+          unit_of_measurement: A
+          device_class: current
+          state_class: measurement
+                      
+          scan_interval: 60
+
+        - name: FoxESS 155 Inverter S Phase Current
+          slave: 247
+          address: 39128
+          data_type: int32
+          scale: 0.001
+          precision: 3
+          unit_of_measurement: A
+          device_class: current
+          state_class: measurement
+                      
+          scan_interval: 60
+
+        - name: FoxESS 156 Inverter T Phase Current
+          slave: 247
+          address: 39130
+          data_type: int32
+          scale: 0.001
+          precision: 3
+          unit_of_measurement: A
+          device_class: current
+          state_class: measurement
+                      
+          scan_interval: 60
+
+        - name: FoxESS 158 Active Power
+          slave: 247
+          address: 39134
+          data_type: int32
+          scale: 0.001
+          precision: 3
+          unit_of_measurement: kW
+          device_class: power
+          state_class: measurement
+                      
+          scan_interval: 60
+
+        - name: FoxESS 159 Reactive Power
+          slave: 247
+          address: 39136
+          data_type: int32
+          scale: 0.001
+          precision: 3
+          unit_of_measurement: kvar
+          device_class: reactive_power
+          state_class: measurement
+                      
+          scan_interval: 60
+
+        - name: FoxESS 160 Power Factor
+          slave: 247
+          address: 39138
+          data_type: int16
+          scale: 0.001
+          precision: 3
+          unit_of_measurement: ""
+          device_class: power_factor
+          state_class: measurement
+                      
+          scan_interval: 60
+
+        - name: FoxESS 161 Grid Frequency
+          slave: 247
+          address: 39139
+          data_type: int16
+          scale: 0.01
+          precision: 2
+          unit_of_measurement: Hz
+          device_class: frequency
+          state_class: measurement
+                      
+          scan_interval: 60
+
+        - name: FoxESS 163 Internal Temperature
+          slave: 247
+          address: 39141
+          data_type: int16
+          scale: 0.1
+          precision: 1
+          unit_of_measurement: °C
+          device_class: temperature
+          state_class: measurement
+                      
+          scan_interval: 60
+
+        - name: FoxESS 169 Cumulative Power Generation
+          slave: 247
+          address: 39149
+          data_type: uint32
+          scale: 0.01
+          precision: 2
+          unit_of_measurement: kWh
+          device_class: energy
+          state_class: total_increasing
+                      
+          scan_interval: 300
+
+        - name: FoxESS 170 Power Generation Today
+          slave: 247
+          address: 39151
+          data_type: uint32
+          scale: 0.01
+          precision: 2
+          unit_of_measurement: kWh
+          device_class: energy
+          state_class: total_increasing
+                      
+          scan_interval: 300
+
+        - name: FoxESS 178 Battery1 Charge Discharge Power
+          slave: 247
+          address: 39162
+          data_type: int32
+          precision: 0
+          unit_of_measurement: W
+          device_class: power
+          state_class: measurement
+                      
+          scan_interval: 60
+
+        - name: FoxESS 181 Meter Active Power
+          slave: 247
+          address: 39168
+          data_type: int32
+          precision: 0
+          unit_of_measurement: W
+          device_class: power
+          state_class: measurement
+                      
+          scan_interval: 60
+
+        # ------------------------------------------------------------------------
+        # 186–200: EPS – napięcia, prądy, moce, częstotliwość + Load
+        # ------------------------------------------------------------------------
+        - name: FoxESS 186 EPS R Phase Voltage
+          slave: 247
+          address: 39201
+          data_type: uint16
+          scale: 0.1
+          precision: 1
+          unit_of_measurement: V
+          device_class: voltage
+          state_class: measurement
+                      
+          scan_interval: 60
+
+        - name: FoxESS 187 EPS S Phase Voltage
+          slave: 247
+          address: 39202
+          data_type: uint16
+          scale: 0.1
+          precision: 1
+          unit_of_measurement: V
+          device_class: voltage
+          state_class: measurement
+                      
+          scan_interval: 60
+
+        - name: FoxESS 188 EPS T Phase Voltage
+          slave: 247
+          address: 39203
+          data_type: uint16
+          scale: 0.1
+          precision: 1
+          unit_of_measurement: V
+          device_class: voltage
+          state_class: measurement
+                      
+          scan_interval: 60
+
+        - name: FoxESS 189 EPS R Phase Current
+          slave: 247
+          address: 39204
+          data_type: int32
+          scale: 0.001
+          precision: 3
+          unit_of_measurement: A
+          device_class: current
+          state_class: measurement
+                      
+          scan_interval: 60
+
+        - name: FoxESS 190 EPS S Phase Current
+          slave: 247
+          address: 39206
+          data_type: int32
+          scale: 0.001
+          precision: 3
+          unit_of_measurement: A
+          device_class: current
+          state_class: measurement
+                      
+          scan_interval: 60
+
+        - name: FoxESS 191 EPS T Phase Current
+          slave: 247
+          address: 39208
+          data_type: int32
+          scale: 0.001
+          precision: 3
+          unit_of_measurement: A
+          device_class: current
+          state_class: measurement
+                      
+          scan_interval: 60
+
+        - name: FoxESS 192 EPS R Phase Power
+          slave: 247
+          address: 39210
+          data_type: int32
+          precision: 0
+          unit_of_measurement: W
+          device_class: power
+          state_class: measurement
+                      
+          scan_interval: 60
+
+        - name: FoxESS 193 EPS S Phase Power
+          slave: 247
+          address: 39212
+          data_type: int32
+          precision: 0
+          unit_of_measurement: W
+          device_class: power
+          state_class: measurement
+                      
+          scan_interval: 60
+
+        - name: FoxESS 194 EPS T Phase Power
+          slave: 247
+          address: 39214
+          data_type: int32
+          precision: 0
+          unit_of_measurement: W
+          device_class: power
+          state_class: measurement
+                      
+          scan_interval: 60
+
+        - name: FoxESS 195 EPS Combined Power
+          slave: 247
+          address: 39216
+          data_type: int32
+          precision: 0
+          unit_of_measurement: W
+          device_class: power
+          state_class: measurement
+                      
+          scan_interval: 60
+
+        - name: FoxESS 196 EPS Frequency
+          slave: 247
+          address: 39218
+          data_type: int16
+          scale: 0.01
+          precision: 2
+          unit_of_measurement: Hz
+          device_class: frequency
+          state_class: measurement
+                      
+          scan_interval: 60
+
+        - name: FoxESS 197 Load R Phase Power
+          slave: 247
+          address: 39219
+          data_type: int32
+          precision: 0
+          unit_of_measurement: W
+          device_class: power
+          state_class: measurement
+                      
+          scan_interval: 60
+
+        - name: FoxESS 198 Load S Phase Power
+          slave: 247
+          address: 39221
+          data_type: int32
+          precision: 0
+          unit_of_measurement: W
+          device_class: power
+          state_class: measurement
+                      
+          scan_interval: 60
+
+        - name: FoxESS 199 Load T Phase Power
+          slave: 247
+          address: 39223
+          data_type: int32
+          precision: 0
+          unit_of_measurement: W
+          device_class: power
+          state_class: measurement
+                      
+          scan_interval: 60
+
+        - name: FoxESS 200 Load Combined Power
+          slave: 247
+          address: 39225
+          data_type: int32
+          precision: 0
+          unit_of_measurement: W
+          device_class: power
+          state_class: measurement
+                      
+          scan_interval: 60
+
+        # ------------------------------------------------------------------------
+        # 201–207: Bateria bezpośrednia – napięcie, prąd, moc
+        # ------------------------------------------------------------------------
+        - name: FoxESS 201 Battery1 Voltage
+          slave: 247
+          address: 39227
+          data_type: int16
+          scale: 0.1
+          precision: 1
+          unit_of_measurement: V
+          device_class: voltage
+          state_class: measurement
+                      
+          scan_interval: 60
+
+        - name: FoxESS 202 Battery1 Current
+          slave: 247
+          address: 39228
+          data_type: int32
+          scale: 0.001
+          precision: 3
+          unit_of_measurement: A
+          device_class: current
+          state_class: measurement
+                      
+          scan_interval: 60
+
+        - name: FoxESS 203 Battery1 Power
+          slave: 247
+          address: 39230
+          data_type: int32
+          precision: 0
+          unit_of_measurement: W
+          device_class: power
+          state_class: measurement
+                      
+          scan_interval: 60
+
+        - name: FoxESS 204 Battery2 Voltage
+          slave: 247
+          address: 39232
+          data_type: int16
+          scale: 0.1
+          precision: 1
+          unit_of_measurement: V
+          device_class: voltage
+          state_class: measurement
+                      
+          scan_interval: 60
+
+        - name: FoxESS 205 Battery2 Current
+          slave: 247
+          address: 39233
+          data_type: int32
+          scale: 0.001
+          precision: 3
+          unit_of_measurement: A
+          device_class: current
+          state_class: measurement
+                      
+          scan_interval: 60
+
+        - name: FoxESS 206 Battery2 Power
+          slave: 247
+          address: 39235
+          data_type: int32
+          precision: 0
+          unit_of_measurement: W
+          device_class: power
+          state_class: measurement
+                      
+          scan_interval: 60
+
+        - name: FoxESS 207 Battery Combined Power
+          slave: 247
+          address: 39237
+          data_type: int32
+          precision: 0
+          unit_of_measurement: W
+          device_class: power
+          state_class: measurement
+                      
+          scan_interval: 60
+
+        # ------------------------------------------------------------------------
+        # 214–230: Inwerter fazowy i dostępne moce
+        # ------------------------------------------------------------------------
+        - name: FoxESS 214 INV R Phase Active Power
+          slave: 247
+          address: 39248
+          data_type: int32
+          precision: 0
+          unit_of_measurement: W
+          device_class: power
+          state_class: measurement
+                      
+          scan_interval: 60
+
+        - name: FoxESS 215 INV S Phase Active Power
+          slave: 247
+          address: 39250
+          data_type: int32
+          precision: 0
+          unit_of_measurement: W
+          device_class: power
+          state_class: measurement
+                      
+          scan_interval: 60
+
+        - name: FoxESS 216 INV T Phase Active Power
+          slave: 247
+          address: 39252
+          data_type: int32
+          precision: 0
+          unit_of_measurement: W
+          device_class: power
+          state_class: measurement
+                      
+          scan_interval: 60
+
+        - name: FoxESS 218 INV R Phase Reactive Power
+          slave: 247
+          address: 39256
+          data_type: int32
+          precision: 0
+          unit_of_measurement: var
+          device_class: reactive_power
+          state_class: measurement
+                      
+          scan_interval: 60
+
+        - name: FoxESS 219 INV S Phase Reactive Power
+          slave: 247
+          address: 39258
+          data_type: int32
+          precision: 0
+          unit_of_measurement: var
+          device_class: reactive_power
+          state_class: measurement
+                      
+          scan_interval: 60
+
+        - name: FoxESS 220 INV T Phase Reactive Power
+          slave: 247
+          address: 39260
+          data_type: int32
+          precision: 0
+          unit_of_measurement: var
+          device_class: reactive_power
+          state_class: measurement
+                      
+          scan_interval: 60
+
+        - name: FoxESS 222 INV R Phase Apparent Power
+          slave: 247
+          address: 39264
+          data_type: int32
+          precision: 0
+          unit_of_measurement: VA
+          device_class: apparent_power
+          state_class: measurement
+                      
+          scan_interval: 60
+
+        - name: FoxESS 223 INV S Phase Apparent Power
+          slave: 247
+          address: 39266
+          data_type: int32
+          precision: 0
+          unit_of_measurement: VA
+          device_class: apparent_power
+          state_class: measurement
+                      
+          scan_interval: 60
+
+        - name: FoxESS 224 INV T Phase Apparent Power
+          slave: 247
+          address: 39268
+          data_type: int32
+          precision: 0
+          unit_of_measurement: VA
+          device_class: apparent_power
+          state_class: measurement
+                      
+          scan_interval: 60
+
+        - name: FoxESS 225 INV Combined Apparent Power
+          slave: 247
+          address: 39270
+          data_type: int32
+          precision: 0
+          unit_of_measurement: VA
+          device_class: apparent_power
+          state_class: measurement
+                      
+          scan_interval: 60
+
+        - name: FoxESS 226 INV Frequency R
+          slave: 247
+          address: 39272
+          data_type: int16
+          scale: 0.01
+          precision: 2
+          unit_of_measurement: Hz
+          device_class: frequency
+          state_class: measurement
+                      
+          scan_interval: 60
+
+        - name: FoxESS 227 INV Frequency S
+          slave: 247
+          address: 39273
+          data_type: int16
+          scale: 0.01
+          precision: 2
+          unit_of_measurement: Hz
+          device_class: frequency
+          state_class: measurement
+                      
+          scan_interval: 60
+
+        - name: FoxESS 228 INV Frequency T
+          slave: 247
+          address: 39274
+          data_type: int16
+          scale: 0.01
+          precision: 2
+          unit_of_measurement: Hz
+          device_class: frequency
+          state_class: measurement
+                      
+          scan_interval: 60
+
+        - name: FoxESS 229 Available Import Power
+          slave: 247
+          address: 39275
+          data_type: int32
+          precision: 0
+          unit_of_measurement: W
+          device_class: power
+          state_class: measurement
+                      
+          scan_interval: 60
+
+        - name: FoxESS 230 Available Export Power
+          slave: 247
+          address: 39277
+          data_type: int32
+          precision: 0
+          unit_of_measurement: W
+          device_class: power
+          state_class: measurement
+                      
+          scan_interval: 60
+
+        # ------------------------------------------------------------------------
+        # 231–234: PV – moce na poszczególnych stringach
+        # ------------------------------------------------------------------------
+        - name: FoxESS 231 PV1 Power
+          slave: 247
+          address: 39279
+          data_type: int32
+          precision: 0
+          unit_of_measurement: W
+          device_class: power
+          state_class: measurement
+                      
+          scan_interval: 60
+
+        - name: FoxESS 232 PV2 Power
+          slave: 247
+          address: 39281
+          data_type: int32
+          precision: 0
+          unit_of_measurement: W
+          device_class: power
+          state_class: measurement
+                      
+          scan_interval: 60
+
+        - name: FoxESS 233 PV3 Power
+          slave: 247
+          address: 39283
+          data_type: int32
+          precision: 0
+          unit_of_measurement: W
+          device_class: power
+          state_class: measurement
+                      
+          scan_interval: 60
+
+        - name: FoxESS 234 PV4 Power
+          slave: 247
+          address: 39285
+          data_type: int32
+          precision: 0
+          unit_of_measurement: W
+          device_class: power
+          state_class: measurement
+                      
+          scan_interval: 60
+
+        # ------------------------------------------------------------------------
+        # 235–243: MPPT – napięcia, prądy, moce
+        # ------------------------------------------------------------------------
+        - name: FoxESS 235 MPPT1 Voltage
+          slave: 247
+          address: 39327
+          data_type: int16
+          scale: 0.1
+          precision: 1
+          unit_of_measurement: V
+          device_class: voltage
+          state_class: measurement
+                      
+          scan_interval: 60
+
+        - name: FoxESS 236 MPPT1 Current
+          slave: 247
+          address: 39328
+          data_type: int16
+          scale: 0.01
+          precision: 2
+          unit_of_measurement: A
+          device_class: current
+          state_class: measurement
+                      
+          scan_interval: 60
+
+        - name: FoxESS 237 MPPT1 Power
+          slave: 247
+          address: 39329
+          data_type: int32
+          precision: 0
+          unit_of_measurement: W
+          device_class: power
+          state_class: measurement
+                      
+          scan_interval: 60
+
+        - name: FoxESS 238 MPPT2 Voltage
+          slave: 247
+          address: 39331
+          data_type: int16
+          scale: 0.1
+          precision: 1
+          unit_of_measurement: V
+          device_class: voltage
+          state_class: measurement
+                      
+          scan_interval: 60
+
+        - name: FoxESS 239 MPPT2 Current
+          slave: 247
+          address: 39332
+          data_type: int16
+          scale: 0.01
+          precision: 2
+          unit_of_measurement: A
+          device_class: current
+          state_class: measurement
+                      
+          scan_interval: 60
+
+        - name: FoxESS 240 MPPT2 Power
+          slave: 247
+          address: 39333
+          data_type: int32
+          precision: 0
+          unit_of_measurement: W
+          device_class: power
+          state_class: measurement
+                      
+          scan_interval: 60
+
+        - name: FoxESS 241 MPPT3 Voltage
+          slave: 247
+          address: 39335
+          data_type: int16
+          scale: 0.1
+          precision: 1
+          unit_of_measurement: V
+          device_class: voltage
+          state_class: measurement
+                      
+          scan_interval: 60
+
+        - name: FoxESS 242 MPPT3 Current
+          slave: 247
+          address: 39336
+          data_type: int16
+          scale: 0.01
+          precision: 2
+          unit_of_measurement: A
+          device_class: current
+          state_class: measurement
+                      
+          scan_interval: 60
+
+        - name: FoxESS 243 MPPT3 Power
+          slave: 247
+          address: 39337
+          data_type: int32
+          precision: 0
+          unit_of_measurement: W
+          device_class: power
+          state_class: measurement
+                      
+          scan_interval: 60
+
+        # ------------------------------------------------------------------------
+        # 244: System SoC
+        # ------------------------------------------------------------------------
+        - name: FoxESS 244 System SoC
+          slave: 247
+          address: 39423
+          data_type: uint16
+          precision: 0
+          unit_of_measurement: "%"
+          device_class: battery
+          state_class: measurement
+                      
+          scan_interval: 60
+
+        # ------------------------------------------------------------------------
+        # 246–261: Energia kumulowana – całkowita i dzienna
+        # ------------------------------------------------------------------------
+        - name: FoxESS 246 PV Total Energy
+          slave: 247
+          address: 39601
+          data_type: uint32
+          scale: 0.01
+          precision: 2
+          unit_of_measurement: kWh
+          device_class: energy
+          state_class: total_increasing
+                      
+          scan_interval: 300
+
+        - name: FoxESS 247 Total PV Power Today
+          slave: 247
+          address: 39603
+          data_type: uint32
+          scale: 0.01
+          precision: 2
+          unit_of_measurement: kWh
+          device_class: energy
+          state_class: total_increasing
+                      
+          scan_interval: 300
+
+        - name: FoxESS 248 Total Charging Capacity
+          slave: 247
+          address: 39605
+          data_type: uint32
+          scale: 0.01
+          precision: 2
+          unit_of_measurement: kWh
+          device_class: energy
+          state_class: total_increasing
+                      
+          scan_interval: 300
+
+        - name: FoxESS 249 Today's Total Charging Capacity
+          slave: 247
+          address: 39607
+          data_type: uint32
+          scale: 0.01
+          precision: 2
+          unit_of_measurement: kWh
+          device_class: energy
+          state_class: total_increasing
+                      
+          scan_interval: 300
+
+        - name: FoxESS 250 Total Discharge Energy
+          slave: 247
+          address: 39609
+          data_type: uint32
+          scale: 0.01
+          precision: 2
+          unit_of_measurement: kWh
+          device_class: energy
+          state_class: total_increasing
+                      
+          scan_interval: 300
+
+        - name: FoxESS 251 Today's Total Discharge Energy
+          slave: 247
+          address: 39611
+          data_type: uint32
+          scale: 0.01
+          precision: 2
+          unit_of_measurement: kWh
+          device_class: energy
+          state_class: total_increasing
+                      
+          scan_interval: 300
+
+        - name: FoxESS 252 Total Feeder Network Energy
+          slave: 247
+          address: 39613
+          data_type: uint32
+          scale: 0.01
+          precision: 2
+          unit_of_measurement: kWh
+          device_class: energy
+          state_class: total_increasing
+                      
+          scan_interval: 300
+
+        - name: FoxESS 253 Today's Total Feeder Energy
+          slave: 247
+          address: 39615
+          data_type: uint32
+          scale: 0.01
+          precision: 2
+          unit_of_measurement: kWh
+          device_class: energy
+          state_class: total_increasing
+                      
+          scan_interval: 300
+
+        - name: FoxESS 254 Total Power Taken
+          slave: 247
+          address: 39617
+          data_type: uint32
+          scale: 0.01
+          precision: 2
+          unit_of_measurement: kWh
+          device_class: energy
+          state_class: total_increasing
+                      
+          scan_interval: 300
+
+        - name: FoxESS 255 Today's Total Electricity Consumption
+          slave: 247
+          address: 39619
+          data_type: uint32
+          scale: 0.01
+          precision: 2
+          unit_of_measurement: kWh
+          device_class: energy
+          state_class: total_increasing
+                      
+          scan_interval: 300
+
+        - name: FoxESS 256 Output Total Energy
+          slave: 247
+          address: 39621
+          data_type: uint32
+          scale: 0.01
+          precision: 2
+          unit_of_measurement: kWh
+          device_class: energy
+          state_class: total_increasing
+                      
+          scan_interval: 300
+
+        - name: FoxESS 257 Total Power Output Today
+          slave: 247
+          address: 39623
+          data_type: uint32
+          scale: 0.01
+          precision: 2
+          unit_of_measurement: kWh
+          device_class: energy
+          state_class: total_increasing
+                      
+          scan_interval: 300
+
+        - name: FoxESS 258 Enter Total Energy
+          slave: 247
+          address: 39625
+          data_type: uint32
+          scale: 0.01
+          precision: 2
+          unit_of_measurement: kWh
+          device_class: energy
+          state_class: total_increasing
+                      
+          scan_interval: 300
+
+        - name: FoxESS 259 Enter Total Energy Today
+          slave: 247
+          address: 39627
+          data_type: uint32
+          scale: 0.01
+          precision: 2
+          unit_of_measurement: kWh
+          device_class: energy
+          state_class: total_increasing
+                      
+          scan_interval: 300
+
+        - name: FoxESS 260 Total Load Energy
+          slave: 247
+          address: 39629
+          data_type: uint32
+          scale: 0.01
+          precision: 2
+          unit_of_measurement: kWh
+          device_class: energy
+          state_class: total_increasing
+                      
+          scan_interval: 300
+
+        - name: FoxESS 261 Total Load Energy Today
+          slave: 247
+          address: 39631
+          data_type: uint32
+          scale: 0.01
+          precision: 2
+          unit_of_measurement: kWh
+          device_class: energy
+          state_class: total_increasing
+                      
+          scan_interval: 300
+
+    # =============================================================================
+    # NASTAWY RW (zapis) – rejestry 271 i 309
+    # =============================================================================
+      switch:
+        - name: FoxESS Remote Control – Zdalne sterowanie włączone
+          slave: 247
+          address: 46001
+          bitmask: 1
+          state_on: 1
+          state_off: 0
+          icon: "mdi:remote"
+          entity_category: config
+
+        - name: FoxESS Time Period Mode – Włączony
+          slave: 247
+          address: 48000
+          bitmask: 1
+          state_on: 1
+          state_off: 0
+          icon: "mdi:clock-outline"
+          entity_category: config
+
+      select:
+        - name: FoxESS Remote Control – Kierunek mocy
+          slave: 247
+          address: 46001
+          options:
+            0: "Power-generation system"
+            1: "Power-consumption system"
+          bitmask: 2
+          icon: "mdi:arrow-decision"
+          entity_category: config
+
+        - name: FoxESS Remote Control – Cel sterowania
+          slave: 247
+          address: 46001
+          options:
+            0: "AC"
+            1: "Battery"
+            2: "Grid (CT/Meter)"
+            3: "AC (Grid first)"
+          bitmask: 12
+          icon: "mdi:target"
+          entity_category: config
+
+      text_sensor:
+        - name: "FoxESS Remote Control – Aktualna konfiguracja"
+          slave: 247
+          address: 46001
+          data_type: uint16
+          value_template: >
+            {% set val = value | int(0) %}
+            {% set remote = 'WŁĄCZONE' if val & 1 else 'WYŁĄCZONE' %}
+            {% set direction = 'Produkcja energii' if (val & 2) == 0 else 'Konsumpcja energii' %}
+            {% set target_val = (val >> 2) & 3 %}
+            {% set target_map = {0: 'AC', 1: 'Bateria', 2: 'Sieć (CT/Meter)', 3: 'AC (priorytet sieci)'} %}
+            Zdalne sterowanie: {{ remote }}  
+            Kierunek mocy: {{ direction }}  
+            Cel sterowania: {{ target_map[target_val] }}
+          scan_interval: 60
+
+        - name: "FoxESS Time Period Mode – Status"
+          slave: 247
+          address: 48000
+          data_type: uint16
+          value_template: >
+            {% if value | int(0) & 1 %}WŁĄCZONY{% else %}WYŁĄCZONY{% endif %}
+          scan_interval: 60
