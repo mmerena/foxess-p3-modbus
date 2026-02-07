@@ -23,6 +23,7 @@
 # • Energia wprowadzona do magazynu energii (ładowanie) → sensor.foxess_bateria_ladowanie_calkowite_kwh
 # • Energia oddana z magazynu energii (rozładowanie)    → sensor.foxess_bateria_rozladowanie_calkowite_kwh
 # • Moc baterii                                         → sensor.foxess_207_battery_combined_power
+#   (Standard – dodatnie = eksport, ujemne = import)
 # • Moc rozładowywania                                  → sensor.foxess_bateria_rozladowanie_moc
 # • Moc ładowania                                       → sensor.foxess_bateria_ladowanie_moc
 # • Stan naładowania (SoC)                              → sensor.foxess_244_system_soc
