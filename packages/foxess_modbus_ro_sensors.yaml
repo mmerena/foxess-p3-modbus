@@ -28,7 +28,7 @@
 #   - !include foxess_modbus_rw_sensors.yaml
 # =============================================================================
 
-foxess:
+foxess_ro:
     modbus:
       - name: foxess_modbus_ro
         type: tcp
@@ -43,12 +43,8 @@ foxess:
             slave: 247
             address: 30000
             data_type: string
-            count: 16        # 16 rejestrów × 2 bajty = 32 znaki
-            slave: 247
-            # scale nie jest potrzebny przy stringu
+            count: 16             # 16 rejestrów × 2 bajty = 32 znaki
             unit_of_measurement: ""
-            device_class: ""
-            state_class: ""
             scan_interval: 3600   # model się nie zmienia – można rzadziej czytać
 
           - name: FoxESS 002 Serial Number
@@ -57,8 +53,6 @@ foxess:
             data_type: string
             count: 16             # 32 znaki
             unit_of_measurement: ""
-            device_class: ""
-            state_class: ""
             scan_interval: 3600
 
           - name: FoxESS 003 MFG ID
@@ -67,8 +61,6 @@ foxess:
             data_type: string
             count: 16             # 32 znaki
             unit_of_measurement: ""
-            device_class: ""
-            state_class: ""
             scan_interval: 3600
 
           - name: FoxESS 004 Master Version
@@ -77,8 +69,6 @@ foxess:
             data_type: uint16
             scale: 1
             unit_of_measurement: ""
-            device_class: ""
-            state_class: ""
             precision: 0
             scan_interval: 3600
 
@@ -88,8 +78,6 @@ foxess:
             data_type: uint16
             scale: 1
             unit_of_measurement: ""
-            device_class: ""
-            state_class: ""
             precision: 0
             scan_interval: 3600
 
@@ -99,8 +87,6 @@ foxess:
             data_type: uint16
             scale: 1
             unit_of_measurement: ""
-            device_class: ""
-            state_class: ""
             precision: 0
             scan_interval: 3600
 
@@ -110,8 +96,6 @@ foxess:
             data_type: string
             count: 16
             unit_of_measurement: ""
-            device_class: ""
-            state_class: ""
             scan_interval: 3600
 
           - name: FoxESS 008 Meter1 MFG ID
@@ -120,8 +104,6 @@ foxess:
             data_type: string
             count: 16
             unit_of_measurement: ""
-            device_class: ""
-            state_class: ""
             scan_interval: 3600
 
           - name: FoxESS 009 Meter1 TYPE
@@ -130,8 +112,6 @@ foxess:
             data_type: string
             count: 16
             unit_of_measurement: ""
-            device_class: ""
-            state_class: ""
             scan_interval: 3600
 
           - name: FoxESS 010 Meter1 Version
@@ -140,8 +120,6 @@ foxess:
             data_type: string
             count: 1
             unit_of_measurement: ""
-            device_class: ""
-            state_class: ""
             scan_interval: 3600
 
           - name: FoxESS 011 Meter2 SN
@@ -150,8 +128,6 @@ foxess:
             data_type: string
             count: 16
             unit_of_measurement: ""
-            device_class: ""
-            state_class: ""
             scan_interval: 3600
 
           - name: FoxESS 012 Meter2 MFG ID
@@ -160,8 +136,6 @@ foxess:
             data_type: string
             count: 16
             unit_of_measurement: ""
-            device_class: ""
-            state_class: ""
             scan_interval: 3600
 
           - name: FoxESS 013 Meter2 TYPE
@@ -170,8 +144,6 @@ foxess:
             data_type: string
             count: 16
             unit_of_measurement: ""
-            device_class: ""
-            state_class: ""
             scan_interval: 3600
 
           - name: FoxESS 014 Meter2 Version
@@ -180,8 +152,6 @@ foxess:
             data_type: string
             count: 1
             unit_of_measurement: ""
-            device_class: ""
-            state_class: ""
             scan_interval: 3600
 
           - name: FoxESS 015 BMS1 Connection Status
@@ -190,8 +160,6 @@ foxess:
             data_type: uint16
             scale: 1
             unit_of_measurement: ""
-            device_class: ""
-            state_class: ""
             precision: 0
             scan_interval: 3600
             # Wartości: 0 = Offline, 1 = Online → w HA możesz dodać value_template jeśli chcesz tekst zamiast liczby
@@ -202,8 +170,6 @@ foxess:
             data_type: uint16
             scale: 1
             unit_of_measurement: ""
-            device_class: ""
-            state_class: ""
             precision: 0
             scan_interval: 3600
 
@@ -213,8 +179,6 @@ foxess:
             data_type: uint16
             scale: 1
             unit_of_measurement: ""
-            device_class: ""
-            state_class: ""
             precision: 0
             scan_interval: 3600
 
@@ -224,8 +188,6 @@ foxess:
             data_type: string
             count: 16
             unit_of_measurement: ""
-            device_class: ""
-            state_class: ""
             scan_interval: 3600
 
           - name: FoxESS 019 BMS1 Slave Number
@@ -234,8 +196,6 @@ foxess:
             data_type: uint16
             scale: 1
             unit_of_measurement: ""
-            device_class: ""
-            state_class: ""
             precision: 0
             scan_interval: 3600
             # Wartość: liczba podłączonych slave'ów (0 = invalid, 1–32 = liczba baterii/slave'ów)
@@ -246,8 +206,6 @@ foxess:
             data_type: uint16
             scale: 1
             unit_of_measurement: ""
-            device_class: ""
-            state_class: ""
             precision: 0
             scan_interval: 3600
 
@@ -257,8 +215,6 @@ foxess:
             data_type: uint16
             scale: 1
             unit_of_measurement: ""
-            device_class: ""
-            state_class: ""
             precision: 0
             scan_interval: 3600
 
@@ -268,8 +224,6 @@ foxess:
             data_type: string
             count: 16
             unit_of_measurement: ""
-            device_class: ""
-            state_class: ""
             scan_interval: 3600
 
           - name: FoxESS 023 BMS1 Slave 2 SN
@@ -278,8 +232,6 @@ foxess:
             data_type: string
             count: 16
             unit_of_measurement: ""
-            device_class: ""
-            state_class: ""
             scan_interval: 3600
 
           - name: FoxESS 024 BMS1 Voltage
@@ -387,8 +339,6 @@ foxess:
             data_type: uint16
             scale: 1.0
             unit_of_measurement: ""
-            device_class: ""
-            state_class: ""
             precision: 0
             scan_interval: 60
 
@@ -398,8 +348,6 @@ foxess:
             data_type: uint16
             scale: 1.0
             unit_of_measurement: ""
-            device_class: ""
-            state_class: ""
             precision: 0
             scan_interval: 60
 
@@ -409,8 +357,6 @@ foxess:
             data_type: uint16
             scale: 1.0
             unit_of_measurement: ""
-            device_class: ""
-            state_class: ""
             precision: 0
             scan_interval: 60
 
@@ -420,8 +366,6 @@ foxess:
             data_type: uint16
             scale: 1.0
             unit_of_measurement: ""
-            device_class: ""
-            state_class: ""
             precision: 0
             scan_interval: 60
 
@@ -431,8 +375,6 @@ foxess:
             data_type: uint16
             scale: 1.0
             unit_of_measurement: ""
-            device_class: ""
-            state_class: ""
             precision: 0
             scan_interval: 60
 
@@ -442,8 +384,6 @@ foxess:
             data_type: uint16
             scale: 1.0
             unit_of_measurement: ""
-            device_class: ""
-            state_class: ""
             precision: 0
             scan_interval: 60
 
@@ -464,7 +404,6 @@ foxess:
             data_type: uint16
             scale: 0.1
             unit_of_measurement: Ah
-            device_class: ""
             state_class: measurement
             precision: 1
             scan_interval: 300
@@ -486,8 +425,6 @@ foxess:
             data_type: uint16
             scale: 1.0
             unit_of_measurement: ""
-            device_class: ""
-            state_class: ""
             precision: 0
             scan_interval: 60
             # Wartości wg dokumentacji:
@@ -500,8 +437,6 @@ foxess:
             data_type: uint16
             scale: 1.0
             unit_of_measurement: ""
-            device_class: ""
-            state_class: ""
             precision: 0
             scan_interval: 60
             # 0: Offline, 1: Online
@@ -512,8 +447,6 @@ foxess:
             data_type: uint16
             scale: 1.0
             unit_of_measurement: ""
-            device_class: ""
-            state_class: ""
             precision: 0
             scan_interval: 3600
 
@@ -523,8 +456,6 @@ foxess:
             data_type: uint16
             scale: 1.0
             unit_of_measurement: ""
-            device_class: ""
-            state_class: ""
             precision: 0
             scan_interval: 3600
 
@@ -534,8 +465,6 @@ foxess:
             data_type: string
             count: 16
             unit_of_measurement: ""
-            device_class: ""
-            state_class: ""
             scan_interval: 3600
 
           - name: FoxESS 048 BMS2 Slave Number
@@ -544,8 +473,6 @@ foxess:
             data_type: uint16
             scale: 1.0
             unit_of_measurement: ""
-            device_class: ""
-            state_class: ""
             precision: 0
             scan_interval: 3600
             # Wartość: liczba podłączonych slave'ów dla BMS2 (0 = invalid, 1–32 = liczba)
@@ -556,8 +483,6 @@ foxess:
             data_type: uint16
             scale: 1.0
             unit_of_measurement: ""
-            device_class: ""
-            state_class: ""
             precision: 0
             scan_interval: 3600
 
@@ -567,8 +492,6 @@ foxess:
             data_type: uint16
             scale: 1.0
             unit_of_measurement: ""
-            device_class: ""
-            state_class: ""
             precision: 0
             scan_interval: 3600
 
@@ -578,8 +501,6 @@ foxess:
             data_type: string
             count: 16
             unit_of_measurement: ""
-            device_class: ""
-            state_class: ""
             scan_interval: 3600
 
           - name: FoxESS 052 BMS2 Slave 2 SN
@@ -588,8 +509,6 @@ foxess:
             data_type: string
             count: 16
             unit_of_measurement: ""
-            device_class: ""
-            state_class: ""
             scan_interval: 3600
 
           - name: FoxESS 053 BMS2 Voltage
@@ -697,8 +616,6 @@ foxess:
             data_type: uint16
             scale: 1.0
             unit_of_measurement: ""
-            device_class: ""
-            state_class: ""
             precision: 0
             scan_interval: 60
 
@@ -708,8 +625,6 @@ foxess:
             data_type: uint16
             scale: 1.0
             unit_of_measurement: ""
-            device_class: ""
-            state_class: ""
             precision: 0
             scan_interval: 60
 
@@ -719,8 +634,6 @@ foxess:
             data_type: uint16
             scale: 1.0
             unit_of_measurement: ""
-            device_class: ""
-            state_class: ""
             precision: 0
             scan_interval: 60
 
@@ -730,8 +643,6 @@ foxess:
             data_type: uint16
             scale: 1.0
             unit_of_measurement: ""
-            device_class: ""
-            state_class: ""
             precision: 0
             scan_interval: 60
 
@@ -741,8 +652,6 @@ foxess:
             data_type: uint16
             scale: 1.0
             unit_of_measurement: ""
-            device_class: ""
-            state_class: ""
             precision: 0
             scan_interval: 60
 
@@ -752,8 +661,6 @@ foxess:
             data_type: uint16
             scale: 1.0
             unit_of_measurement: ""
-            device_class: ""
-            state_class: ""
             precision: 0
             scan_interval: 60
 
@@ -774,7 +681,6 @@ foxess:
             data_type: uint16
             scale: 0.1
             unit_of_measurement: Ah
-            device_class: ""
             state_class: measurement
             precision: 1
             scan_interval: 300
@@ -796,8 +702,6 @@ foxess:
             data_type: uint16
             scale: 1.0
             unit_of_measurement: ""
-            device_class: ""
-            state_class: ""
             precision: 0
             scan_interval: 60
 
@@ -807,8 +711,6 @@ foxess:
             data_type: uint16
             scale: 1.0
             unit_of_measurement: ""
-            device_class: ""
-            state_class: ""
             precision: 0
             scan_interval: 60
             # 0: Disconnect, 1: Connect
@@ -1072,8 +974,6 @@ foxess:
             data_type: uint16
             scale: 1.0
             unit_of_measurement: ""
-            device_class: ""
-            state_class: ""
             precision: 0
             scan_interval: 60
             # Wartości: 0 = Disconnect, 1 = Connect
@@ -1337,8 +1237,6 @@ foxess:
             data_type: uint32
             scale: 1
             unit_of_measurement: ""
-            device_class: ""
-            state_class: ""
             precision: 0
             scan_interval: 3600
 
@@ -1348,8 +1246,6 @@ foxess:
             data_type: string
             count: 16
             unit_of_measurement: ""
-            device_class: ""
-            state_class: ""
             scan_interval: 3600
 
           - name: FoxESS 123 SN
@@ -1358,8 +1254,6 @@ foxess:
             data_type: string
             count: 16
             unit_of_measurement: ""
-            device_class: ""
-            state_class: ""
             scan_interval: 3600
 
           - name: FoxESS 124 PN
@@ -1368,8 +1262,6 @@ foxess:
             data_type: string
             count: 16
             unit_of_measurement: ""
-            device_class: ""
-            state_class: ""
             scan_interval: 3600
 
           - name: FoxESS 125 Model ID
@@ -1378,8 +1270,6 @@ foxess:
             data_type: uint16
             scale: 1
             unit_of_measurement: ""
-            device_class: ""
-            state_class: ""
             precision: 0
             scan_interval: 3600
 
@@ -1389,8 +1279,6 @@ foxess:
             data_type: uint16
             scale: 1
             unit_of_measurement: ""
-            device_class: ""
-            state_class: ""
             precision: 0
             scan_interval: 3600
 
@@ -1400,8 +1288,6 @@ foxess:
             data_type: uint16
             scale: 1
             unit_of_measurement: ""
-            device_class: ""
-            state_class: ""
             precision: 0
             scan_interval: 3600
 
@@ -1466,8 +1352,6 @@ foxess:
             data_type: uint16
             scale: 1
             unit_of_measurement: ""
-            device_class: ""
-            state_class: ""
             precision: 0
             scan_interval: 60
 
@@ -1477,8 +1361,6 @@ foxess:
             data_type: uint16
             scale: 1
             unit_of_measurement: ""
-            device_class: ""
-            state_class: ""
             precision: 0
             scan_interval: 60
 
