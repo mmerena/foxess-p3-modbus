@@ -62,7 +62,6 @@ foxess:
             address: 30000
             data_type: string
             count: 16             # 16 rejestrów × 2 bajty = 32 znaki
-            unit_of_measurement: ""
             scan_interval: 3600   # model się nie zmienia – można rzadziej czytać
 
           - name: FoxESS 002 Serial Number
@@ -70,7 +69,6 @@ foxess:
             address: 30016
             data_type: string
             count: 16             # 32 znaki
-            unit_of_measurement: ""
             scan_interval: 3600
 
           - name: FoxESS 003 MFG ID
@@ -78,7 +76,6 @@ foxess:
             address: 30032
             data_type: string
             count: 16             # 32 znaki
-            unit_of_measurement: ""
             scan_interval: 3600
 
           - name: FoxESS 004 Master Version
@@ -86,7 +83,6 @@ foxess:
             address: 36001
             data_type: uint16
             scale: 1
-            unit_of_measurement: ""
             precision: 0
             scan_interval: 3600
 
@@ -95,7 +91,6 @@ foxess:
             address: 36002
             data_type: uint16
             scale: 1
-            unit_of_measurement: ""
             precision: 0
             scan_interval: 3600
 
@@ -104,7 +99,6 @@ foxess:
             address: 36003
             data_type: uint16
             scale: 1
-            unit_of_measurement: ""
             precision: 0
             scan_interval: 3600
 
@@ -113,7 +107,6 @@ foxess:
             address: 36100
             data_type: string
             count: 16
-            unit_of_measurement: ""
             scan_interval: 3600
 
           - name: FoxESS 008 Meter1 MFG ID
@@ -121,7 +114,6 @@ foxess:
             address: 36116
             data_type: string
             count: 16
-            unit_of_measurement: ""
             scan_interval: 3600
 
           - name: FoxESS 009 Meter1 TYPE
@@ -129,7 +121,6 @@ foxess:
             address: 36132
             data_type: string
             count: 16
-            unit_of_measurement: ""
             scan_interval: 3600
 
           - name: FoxESS 010 Meter1 Version
@@ -137,7 +128,6 @@ foxess:
             address: 36148
             data_type: string
             count: 1
-            unit_of_measurement: ""
             scan_interval: 3600
 
           - name: FoxESS 011 Meter2 SN
@@ -145,7 +135,6 @@ foxess:
             address: 36200
             data_type: string
             count: 16
-            unit_of_measurement: ""
             scan_interval: 3600
 
           - name: FoxESS 012 Meter2 MFG ID
@@ -153,7 +142,6 @@ foxess:
             address: 36216
             data_type: string
             count: 16
-            unit_of_measurement: ""
             scan_interval: 3600
 
           - name: FoxESS 013 Meter2 TYPE
@@ -161,7 +149,6 @@ foxess:
             address: 36232
             data_type: string
             count: 16
-            unit_of_measurement: ""
             scan_interval: 3600
 
           - name: FoxESS 014 Meter2 Version
@@ -169,7 +156,6 @@ foxess:
             address: 36248
             data_type: string
             count: 1
-            unit_of_measurement: ""
             scan_interval: 3600
 
           - name: FoxESS 015 BMS1 Connection Status
@@ -177,7 +163,6 @@ foxess:
             address: 37002
             data_type: uint16
             scale: 1
-            unit_of_measurement: ""
             precision: 0
             scan_interval: 3600
             # Wartości: 0 = Offline, 1 = Online → w HA możesz dodać value_template jeśli chcesz tekst zamiast liczby
@@ -187,7 +172,6 @@ foxess:
             address: 37003
             data_type: uint16
             scale: 1
-            unit_of_measurement: ""
             precision: 0
             scan_interval: 3600
 
@@ -196,7 +180,6 @@ foxess:
             address: 37004
             data_type: uint16
             scale: 1
-            unit_of_measurement: ""
             precision: 0
             scan_interval: 3600
 
@@ -205,7 +188,6 @@ foxess:
             address: 37005
             data_type: string
             count: 16
-            unit_of_measurement: ""
             scan_interval: 3600
 
           - name: FoxESS 019 BMS1 Slave Number
@@ -213,7 +195,6 @@ foxess:
             address: 37032
             data_type: uint16
             scale: 1
-            unit_of_measurement: ""
             precision: 0
             scan_interval: 3600
             # Wartość: liczba podłączonych slave'ów (0 = invalid, 1–32 = liczba baterii/slave'ów)
@@ -223,7 +204,6 @@ foxess:
             address: 37033
             data_type: uint16
             scale: 1
-            unit_of_measurement: ""
             precision: 0
             scan_interval: 3600
 
@@ -232,7 +212,6 @@ foxess:
             address: 37034
             data_type: uint16
             scale: 1
-            unit_of_measurement: ""
             precision: 0
             scan_interval: 3600
 
@@ -241,7 +220,6 @@ foxess:
             address: 37097
             data_type: string
             count: 16
-            unit_of_measurement: ""
             scan_interval: 3600
 
           - name: FoxESS 023 BMS1 Slave 2 SN
@@ -249,7 +227,6 @@ foxess:
             address: 37113
             data_type: string
             count: 16
-            unit_of_measurement: ""
             scan_interval: 3600
 
           - name: FoxESS 024 BMS1 Voltage
@@ -356,7 +333,6 @@ foxess:
             address: 37626
             data_type: uint16
             scale: 1.0
-            unit_of_measurement: ""
             precision: 0
             scan_interval: 60
 
@@ -365,7 +341,6 @@ foxess:
             address: 37627
             data_type: uint16
             scale: 1.0
-            unit_of_measurement: ""
             precision: 0
             scan_interval: 60
 
@@ -374,7 +349,6 @@ foxess:
             address: 37628
             data_type: uint16
             scale: 1.0
-            unit_of_measurement: ""
             precision: 0
             scan_interval: 60
 
@@ -383,7 +357,6 @@ foxess:
             address: 37629
             data_type: uint16
             scale: 1.0
-            unit_of_measurement: ""
             precision: 0
             scan_interval: 60
 
@@ -392,7 +365,6 @@ foxess:
             address: 37630
             data_type: uint16
             scale: 1.0
-            unit_of_measurement: ""
             precision: 0
             scan_interval: 60
 
@@ -401,7 +373,6 @@ foxess:
             address: 37631
             data_type: uint16
             scale: 1.0
-            unit_of_measurement: ""
             precision: 0
             scan_interval: 60
 
@@ -442,7 +413,6 @@ foxess:
             address: 37636
             data_type: uint16
             scale: 1.0
-            unit_of_measurement: ""
             precision: 0
             scan_interval: 60
             # Wartości wg dokumentacji:
@@ -454,7 +424,6 @@ foxess:
             address: 37700
             data_type: uint16
             scale: 1.0
-            unit_of_measurement: ""
             precision: 0
             scan_interval: 60
             # 0: Offline, 1: Online
@@ -464,7 +433,6 @@ foxess:
             address: 37701
             data_type: uint16
             scale: 1.0
-            unit_of_measurement: ""
             precision: 0
             scan_interval: 3600
 
@@ -473,7 +441,6 @@ foxess:
             address: 37702
             data_type: uint16
             scale: 1.0
-            unit_of_measurement: ""
             precision: 0
             scan_interval: 3600
 
@@ -482,7 +449,6 @@ foxess:
             address: 37703
             data_type: string
             count: 16
-            unit_of_measurement: ""
             scan_interval: 3600
 
           - name: FoxESS 048 BMS2 Slave Number
@@ -490,7 +456,6 @@ foxess:
             address: 37730
             data_type: uint16
             scale: 1.0
-            unit_of_measurement: ""
             precision: 0
             scan_interval: 3600
             # Wartość: liczba podłączonych slave'ów dla BMS2 (0 = invalid, 1–32 = liczba)
@@ -500,7 +465,6 @@ foxess:
             address: 37731
             data_type: uint16
             scale: 1.0
-            unit_of_measurement: ""
             precision: 0
             scan_interval: 3600
 
@@ -509,7 +473,6 @@ foxess:
             address: 37732
             data_type: uint16
             scale: 1.0
-            unit_of_measurement: ""
             precision: 0
             scan_interval: 3600
 
@@ -518,7 +481,6 @@ foxess:
             address: 37795
             data_type: string
             count: 16
-            unit_of_measurement: ""
             scan_interval: 3600
 
           - name: FoxESS 052 BMS2 Slave 2 SN
@@ -526,7 +488,6 @@ foxess:
             address: 37811
             data_type: string
             count: 16
-            unit_of_measurement: ""
             scan_interval: 3600
 
           - name: FoxESS 053 BMS2 Voltage
@@ -633,7 +594,6 @@ foxess:
             address: 38324
             data_type: uint16
             scale: 1.0
-            unit_of_measurement: ""
             precision: 0
             scan_interval: 60
 
@@ -642,7 +602,6 @@ foxess:
             address: 38325
             data_type: uint16
             scale: 1.0
-            unit_of_measurement: ""
             precision: 0
             scan_interval: 60
 
@@ -651,7 +610,6 @@ foxess:
             address: 38326
             data_type: uint16
             scale: 1.0
-            unit_of_measurement: ""
             precision: 0
             scan_interval: 60
 
@@ -660,7 +618,6 @@ foxess:
             address: 38327
             data_type: uint16
             scale: 1.0
-            unit_of_measurement: ""
             precision: 0
             scan_interval: 60
 
@@ -669,7 +626,6 @@ foxess:
             address: 38328
             data_type: uint16
             scale: 1.0
-            unit_of_measurement: ""
             precision: 0
             scan_interval: 60
 
@@ -678,7 +634,6 @@ foxess:
             address: 38329
             data_type: uint16
             scale: 1.0
-            unit_of_measurement: ""
             precision: 0
             scan_interval: 60
 
@@ -719,7 +674,6 @@ foxess:
             address: 38334
             data_type: uint16
             scale: 1.0
-            unit_of_measurement: ""
             precision: 0
             scan_interval: 60
 
@@ -728,7 +682,6 @@ foxess:
             address: 38801
             data_type: uint16
             scale: 1.0
-            unit_of_measurement: ""
             precision: 0
             scan_interval: 60
             # 0: Disconnect, 1: Connect
@@ -936,7 +889,6 @@ foxess:
             address: 38838
             data_type: int32
             scale: 0.001
-            unit_of_measurement: ""
             device_class: power_factor
             state_class: measurement
             precision: 3
@@ -947,7 +899,6 @@ foxess:
             address: 38840
             data_type: int32
             scale: 0.001
-            unit_of_measurement: ""
             device_class: power_factor
             state_class: measurement
             precision: 3
@@ -958,7 +909,6 @@ foxess:
             address: 38842
             data_type: int32
             scale: 0.001
-            unit_of_measurement: ""
             device_class: power_factor
             state_class: measurement
             precision: 3
@@ -969,7 +919,6 @@ foxess:
             address: 38844
             data_type: int32
             scale: 0.001
-            unit_of_measurement: ""
             device_class: power_factor
             state_class: measurement
             precision: 3
@@ -991,7 +940,6 @@ foxess:
             address: 38901
             data_type: uint16
             scale: 1.0
-            unit_of_measurement: ""
             precision: 0
             scan_interval: 60
             # Wartości: 0 = Disconnect, 1 = Connect
@@ -1199,7 +1147,6 @@ foxess:
             address: 38938
             data_type: int32
             scale: 0.001
-            unit_of_measurement: ""
             device_class: power_factor
             state_class: measurement
             precision: 3
@@ -1210,7 +1157,6 @@ foxess:
             address: 38940
             data_type: int32
             scale: 0.001
-            unit_of_measurement: ""
             device_class: power_factor
             state_class: measurement
             precision: 3
@@ -1221,7 +1167,6 @@ foxess:
             address: 38942
             data_type: int32
             scale: 0.001
-            unit_of_measurement: ""
             device_class: power_factor
             state_class: measurement
             precision: 3
@@ -1232,7 +1177,6 @@ foxess:
             address: 38944
             data_type: int32
             scale: 0.001
-            unit_of_measurement: ""
             device_class: power_factor
             state_class: measurement
             precision: 3
@@ -1254,7 +1198,6 @@ foxess:
             address: 39000
             data_type: uint32
             scale: 1
-            unit_of_measurement: ""
             precision: 0
             scan_interval: 3600
 
@@ -1263,7 +1206,6 @@ foxess:
             address: 39002
             data_type: string
             count: 16
-            unit_of_measurement: ""
             scan_interval: 3600
 
           - name: FoxESS 123 SN
@@ -1271,7 +1213,6 @@ foxess:
             address: 39018
             data_type: string
             count: 16
-            unit_of_measurement: ""
             scan_interval: 3600
 
           - name: FoxESS 124 PN
@@ -1279,7 +1220,6 @@ foxess:
             address: 39034
             data_type: string
             count: 16
-            unit_of_measurement: ""
             scan_interval: 3600
 
           - name: FoxESS 125 Model ID
@@ -1287,7 +1227,6 @@ foxess:
             address: 39050
             data_type: uint16
             scale: 1
-            unit_of_measurement: ""
             precision: 0
             scan_interval: 3600
 
@@ -1296,7 +1235,6 @@ foxess:
             address: 39051
             data_type: uint16
             scale: 1
-            unit_of_measurement: ""
             precision: 0
             scan_interval: 3600
 
@@ -1305,7 +1243,6 @@ foxess:
             address: 39052
             data_type: uint16
             scale: 1
-            unit_of_measurement: ""
             precision: 0
             scan_interval: 3600
 
@@ -1369,7 +1306,6 @@ foxess:
             address: 39063
             data_type: uint16
             scale: 1
-            unit_of_measurement: ""
             precision: 0
             scan_interval: 60
 
@@ -1378,7 +1314,6 @@ foxess:
             address: 39065
             data_type: uint16
             scale: 1
-            unit_of_measurement: ""
             precision: 0
             scan_interval: 60
 
@@ -1574,7 +1509,6 @@ foxess:
             address: 39138
             data_type: int16
             scale: 0.001
-            unit_of_measurement: ""
             device_class: power_factor
             state_class: measurement
             precision: 3
