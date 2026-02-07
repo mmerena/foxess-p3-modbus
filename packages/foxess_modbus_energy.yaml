@@ -1,4 +1,4 @@
-# packages/foxess_energia.yaml
+# packages/foxess_modbus_energy.yaml
 # Gotowe do podpięcia pod panel Energia (Grid, Solar, Battery)
 # Wszystkie sensory bazują na sensorach z foxess_modbus.yaml
 
