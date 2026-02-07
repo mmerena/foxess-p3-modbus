@@ -2351,3 +2351,44 @@ foxess:
           platform: template
           value_template: >
             {% if states('sensor.foxess_309_time_mode_flag_raw') | int(0) & 1 %}WŁĄCZONY{% else %}WYŁĄCZONY{% endif %}
+
+  template:
+    - sensor:
+        - name: FoxESS Master Version
+          unique_id: foxess_master_version
+          state: >
+            {% set raw = states('sensor.foxess_004_master_version') | int(0) %}
+            {% set val = "%4x" % raw | int(0) %}
+            {{ val[0:2] }}.{{ val[2:4] }}
+          unit_of_measurement: ""
+          icon: "mdi:chip"
+
+        - name: FoxESS Slave Version
+          unique_id: foxess_slave_version
+          state: >
+            {% set raw = states('sensor.foxess_005_slave_version') | int(0) %}
+            {% set val = "%4x" % raw | int(0) %}
+            {{ val[0:2] }}.{{ val[2:4] }}
+          unit_of_measurement: ""
+          icon: "mdi:chip"
+
+        - name: FoxESS Manager Version
+          unique_id: foxess_manager_version
+          state: >
+            {% set raw = states('sensor.foxess_006_manager_version') | int(0) %}
+            {% set val = "%4x" % raw | int(0) %}
+            {{ val[0:2] }}.{{ val[2:4] }}
+          unit_of_measurement: ""
+          icon: "mdi:chip"
+
+        - name: FoxESS Protocol Version
+          unique_id: foxess_protocol_version
+          state: >
+            {% set raw = states('sensor.foxess_121_protocol_version') | int(0) %}
+            {% set val = "%8x" % raw | int(0) %}
+            {{ val[0:2] }}.{{ val[2:4] }}.{{ val[4:6] }}.{{ val[6:8] }}
+          unit_of_measurement: ""
+          icon: "mdi:chip"
+
+
+
