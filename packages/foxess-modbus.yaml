@@ -1,5 +1,5 @@
 # =============================================================================
-# foxess-modbus.yaml
+# packages/foxess-modbus.yaml
 # =============================================================================
 # Pełna, profesjonalna integracja inwertera FoxESS przez Modbus (RO + RW)
 # Dokumentacja źródłowa: FOX Inverter Modbus Protocol V1.02.00.00
@@ -66,7 +66,6 @@ foxess:
           slave: 247
           address: 36001
           data_type: uint16
-                  
           precision: 0
           scan_interval: 3600
 
@@ -74,7 +73,6 @@ foxess:
           slave: 247
           address: 36002
           data_type: uint16
-                  
           precision: 0
           scan_interval: 3600
 
@@ -82,7 +80,6 @@ foxess:
           slave: 247
           address: 36003
           data_type: uint16
-                  
           precision: 0
           scan_interval: 3600
 
@@ -148,16 +145,13 @@ foxess:
           slave: 247
           address: 37002
           data_type: uint16
-                  
           precision: 0
           scan_interval: 60
-                                                                                                                        
 
         - name: FoxESS 016 BMS1 Master Version
           slave: 247
           address: 37003
           data_type: uint16
-                  
           precision: 0
           scan_interval: 3600
 
@@ -165,7 +159,6 @@ foxess:
           slave: 247
           address: 37004
           data_type: uint16
-                  
           precision: 0
           scan_interval: 3600
 
@@ -180,16 +173,13 @@ foxess:
           slave: 247
           address: 37032
           data_type: uint16
-                  
           precision: 0
           scan_interval: 3600
-                                                                                                       
 
         - name: FoxESS 020 BMS1 Slave 1 Version
           slave: 247
           address: 37033
           data_type: uint16
-                  
           precision: 0
           scan_interval: 3600
 
@@ -197,7 +187,6 @@ foxess:
           slave: 247
           address: 37034
           data_type: uint16
-                  
           precision: 0
           scan_interval: 3600
 
@@ -225,7 +214,6 @@ foxess:
           unit_of_measurement: V
           device_class: voltage
           state_class: measurement
-                      
           scan_interval: 60
 
         - name: FoxESS 025 BMS1 Current
@@ -237,7 +225,6 @@ foxess:
           unit_of_measurement: A
           device_class: current
           state_class: measurement
-                      
           scan_interval: 60
 
         - name: FoxESS 026 BMS1 Ambient Temperature
@@ -249,7 +236,6 @@ foxess:
           unit_of_measurement: °C
           device_class: temperature
           state_class: measurement
-                      
           scan_interval: 60
 
         - name: FoxESS 027 BMS1 SoC
@@ -260,7 +246,6 @@ foxess:
           unit_of_measurement: "%"
           device_class: battery
           state_class: measurement
-                      
           scan_interval: 60
 
         - name: FoxESS 028 BMS1 Max Temperature
@@ -272,7 +257,6 @@ foxess:
           unit_of_measurement: °C
           device_class: temperature
           state_class: measurement
-                      
           scan_interval: 60
 
         - name: FoxESS 029 BMS1 Min Temperature
@@ -284,7 +268,6 @@ foxess:
           unit_of_measurement: °C
           device_class: temperature
           state_class: measurement
-                      
           scan_interval: 60
 
         - name: FoxESS 030 BMS1 Max Cell Voltage
@@ -295,7 +278,6 @@ foxess:
           unit_of_measurement: mV
           device_class: voltage
           state_class: measurement
-                      
           scan_interval: 60
 
         - name: FoxESS 031 BMS1 Min Cell Voltage
@@ -306,7 +288,6 @@ foxess:
           unit_of_measurement: mV
           device_class: voltage
           state_class: measurement
-                      
           scan_interval: 60
 
         - name: FoxESS 032 BMS1 SOH
@@ -317,14 +298,12 @@ foxess:
           unit_of_measurement: "%"
           device_class: battery
           state_class: measurement
-                      
           scan_interval: 300
 
         - name: FoxESS 033 BMS1 Fault1
           slave: 247
           address: 37626
           data_type: uint16
-                    
           precision: 0
           scan_interval: 60
 
@@ -332,7 +311,6 @@ foxess:
           slave: 247
           address: 37627
           data_type: uint16
-                    
           precision: 0
           scan_interval: 60
 
@@ -340,7 +318,6 @@ foxess:
           slave: 247
           address: 37628
           data_type: uint16
-                    
           precision: 0
           scan_interval: 60
 
@@ -348,7 +325,6 @@ foxess:
           slave: 247
           address: 37629
           data_type: uint16
-                    
           precision: 0
           scan_interval: 60
 
@@ -356,7 +332,6 @@ foxess:
           slave: 247
           address: 37630
           data_type: uint16
-                    
           precision: 0
           scan_interval: 60
 
@@ -364,7 +339,6 @@ foxess:
           slave: 247
           address: 37631
           data_type: uint16
-                    
           precision: 0
           scan_interval: 60
 
@@ -377,7 +351,6 @@ foxess:
           unit_of_measurement: Wh
           device_class: energy
           state_class: measurement
-                      
           scan_interval: 60
 
         - name: FoxESS 040 BMS1 FCC Capacity
@@ -388,7 +361,6 @@ foxess:
           precision: 1
           unit_of_measurement: Ah
           state_class: measurement
-                      
           scan_interval: 300
 
         - name: FoxESS 042 BMS1 Design Energy
@@ -400,35 +372,27 @@ foxess:
           unit_of_measurement: Wh
           device_class: energy
           state_class: measurement
-                      
           scan_interval: 3600
 
         - name: FoxESS 043 BMS1 Force Charge Flag
           slave: 247
           address: 37636
           data_type: uint16
-                    
           precision: 0
           scan_interval: 60
-                                      
-                                                        
-                                                                                        
 
         # 044–072: BMS2 – status, wersje, SN, parametry fizyczne, fault
         - name: FoxESS 044 BMS2 Connection Status
           slave: 247
           address: 37700
           data_type: uint16
-                    
           precision: 0
           scan_interval: 60
-                                 
 
         - name: FoxESS 045 BMS2 Master Version
           slave: 247
           address: 37701
           data_type: uint16
-                    
           precision: 0
           scan_interval: 3600
 
@@ -436,7 +400,6 @@ foxess:
           slave: 247
           address: 37702
           data_type: uint16
-                    
           precision: 0
           scan_interval: 3600
 
@@ -451,16 +414,13 @@ foxess:
           slave: 247
           address: 37730
           data_type: uint16
-                    
           precision: 0
           scan_interval: 3600
-                                                                                              
 
         - name: FoxESS 049 BMS2 Slave 1 Version
           slave: 247
           address: 37731
           data_type: uint16
-                    
           precision: 0
           scan_interval: 3600
 
@@ -468,7 +428,6 @@ foxess:
           slave: 247
           address: 37732
           data_type: uint16
-                    
           precision: 0
           scan_interval: 3600
 
@@ -495,7 +454,6 @@ foxess:
           unit_of_measurement: V
           device_class: voltage
           state_class: measurement
-                      
           scan_interval: 60
 
         - name: FoxESS 054 BMS2 Current
@@ -507,7 +465,6 @@ foxess:
           unit_of_measurement: A
           device_class: current
           state_class: measurement
-                      
           scan_interval: 60
 
         - name: FoxESS 055 BMS2 Ambient Temperature
@@ -519,7 +476,6 @@ foxess:
           unit_of_measurement: °C
           device_class: temperature
           state_class: measurement
-                      
           scan_interval: 60
 
         - name: FoxESS 056 BMS2 SoC
@@ -530,7 +486,6 @@ foxess:
           unit_of_measurement: "%"
           device_class: battery
           state_class: measurement
-                      
           scan_interval: 60
 
         - name: FoxESS 057 BMS2 Max Temperature
@@ -542,7 +497,6 @@ foxess:
           unit_of_measurement: °C
           device_class: temperature
           state_class: measurement
-                      
           scan_interval: 60
 
         - name: FoxESS 058 BMS2 Min Temperature
@@ -554,7 +508,6 @@ foxess:
           unit_of_measurement: °C
           device_class: temperature
           state_class: measurement
-                      
           scan_interval: 60
 
         - name: FoxESS 059 BMS2 Max Cell Voltage
@@ -565,7 +518,6 @@ foxess:
           unit_of_measurement: mV
           device_class: voltage
           state_class: measurement
-                      
           scan_interval: 60
 
         - name: FoxESS 060 BMS2 Min Cell Voltage
@@ -576,7 +528,6 @@ foxess:
           unit_of_measurement: mV
           device_class: voltage
           state_class: measurement
-                      
           scan_interval: 60
 
         - name: FoxESS 061 BMS2 SOH
@@ -587,14 +538,12 @@ foxess:
           unit_of_measurement: "%"
           device_class: battery
           state_class: measurement
-                      
           scan_interval: 300
 
         - name: FoxESS 062 BMS2 Fault1
           slave: 247
           address: 38324
           data_type: uint16
-                    
           precision: 0
           scan_interval: 60
 
@@ -602,7 +551,6 @@ foxess:
           slave: 247
           address: 38325
           data_type: uint16
-                    
           precision: 0
           scan_interval: 60
 
@@ -610,7 +558,6 @@ foxess:
           slave: 247
           address: 38326
           data_type: uint16
-                    
           precision: 0
           scan_interval: 60
 
@@ -618,7 +565,6 @@ foxess:
           slave: 247
           address: 38327
           data_type: uint16
-                    
           precision: 0
           scan_interval: 60
 
@@ -626,7 +572,6 @@ foxess:
           slave: 247
           address: 38328
           data_type: uint16
-                    
           precision: 0
           scan_interval: 60
 
@@ -634,7 +579,6 @@ foxess:
           slave: 247
           address: 38329
           data_type: uint16
-                    
           precision: 0
           scan_interval: 60
 
@@ -647,7 +591,6 @@ foxess:
           unit_of_measurement: Wh
           device_class: energy
           state_class: measurement
-                      
           scan_interval: 60
 
         - name: FoxESS 069 BMS2 FCC Capacity
@@ -658,7 +601,6 @@ foxess:
           precision: 1
           unit_of_measurement: Ah
           state_class: measurement
-                      
           scan_interval: 300
 
         - name: FoxESS 071 BMS2 Design Energy
@@ -670,14 +612,12 @@ foxess:
           unit_of_measurement: Wh
           device_class: energy
           state_class: measurement
-                      
           scan_interval: 3600
 
         - name: FoxESS 072 BMS2 Force Charge Flag
           slave: 247
           address: 38334
           data_type: uint16
-                    
           precision: 0
           scan_interval: 60
 
@@ -688,10 +628,8 @@ foxess:
           slave: 247
           address: 38801
           data_type: uint16
-                    
           precision: 0
           scan_interval: 60
-                                     
 
         - name: FoxESS 074 Meter1 CT1 R Phase Voltage
           slave: 247
@@ -702,7 +640,6 @@ foxess:
           unit_of_measurement: V
           device_class: voltage
           state_class: measurement
-                      
           scan_interval: 60
 
         - name: FoxESS 075 Meter1 CT1 S Phase Voltage
@@ -714,7 +651,6 @@ foxess:
           unit_of_measurement: V
           device_class: voltage
           state_class: measurement
-                      
           scan_interval: 60
 
         - name: FoxESS 076 Meter1 CT1 T Phase Voltage
@@ -726,7 +662,6 @@ foxess:
           unit_of_measurement: V
           device_class: voltage
           state_class: measurement
-                      
           scan_interval: 60
 
         - name: FoxESS 077 Meter1 CT1 R Phase Current
@@ -738,7 +673,6 @@ foxess:
           unit_of_measurement: A
           device_class: current
           state_class: measurement
-                      
           scan_interval: 60
 
         - name: FoxESS 078 Meter1 CT1 S Phase Current
@@ -750,7 +684,6 @@ foxess:
           unit_of_measurement: A
           device_class: current
           state_class: measurement
-                      
           scan_interval: 60
 
         - name: FoxESS 079 Meter1 CT1 T Phase Current
@@ -762,7 +695,6 @@ foxess:
           unit_of_measurement: A
           device_class: current
           state_class: measurement
-                      
           scan_interval: 60
 
         - name: FoxESS 080 Meter1 CT1 Combined Active Power
@@ -774,7 +706,6 @@ foxess:
           unit_of_measurement: W
           device_class: power
           state_class: measurement
-                      
           scan_interval: 60
 
         - name: FoxESS 081 Meter1 CT1 R Phase Active Power
@@ -786,7 +717,6 @@ foxess:
           unit_of_measurement: W
           device_class: power
           state_class: measurement
-                      
           scan_interval: 60
 
         - name: FoxESS 082 Meter1 CT1 S Phase Active Power
@@ -798,7 +728,6 @@ foxess:
           unit_of_measurement: W
           device_class: power
           state_class: measurement
-                      
           scan_interval: 60
 
         - name: FoxESS 083 Meter1 CT1 T Phase Active Power
@@ -810,7 +739,6 @@ foxess:
           unit_of_measurement: W
           device_class: power
           state_class: measurement
-                      
           scan_interval: 60
 
         - name: FoxESS 084 Meter1 CT1 Combined Reactive Power
@@ -822,7 +750,6 @@ foxess:
           unit_of_measurement: var
           device_class: reactive_power
           state_class: measurement
-                      
           scan_interval: 60
 
         - name: FoxESS 085 Meter1 CT1 R Phase Reactive Power
@@ -834,7 +761,6 @@ foxess:
           unit_of_measurement: var
           device_class: reactive_power
           state_class: measurement
-                      
           scan_interval: 60
 
         - name: FoxESS 086 Meter1 CT1 S Phase Reactive Power
@@ -846,7 +772,6 @@ foxess:
           unit_of_measurement: var
           device_class: reactive_power
           state_class: measurement
-                      
           scan_interval: 60
 
         - name: FoxESS 087 Meter1 CT1 T Phase Reactive Power
@@ -858,7 +783,6 @@ foxess:
           unit_of_measurement: var
           device_class: reactive_power
           state_class: measurement
-                      
           scan_interval: 60
 
         - name: FoxESS 088 Meter1 CT1 Combined Apparent Power
@@ -870,7 +794,6 @@ foxess:
           unit_of_measurement: VA
           device_class: apparent_power
           state_class: measurement
-                      
           scan_interval: 60
 
         - name: FoxESS 089 Meter1 CT1 R Phase Apparent Power
@@ -882,7 +805,6 @@ foxess:
           unit_of_measurement: VA
           device_class: apparent_power
           state_class: measurement
-                      
           scan_interval: 60
 
         - name: FoxESS 090 Meter1 CT1 S Phase Apparent Power
@@ -894,7 +816,6 @@ foxess:
           unit_of_measurement: VA
           device_class: apparent_power
           state_class: measurement
-                      
           scan_interval: 60
 
         - name: FoxESS 091 Meter1 CT1 T Phase Apparent Power
@@ -906,7 +827,6 @@ foxess:
           unit_of_measurement: VA
           device_class: apparent_power
           state_class: measurement
-                      
           scan_interval: 60
 
         - name: FoxESS 092 Meter1 CT1 Combined Power Factor
@@ -918,7 +838,6 @@ foxess:
           unit_of_measurement: ""
           device_class: power_factor
           state_class: measurement
-                      
           scan_interval: 60
 
         - name: FoxESS 093 Meter1 CT1 R Phase Power Factor
@@ -930,7 +849,6 @@ foxess:
           unit_of_measurement: ""
           device_class: power_factor
           state_class: measurement
-                      
           scan_interval: 60
 
         - name: FoxESS 094 Meter1 CT1 S Phase Power Factor
@@ -942,7 +860,6 @@ foxess:
           unit_of_measurement: ""
           device_class: power_factor
           state_class: measurement
-                      
           scan_interval: 60
 
         - name: FoxESS 095 Meter1 CT1 T Phase Power Factor
@@ -954,7 +871,6 @@ foxess:
           unit_of_measurement: ""
           device_class: power_factor
           state_class: measurement
-                      
           scan_interval: 60
 
         - name: FoxESS 096 Meter1 CT1 Frequency
@@ -966,7 +882,6 @@ foxess:
           unit_of_measurement: Hz
           device_class: frequency
           state_class: measurement
-                      
           scan_interval: 60
 
         # ------------------------------------------------------------------------
@@ -976,10 +891,8 @@ foxess:
           slave: 247
           address: 38901
           data_type: uint16
-                    
           precision: 0
           scan_interval: 60
-                                                  
 
         - name: FoxESS 098 Meter2 CT2 R Phase Voltage
           slave: 247
@@ -990,7 +903,6 @@ foxess:
           unit_of_measurement: V
           device_class: voltage
           state_class: measurement
-                      
           scan_interval: 60
 
         - name: FoxESS 099 Meter2 CT2 S Phase Voltage
@@ -1002,7 +914,6 @@ foxess:
           unit_of_measurement: V
           device_class: voltage
           state_class: measurement
-                      
           scan_interval: 60
 
         - name: FoxESS 100 Meter2 CT2 T Phase Voltage
@@ -1014,7 +925,6 @@ foxess:
           unit_of_measurement: V
           device_class: voltage
           state_class: measurement
-                      
           scan_interval: 60
 
         - name: FoxESS 101 Meter2 CT2 R Phase Current
@@ -1026,7 +936,6 @@ foxess:
           unit_of_measurement: A
           device_class: current
           state_class: measurement
-                      
           scan_interval: 60
 
         - name: FoxESS 102 Meter2 CT2 S Phase Current
@@ -1038,7 +947,6 @@ foxess:
           unit_of_measurement: A
           device_class: current
           state_class: measurement
-                      
           scan_interval: 60
 
         - name: FoxESS 103 Meter2 CT2 T Phase Current
@@ -1050,7 +958,6 @@ foxess:
           unit_of_measurement: A
           device_class: current
           state_class: measurement
-                      
           scan_interval: 60
 
         - name: FoxESS 104 Meter2 CT2 Combined Active Power
@@ -1062,7 +969,6 @@ foxess:
           unit_of_measurement: W
           device_class: power
           state_class: measurement
-                      
           scan_interval: 60
 
         - name: FoxESS 105 Meter2 CT2 R Phase Active Power
@@ -1074,7 +980,6 @@ foxess:
           unit_of_measurement: W
           device_class: power
           state_class: measurement
-                      
           scan_interval: 60
 
         - name: FoxESS 106 Meter2 CT2 S Phase Active Power
@@ -1086,7 +991,6 @@ foxess:
           unit_of_measurement: W
           device_class: power
           state_class: measurement
-                      
           scan_interval: 60
 
         - name: FoxESS 107 Meter2 CT2 T Phase Active Power
@@ -1098,7 +1002,6 @@ foxess:
           unit_of_measurement: W
           device_class: power
           state_class: measurement
-                      
           scan_interval: 60
 
         - name: FoxESS 108 Meter2 CT2 Combined Reactive Power
@@ -1110,7 +1013,6 @@ foxess:
           unit_of_measurement: var
           device_class: reactive_power
           state_class: measurement
-                      
           scan_interval: 60
 
         - name: FoxESS 109 Meter2 CT2 R Phase Reactive Power
@@ -1122,7 +1024,6 @@ foxess:
           unit_of_measurement: var
           device_class: reactive_power
           state_class: measurement
-                      
           scan_interval: 60
 
         - name: FoxESS 110 Meter2 CT2 S Phase Reactive Power
@@ -1134,7 +1035,6 @@ foxess:
           unit_of_measurement: var
           device_class: reactive_power
           state_class: measurement
-                      
           scan_interval: 60
 
         - name: FoxESS 111 Meter2 CT2 T Phase Reactive Power
@@ -1146,7 +1046,6 @@ foxess:
           unit_of_measurement: var
           device_class: reactive_power
           state_class: measurement
-                      
           scan_interval: 60
 
         - name: FoxESS 112 Meter2 CT2 Combined Apparent Power
@@ -1158,7 +1057,6 @@ foxess:
           unit_of_measurement: VA
           device_class: apparent_power
           state_class: measurement
-                      
           scan_interval: 60
 
         - name: FoxESS 113 Meter2 CT2 R Phase Apparent Power
@@ -1170,7 +1068,6 @@ foxess:
           unit_of_measurement: VA
           device_class: apparent_power
           state_class: measurement
-                      
           scan_interval: 60
 
         - name: FoxESS 114 Meter2 CT2 S Phase Apparent Power
@@ -1182,7 +1079,6 @@ foxess:
           unit_of_measurement: VA
           device_class: apparent_power
           state_class: measurement
-                      
           scan_interval: 60
 
         - name: FoxESS 115 Meter2 CT2 T Phase Apparent Power
@@ -1194,7 +1090,6 @@ foxess:
           unit_of_measurement: VA
           device_class: apparent_power
           state_class: measurement
-                      
           scan_interval: 60
 
         - name: FoxESS 116 Meter2 CT2 Combined Power Factor
@@ -1206,7 +1101,6 @@ foxess:
           unit_of_measurement: ""
           device_class: power_factor
           state_class: measurement
-                      
           scan_interval: 60
 
         - name: FoxESS 117 Meter2 CT2 R Phase Power Factor
@@ -1218,7 +1112,6 @@ foxess:
           unit_of_measurement: ""
           device_class: power_factor
           state_class: measurement
-                      
           scan_interval: 60
 
         - name: FoxESS 118 Meter2 CT2 S Phase Power Factor
@@ -1230,7 +1123,6 @@ foxess:
           unit_of_measurement: ""
           device_class: power_factor
           state_class: measurement
-                      
           scan_interval: 60
 
         - name: FoxESS 119 Meter2 CT2 T Phase Power Factor
@@ -1242,7 +1134,6 @@ foxess:
           unit_of_measurement: ""
           device_class: power_factor
           state_class: measurement
-                      
           scan_interval: 60
 
         - name: FoxESS 120 Meter2 CT2 Frequency
@@ -1254,7 +1145,6 @@ foxess:
           unit_of_measurement: Hz
           device_class: frequency
           state_class: measurement
-                      
           scan_interval: 60
 
         # ------------------------------------------------------------------------
@@ -1264,7 +1154,6 @@ foxess:
           slave: 247
           address: 39000
           data_type: uint32
-                  
           precision: 0
           scan_interval: 3600
 
@@ -1293,7 +1182,6 @@ foxess:
           slave: 247
           address: 39050
           data_type: uint16
-                  
           precision: 0
           scan_interval: 3600
 
@@ -1301,7 +1189,6 @@ foxess:
           slave: 247
           address: 39051
           data_type: uint16
-                  
           precision: 0
           scan_interval: 3600
 
@@ -1309,7 +1196,6 @@ foxess:
           slave: 247
           address: 39052
           data_type: uint16
-                  
           precision: 0
           scan_interval: 3600
 
@@ -1322,7 +1208,6 @@ foxess:
           unit_of_measurement: kW
           device_class: power
           state_class: measurement
-                      
           scan_interval: 3600
 
         - name: FoxESS 129 Maximum Active Power Pmax
@@ -1334,7 +1219,6 @@ foxess:
           unit_of_measurement: kW
           device_class: power
           state_class: measurement
-                      
           scan_interval: 3600
 
         - name: FoxESS 130 Maximum Apparent Power Smax
@@ -1346,7 +1230,6 @@ foxess:
           unit_of_measurement: kVA
           device_class: apparent_power
           state_class: measurement
-                      
           scan_interval: 3600
 
         - name: FoxESS 131 Maximum Reactive Power Qmax fed
@@ -1358,7 +1241,6 @@ foxess:
           unit_of_measurement: kvar
           device_class: reactive_power
           state_class: measurement
-                      
           scan_interval: 3600
 
         - name: FoxESS 132 Maximum Reactive Power Qmax absorbed
@@ -1370,7 +1252,6 @@ foxess:
           unit_of_measurement: kvar
           device_class: reactive_power
           state_class: measurement
-                      
           scan_interval: 3600
 
         # ------------------------------------------------------------------------
@@ -1380,7 +1261,6 @@ foxess:
           slave: 247
           address: 39063
           data_type: uint16
-                  
           precision: 0
           scan_interval: 60
 
@@ -1388,7 +1268,6 @@ foxess:
           slave: 247
           address: 39065
           data_type: uint16
-                  
           precision: 0
           scan_interval: 60
 
@@ -1404,7 +1283,6 @@ foxess:
           unit_of_measurement: V
           device_class: voltage
           state_class: measurement
-                      
           scan_interval: 60
 
         - name: FoxESS 140 PV1 Current
@@ -1416,7 +1294,6 @@ foxess:
           unit_of_measurement: A
           device_class: current
           state_class: measurement
-                      
           scan_interval: 60
 
         - name: FoxESS 141 PV2 Voltage
@@ -1428,7 +1305,6 @@ foxess:
           unit_of_measurement: V
           device_class: voltage
           state_class: measurement
-                      
           scan_interval: 60
 
         - name: FoxESS 142 PV2 Current
@@ -1440,7 +1316,6 @@ foxess:
           unit_of_measurement: A
           device_class: current
           state_class: measurement
-                      
           scan_interval: 60
 
         - name: FoxESS 143 PV3 Voltage
@@ -1452,7 +1327,6 @@ foxess:
           unit_of_measurement: V
           device_class: voltage
           state_class: measurement
-                      
           scan_interval: 60
 
         - name: FoxESS 144 PV3 Current
@@ -1464,7 +1338,6 @@ foxess:
           unit_of_measurement: A
           device_class: current
           state_class: measurement
-                      
           scan_interval: 60
 
         - name: FoxESS 145 PV4 Voltage
@@ -1476,7 +1349,6 @@ foxess:
           unit_of_measurement: V
           device_class: voltage
           state_class: measurement
-                      
           scan_interval: 60
 
         - name: FoxESS 146 PV4 Current
@@ -1488,7 +1360,6 @@ foxess:
           unit_of_measurement: A
           device_class: current
           state_class: measurement
-                      
           scan_interval: 60
 
         - name: FoxESS 147 Total PV Input Power
@@ -1500,7 +1371,6 @@ foxess:
           unit_of_measurement: kW
           device_class: power
           state_class: measurement
-                      
           scan_interval: 60
 
         # ------------------------------------------------------------------------
@@ -1515,7 +1385,6 @@ foxess:
           unit_of_measurement: V
           device_class: voltage
           state_class: measurement
-                      
           scan_interval: 60
 
         - name: FoxESS 152 Grid S Phase Voltage
@@ -1527,7 +1396,6 @@ foxess:
           unit_of_measurement: V
           device_class: voltage
           state_class: measurement
-                      
           scan_interval: 60
 
         - name: FoxESS 153 Grid T Phase Voltage
@@ -1539,7 +1407,6 @@ foxess:
           unit_of_measurement: V
           device_class: voltage
           state_class: measurement
-                      
           scan_interval: 60
 
         - name: FoxESS 154 Inverter R Phase Current
@@ -1551,7 +1418,6 @@ foxess:
           unit_of_measurement: A
           device_class: current
           state_class: measurement
-                      
           scan_interval: 60
 
         - name: FoxESS 155 Inverter S Phase Current
@@ -1563,7 +1429,6 @@ foxess:
           unit_of_measurement: A
           device_class: current
           state_class: measurement
-                      
           scan_interval: 60
 
         - name: FoxESS 156 Inverter T Phase Current
@@ -1575,7 +1440,6 @@ foxess:
           unit_of_measurement: A
           device_class: current
           state_class: measurement
-                      
           scan_interval: 60
 
         - name: FoxESS 158 Active Power
@@ -1587,7 +1451,6 @@ foxess:
           unit_of_measurement: kW
           device_class: power
           state_class: measurement
-                      
           scan_interval: 60
 
         - name: FoxESS 159 Reactive Power
@@ -1599,7 +1462,6 @@ foxess:
           unit_of_measurement: kvar
           device_class: reactive_power
           state_class: measurement
-                      
           scan_interval: 60
 
         - name: FoxESS 160 Power Factor
@@ -1611,7 +1473,6 @@ foxess:
           unit_of_measurement: ""
           device_class: power_factor
           state_class: measurement
-                      
           scan_interval: 60
 
         - name: FoxESS 161 Grid Frequency
@@ -1623,7 +1484,6 @@ foxess:
           unit_of_measurement: Hz
           device_class: frequency
           state_class: measurement
-                      
           scan_interval: 60
 
         - name: FoxESS 163 Internal Temperature
@@ -1635,7 +1495,6 @@ foxess:
           unit_of_measurement: °C
           device_class: temperature
           state_class: measurement
-                      
           scan_interval: 60
 
         - name: FoxESS 169 Cumulative Power Generation
@@ -1647,7 +1506,6 @@ foxess:
           unit_of_measurement: kWh
           device_class: energy
           state_class: total_increasing
-                      
           scan_interval: 300
 
         - name: FoxESS 170 Power Generation Today
@@ -1659,7 +1517,6 @@ foxess:
           unit_of_measurement: kWh
           device_class: energy
           state_class: total_increasing
-                      
           scan_interval: 300
 
         - name: FoxESS 178 Battery1 Charge Discharge Power
@@ -1670,7 +1527,6 @@ foxess:
           unit_of_measurement: W
           device_class: power
           state_class: measurement
-                      
           scan_interval: 60
 
         - name: FoxESS 181 Meter Active Power
@@ -1681,7 +1537,6 @@ foxess:
           unit_of_measurement: W
           device_class: power
           state_class: measurement
-                      
           scan_interval: 60
 
         # ------------------------------------------------------------------------
@@ -1696,7 +1551,6 @@ foxess:
           unit_of_measurement: V
           device_class: voltage
           state_class: measurement
-                      
           scan_interval: 60
 
         - name: FoxESS 187 EPS S Phase Voltage
@@ -1708,7 +1562,6 @@ foxess:
           unit_of_measurement: V
           device_class: voltage
           state_class: measurement
-                      
           scan_interval: 60
 
         - name: FoxESS 188 EPS T Phase Voltage
@@ -1720,7 +1573,6 @@ foxess:
           unit_of_measurement: V
           device_class: voltage
           state_class: measurement
-                      
           scan_interval: 60
 
         - name: FoxESS 189 EPS R Phase Current
@@ -1732,7 +1584,6 @@ foxess:
           unit_of_measurement: A
           device_class: current
           state_class: measurement
-                      
           scan_interval: 60
 
         - name: FoxESS 190 EPS S Phase Current
@@ -1744,7 +1595,6 @@ foxess:
           unit_of_measurement: A
           device_class: current
           state_class: measurement
-                      
           scan_interval: 60
 
         - name: FoxESS 191 EPS T Phase Current
@@ -1756,7 +1606,6 @@ foxess:
           unit_of_measurement: A
           device_class: current
           state_class: measurement
-                      
           scan_interval: 60
 
         - name: FoxESS 192 EPS R Phase Power
@@ -1767,7 +1616,6 @@ foxess:
           unit_of_measurement: W
           device_class: power
           state_class: measurement
-                      
           scan_interval: 60
 
         - name: FoxESS 193 EPS S Phase Power
@@ -1778,7 +1626,6 @@ foxess:
           unit_of_measurement: W
           device_class: power
           state_class: measurement
-                      
           scan_interval: 60
 
         - name: FoxESS 194 EPS T Phase Power
@@ -1789,7 +1636,6 @@ foxess:
           unit_of_measurement: W
           device_class: power
           state_class: measurement
-                      
           scan_interval: 60
 
         - name: FoxESS 195 EPS Combined Power
@@ -1800,7 +1646,6 @@ foxess:
           unit_of_measurement: W
           device_class: power
           state_class: measurement
-                      
           scan_interval: 60
 
         - name: FoxESS 196 EPS Frequency
@@ -1812,7 +1657,6 @@ foxess:
           unit_of_measurement: Hz
           device_class: frequency
           state_class: measurement
-                      
           scan_interval: 60
 
         - name: FoxESS 197 Load R Phase Power
@@ -1823,7 +1667,6 @@ foxess:
           unit_of_measurement: W
           device_class: power
           state_class: measurement
-                      
           scan_interval: 60
 
         - name: FoxESS 198 Load S Phase Power
@@ -1834,7 +1677,6 @@ foxess:
           unit_of_measurement: W
           device_class: power
           state_class: measurement
-                      
           scan_interval: 60
 
         - name: FoxESS 199 Load T Phase Power
@@ -1845,7 +1687,6 @@ foxess:
           unit_of_measurement: W
           device_class: power
           state_class: measurement
-                      
           scan_interval: 60
 
         - name: FoxESS 200 Load Combined Power
@@ -1856,7 +1697,6 @@ foxess:
           unit_of_measurement: W
           device_class: power
           state_class: measurement
-                      
           scan_interval: 60
 
         # ------------------------------------------------------------------------
@@ -1871,7 +1711,6 @@ foxess:
           unit_of_measurement: V
           device_class: voltage
           state_class: measurement
-                      
           scan_interval: 60
 
         - name: FoxESS 202 Battery1 Current
@@ -1883,7 +1722,6 @@ foxess:
           unit_of_measurement: A
           device_class: current
           state_class: measurement
-                      
           scan_interval: 60
 
         - name: FoxESS 203 Battery1 Power
@@ -1894,7 +1732,6 @@ foxess:
           unit_of_measurement: W
           device_class: power
           state_class: measurement
-                      
           scan_interval: 60
 
         - name: FoxESS 204 Battery2 Voltage
@@ -1906,7 +1743,6 @@ foxess:
           unit_of_measurement: V
           device_class: voltage
           state_class: measurement
-                      
           scan_interval: 60
 
         - name: FoxESS 205 Battery2 Current
@@ -1918,7 +1754,6 @@ foxess:
           unit_of_measurement: A
           device_class: current
           state_class: measurement
-                      
           scan_interval: 60
 
         - name: FoxESS 206 Battery2 Power
@@ -1929,7 +1764,6 @@ foxess:
           unit_of_measurement: W
           device_class: power
           state_class: measurement
-                      
           scan_interval: 60
 
         - name: FoxESS 207 Battery Combined Power
@@ -1940,7 +1774,6 @@ foxess:
           unit_of_measurement: W
           device_class: power
           state_class: measurement
-                      
           scan_interval: 60
 
         # ------------------------------------------------------------------------
@@ -1954,7 +1787,6 @@ foxess:
           unit_of_measurement: W
           device_class: power
           state_class: measurement
-                      
           scan_interval: 60
 
         - name: FoxESS 215 INV S Phase Active Power
@@ -1965,7 +1797,6 @@ foxess:
           unit_of_measurement: W
           device_class: power
           state_class: measurement
-                      
           scan_interval: 60
 
         - name: FoxESS 216 INV T Phase Active Power
@@ -1976,7 +1807,6 @@ foxess:
           unit_of_measurement: W
           device_class: power
           state_class: measurement
-                      
           scan_interval: 60
 
         - name: FoxESS 218 INV R Phase Reactive Power
@@ -1987,7 +1817,6 @@ foxess:
           unit_of_measurement: var
           device_class: reactive_power
           state_class: measurement
-                      
           scan_interval: 60
 
         - name: FoxESS 219 INV S Phase Reactive Power
@@ -1998,7 +1827,6 @@ foxess:
           unit_of_measurement: var
           device_class: reactive_power
           state_class: measurement
-                      
           scan_interval: 60
 
         - name: FoxESS 220 INV T Phase Reactive Power
@@ -2009,7 +1837,6 @@ foxess:
           unit_of_measurement: var
           device_class: reactive_power
           state_class: measurement
-                      
           scan_interval: 60
 
         - name: FoxESS 222 INV R Phase Apparent Power
@@ -2020,7 +1847,6 @@ foxess:
           unit_of_measurement: VA
           device_class: apparent_power
           state_class: measurement
-                      
           scan_interval: 60
 
         - name: FoxESS 223 INV S Phase Apparent Power
@@ -2031,7 +1857,6 @@ foxess:
           unit_of_measurement: VA
           device_class: apparent_power
           state_class: measurement
-                      
           scan_interval: 60
 
         - name: FoxESS 224 INV T Phase Apparent Power
@@ -2042,7 +1867,6 @@ foxess:
           unit_of_measurement: VA
           device_class: apparent_power
           state_class: measurement
-                      
           scan_interval: 60
 
         - name: FoxESS 225 INV Combined Apparent Power
@@ -2053,7 +1877,6 @@ foxess:
           unit_of_measurement: VA
           device_class: apparent_power
           state_class: measurement
-                      
           scan_interval: 60
 
         - name: FoxESS 226 INV Frequency R
@@ -2065,7 +1888,6 @@ foxess:
           unit_of_measurement: Hz
           device_class: frequency
           state_class: measurement
-                      
           scan_interval: 60
 
         - name: FoxESS 227 INV Frequency S
@@ -2077,7 +1899,6 @@ foxess:
           unit_of_measurement: Hz
           device_class: frequency
           state_class: measurement
-                      
           scan_interval: 60
 
         - name: FoxESS 228 INV Frequency T
@@ -2089,7 +1910,6 @@ foxess:
           unit_of_measurement: Hz
           device_class: frequency
           state_class: measurement
-                      
           scan_interval: 60
 
         - name: FoxESS 229 Available Import Power
@@ -2100,7 +1920,6 @@ foxess:
           unit_of_measurement: W
           device_class: power
           state_class: measurement
-                      
           scan_interval: 60
 
         - name: FoxESS 230 Available Export Power
@@ -2111,7 +1930,6 @@ foxess:
           unit_of_measurement: W
           device_class: power
           state_class: measurement
-                      
           scan_interval: 60
 
         # ------------------------------------------------------------------------
@@ -2125,7 +1943,6 @@ foxess:
           unit_of_measurement: W
           device_class: power
           state_class: measurement
-                      
           scan_interval: 60
 
         - name: FoxESS 232 PV2 Power
@@ -2136,7 +1953,6 @@ foxess:
           unit_of_measurement: W
           device_class: power
           state_class: measurement
-                      
           scan_interval: 60
 
         - name: FoxESS 233 PV3 Power
@@ -2147,7 +1963,6 @@ foxess:
           unit_of_measurement: W
           device_class: power
           state_class: measurement
-                      
           scan_interval: 60
 
         - name: FoxESS 234 PV4 Power
@@ -2158,7 +1973,6 @@ foxess:
           unit_of_measurement: W
           device_class: power
           state_class: measurement
-                      
           scan_interval: 60
 
         # ------------------------------------------------------------------------
@@ -2173,7 +1987,6 @@ foxess:
           unit_of_measurement: V
           device_class: voltage
           state_class: measurement
-                      
           scan_interval: 60
 
         - name: FoxESS 236 MPPT1 Current
@@ -2185,7 +1998,6 @@ foxess:
           unit_of_measurement: A
           device_class: current
           state_class: measurement
-                      
           scan_interval: 60
 
         - name: FoxESS 237 MPPT1 Power
@@ -2196,7 +2008,6 @@ foxess:
           unit_of_measurement: W
           device_class: power
           state_class: measurement
-                      
           scan_interval: 60
 
         - name: FoxESS 238 MPPT2 Voltage
@@ -2208,7 +2019,6 @@ foxess:
           unit_of_measurement: V
           device_class: voltage
           state_class: measurement
-                      
           scan_interval: 60
 
         - name: FoxESS 239 MPPT2 Current
@@ -2220,7 +2030,6 @@ foxess:
           unit_of_measurement: A
           device_class: current
           state_class: measurement
-                      
           scan_interval: 60
 
         - name: FoxESS 240 MPPT2 Power
@@ -2231,7 +2040,6 @@ foxess:
           unit_of_measurement: W
           device_class: power
           state_class: measurement
-                      
           scan_interval: 60
 
         - name: FoxESS 241 MPPT3 Voltage
@@ -2243,7 +2051,6 @@ foxess:
           unit_of_measurement: V
           device_class: voltage
           state_class: measurement
-                      
           scan_interval: 60
 
         - name: FoxESS 242 MPPT3 Current
@@ -2255,7 +2062,6 @@ foxess:
           unit_of_measurement: A
           device_class: current
           state_class: measurement
-                      
           scan_interval: 60
 
         - name: FoxESS 243 MPPT3 Power
@@ -2266,7 +2072,6 @@ foxess:
           unit_of_measurement: W
           device_class: power
           state_class: measurement
-                      
           scan_interval: 60
 
         # ------------------------------------------------------------------------
@@ -2280,7 +2085,6 @@ foxess:
           unit_of_measurement: "%"
           device_class: battery
           state_class: measurement
-                      
           scan_interval: 60
 
         # ------------------------------------------------------------------------
@@ -2295,7 +2099,6 @@ foxess:
           unit_of_measurement: kWh
           device_class: energy
           state_class: total_increasing
-                      
           scan_interval: 300
 
         - name: FoxESS 247 Total PV Power Today
@@ -2307,7 +2110,6 @@ foxess:
           unit_of_measurement: kWh
           device_class: energy
           state_class: total_increasing
-                      
           scan_interval: 300
 
         - name: FoxESS 248 Total Charging Capacity
@@ -2319,7 +2121,6 @@ foxess:
           unit_of_measurement: kWh
           device_class: energy
           state_class: total_increasing
-                      
           scan_interval: 300
 
         - name: FoxESS 249 Today's Total Charging Capacity
@@ -2331,7 +2132,6 @@ foxess:
           unit_of_measurement: kWh
           device_class: energy
           state_class: total_increasing
-                      
           scan_interval: 300
 
         - name: FoxESS 250 Total Discharge Energy
@@ -2343,7 +2143,6 @@ foxess:
           unit_of_measurement: kWh
           device_class: energy
           state_class: total_increasing
-                      
           scan_interval: 300
 
         - name: FoxESS 251 Today's Total Discharge Energy
@@ -2355,7 +2154,6 @@ foxess:
           unit_of_measurement: kWh
           device_class: energy
           state_class: total_increasing
-                      
           scan_interval: 300
 
         - name: FoxESS 252 Total Feeder Network Energy
@@ -2367,7 +2165,6 @@ foxess:
           unit_of_measurement: kWh
           device_class: energy
           state_class: total_increasing
-                      
           scan_interval: 300
 
         - name: FoxESS 253 Today's Total Feeder Energy
@@ -2379,7 +2176,6 @@ foxess:
           unit_of_measurement: kWh
           device_class: energy
           state_class: total_increasing
-                      
           scan_interval: 300
 
         - name: FoxESS 254 Total Power Taken
@@ -2391,7 +2187,6 @@ foxess:
           unit_of_measurement: kWh
           device_class: energy
           state_class: total_increasing
-                      
           scan_interval: 300
 
         - name: FoxESS 255 Today's Total Electricity Consumption
@@ -2403,7 +2198,6 @@ foxess:
           unit_of_measurement: kWh
           device_class: energy
           state_class: total_increasing
-                      
           scan_interval: 300
 
         - name: FoxESS 256 Output Total Energy
@@ -2415,7 +2209,6 @@ foxess:
           unit_of_measurement: kWh
           device_class: energy
           state_class: total_increasing
-                      
           scan_interval: 300
 
         - name: FoxESS 257 Total Power Output Today
@@ -2427,7 +2220,6 @@ foxess:
           unit_of_measurement: kWh
           device_class: energy
           state_class: total_increasing
-                      
           scan_interval: 300
 
         - name: FoxESS 258 Enter Total Energy
@@ -2439,7 +2231,6 @@ foxess:
           unit_of_measurement: kWh
           device_class: energy
           state_class: total_increasing
-                      
           scan_interval: 300
 
         - name: FoxESS 259 Enter Total Energy Today
@@ -2451,7 +2242,6 @@ foxess:
           unit_of_measurement: kWh
           device_class: energy
           state_class: total_increasing
-                      
           scan_interval: 300
 
         - name: FoxESS 260 Total Load Energy
@@ -2463,7 +2253,6 @@ foxess:
           unit_of_measurement: kWh
           device_class: energy
           state_class: total_increasing
-                      
           scan_interval: 300
 
         - name: FoxESS 261 Total Load Energy Today
@@ -2475,43 +2264,65 @@ foxess:
           unit_of_measurement: kWh
           device_class: energy
           state_class: total_increasing
-                      
           scan_interval: 300
 
     # =============================================================================
     # NASTAWY RW (zapis) – rejestry 271 i 309
     # =============================================================================
+ 
+        - name: FoxESS 271 Remote Control Raw
+          slave: 247
+          address: 46001
+          data_type: uint16
+          precision: 0
+          scan_interval: 60
+
+        - name: FoxESS 309 Time Mode Flag Raw
+          slave: 247
+          address: 48000
+          data_type: uint16
+          precision: 0
+          scan_interval: 60
+
       switch:
-        - name: FoxESS Remote Control – Zdalne sterowanie włączone
+        - platform: modbus
+          name: FoxESS Remote Control – Zdalne sterowanie włączone
+          hub: foxess_modbus
           slave: 247
           address: 46001
           bitmask: 1
           state_on: 1
           state_off: 0
-          icon: "mdi:remote"
+          icon: mdi:remote
           entity_category: config
 
-        - name: FoxESS Time Period Mode – Włączony
+        - platform: modbus
+          name: FoxESS Time Period Mode – Włączony
+          hub: foxess_modbus
           slave: 247
           address: 48000
           bitmask: 1
           state_on: 1
           state_off: 0
-          icon: "mdi:clock-outline"
+          icon: mdi:clock-outline
           entity_category: config
 
       select:
-        - name: FoxESS Remote Control – Kierunek mocy
+        - platform: modbus
+          name: FoxESS Remote Control – Kierunek mocy
+          hub: foxess_modbus
           slave: 247
           address: 46001
           options:
             0: "Power-generation system"
             1: "Power-consumption system"
           bitmask: 2
-          icon: "mdi:arrow-decision"
+          icon: mdi:arrow-decision
           entity_category: config
 
-        - name: FoxESS Remote Control – Cel sterowania
+        - platform: modbus
+          name: FoxESS Remote Control – Cel sterowania
+          hub: foxess_modbus
           slave: 247
           address: 46001
           options:
@@ -2520,16 +2331,14 @@ foxess:
             2: "Grid (CT/Meter)"
             3: "AC (Grid first)"
           bitmask: 12
-          icon: "mdi:target"
+          icon: mdi:target
           entity_category: config
 
       text_sensor:
         - name: "FoxESS Remote Control – Aktualna konfiguracja"
-          slave: 247
-          address: 46001
-          data_type: uint16
+          platform: template
           value_template: >
-            {% set val = value | int(0) %}
+            {% set val = states('sensor.foxess_271_remote_control_raw') | int(0) %}
             {% set remote = 'WŁĄCZONE' if val & 1 else 'WYŁĄCZONE' %}
             {% set direction = 'Produkcja energii' if (val & 2) == 0 else 'Konsumpcja energii' %}
             {% set target_val = (val >> 2) & 3 %}
@@ -2537,12 +2346,8 @@ foxess:
             Zdalne sterowanie: {{ remote }}  
             Kierunek mocy: {{ direction }}  
             Cel sterowania: {{ target_map[target_val] }}
-          scan_interval: 60
 
         - name: "FoxESS Time Period Mode – Status"
-          slave: 247
-          address: 48000
-          data_type: uint16
+          platform: template
           value_template: >
-            {% if value | int(0) & 1 %}WŁĄCZONY{% else %}WYŁĄCZONY{% endif %}
-          scan_interval: 60
+            {% if states('sensor.foxess_309_time_mode_flag_raw') | int(0) & 1 %}WŁĄCZONY{% else %}WYŁĄCZONY{% endif %}
