@@ -36,7 +36,7 @@
 # 3. Wybierz powyższe sensory w odpowiednich polach
 # =============================================================================
 
-foxess_energia:
+foxess_modbus_energy:
   template:
     # ------------------------------------------------------------------------
     # PANELE SŁONECZNE – wymagane przez panel Energia
