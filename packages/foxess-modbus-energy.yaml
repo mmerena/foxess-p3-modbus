@@ -1,0 +1,114 @@
+# =============================================================================
+# packages/foxess-modbus-energy.yaml
+# =============================================================================
+# Dodatkowe encje niezbędne do poprawnego działania panelu Energia
+# Dokumentacja panelu Energia (stan na 2026):
+#   • Sieć elektryczna:        https://www.home-assistant.io/docs/energy/electricity-grid/
+#   • Panele słoneczne:        https://www.home-assistant.io/docs/energy/solar-panels/
+#   • Domowy magazyn energii:  https://www.home-assistant.io/docs/energy/battery/
+#
+# Co podpiąć w panelu Energia po zapisaniu i reloadzie YAML:
+#
+# Sieć elektryczna:
+# • Pobrana energia z sieci (Zużyta energia)          → sensor.foxess_import_calkowity_kwh
+# • Energia zwrócona do sieci (Produkcja do sieci)    → sensor.foxess_eksport_calkowity_kwh
+# • Moc z sieci (Sensor poboru mocy)                  → sensor.foxess_181_meter_active_power
+#   (Standard – dodatnie = eksport, ujemne = import)
+#
+# Panele słoneczne:
+# • Produkcja energii z fotowoltaiki                   → sensor.foxess_pv_calkowita_kwh
+# • Moc produkcji fotowoltaiki                         → sensor.foxess_147_total_pv_input_power
+#
+# Domowy magazyn energii:
+# • Energia wprowadzona do magazynu energii (ładowanie) → sensor.foxess_bateria_ladowanie_calkowite_kwh
+# • Energia oddana z magazynu energii (rozładowanie)    → sensor.foxess_bateria_rozladowanie_calkowite_kwh
+# • Moc baterii                                         → sensor.foxess_207_battery_combined_power
+# • Moc rozładowywania                                  → sensor.foxess_bateria_rozladowanie_moc
+# • Moc ładowania                                       → sensor.foxess_bateria_ladowanie_moc
+# • Stan naładowania (SoC)                              → sensor.foxess_244_system_soc
+#
+# Po zapisaniu pliku:
+# 1. Reload YAML configuration lub restart HA
+# 2. Ustawienia → Panele → Energia → dodaj/edytuj źródła
+# 3. Wybierz powyższe sensory w odpowiednich polach
+# =============================================================================
+
+foxess_energia:
+  template:
+    # ------------------------------------------------------------------------
+    # 1. PANELE SŁONECZNE – wymagane przez panel Energia
+    # ------------------------------------------------------------------------
+    - sensor:
+        - name: FoxESS PV Całkowita Energia
+          unique_id: foxess_pv_calkowita_kwh
+          state: "{{ states('sensor.foxess_246_pv_total_energy') | float(0) | round(2) }}"
+          unit_of_measurement: kWh
+          device_class: energy
+          state_class: total_increasing
+
+        - name: FoxESS PV Produkcja Dzisiaj
+          unique_id: foxess_pv_dzisiaj_kwh
+          state: "{{ states('sensor.foxess_247_total_pv_power_today') | float(0) | round(2) }}"
+          unit_of_measurement: kWh
+          device_class: energy
+          state_class: total_increasing
+
+    # ------------------------------------------------------------------------
+    # 2. DOMOWY MAGAZYN ENERGII – wymagane przez panel Energia
+    # ------------------------------------------------------------------------
+    - sensor:
+        - name: FoxESS Bateria Ładowanie Całkowite
+          unique_id: foxess_bateria_ladowanie_calkowite_kwh
+          state: "{{ states('sensor.foxess_248_total_charging_capacity') | float(0) | round(2) }}"
+          unit_of_measurement: kWh
+          device_class: energy
+          state_class: total_increasing
+
+        - name: FoxESS Bateria Rozładowanie Całkowite
+          unique_id: foxess_bateria_rozladowanie_calkowite_kwh
+          state: "{{ states('sensor.foxess_250_total_discharge_energy') | float(0) | round(2) }}"
+          unit_of_measurement: kWh
+          device_class: energy
+          state_class: total_increasing
+
+        - name: FoxESS Bateria Moc Łączna
+          unique_id: foxess_bateria_moc_laczna
+          state: "{{ states('sensor.foxess_207_battery_combined_power') | float(0) }}"
+          unit_of_measurement: W
+          device_class: power
+          state_class: measurement
+
+        - name: FoxESS Bateria Moc Ładowania
+          unique_id: foxess_bateria_ladowanie_moc
+          state: "{{ max(0, states('sensor.foxess_207_battery_combined_power') | float(0)) }}"
+          unit_of_measurement: W
+          device_class: power
+          state_class: measurement
+
+        - name: FoxESS Bateria Moc Rozładowania
+          unique_id: foxess_bateria_rozladowanie_moc
+          state: "{{ max(0, states('sensor.foxess_207_battery_combined_power') | float(0) * -1) }}"
+          unit_of_measurement: W
+          device_class: power
+          state_class: measurement
+
+    # ------------------------------------------------------------------------
+    # 3. SIEĆ ELEKTRYCZNA – import + eksport (z sensora mocy netto 181)
+    # ------------------------------------------------------------------------
+    - sensor:
+        - name: FoxESS Import z Sieci Całkowity
+          unique_id: foxess_import_calkowity_kwh
+          state: "{{ states('sensor.foxess_254_total_power_taken') | float(0) | round(2) }}"
+          unit_of_measurement: kWh
+          device_class: energy
+          state_class: total_increasing
+
+        - name: FoxESS Energia Zwrócona do Sieci (Eksport Całkowity)
+          unique_id: foxess_eksport_calkowity_kwh
+          state: >
+            {% set moc = states('sensor.foxess_181_meter_active_power') | float(0) %}
+            {% set eksport = moc if moc > 0 else 0 %}
+            {{ eksport | round(2) }}
+          unit_of_measurement: kWh
+          device_class: energy
+          state_class: total_increasing
