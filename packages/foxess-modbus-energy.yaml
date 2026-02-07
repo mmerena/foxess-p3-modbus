@@ -84,7 +84,7 @@ foxess_modbus_energy:
 
         - name: FoxESS Bateria Stan Naładowania
           unique_id: foxess_bateria_soc
-          state: "{{ states('sensor.foxess_244_system_soc') | float(0) }}"
+          state: "{{ states('sensor.foxess_027_bms1_soc') | float(0) }}"
           unit_of_measurement: "%"
           device_class: battery
           state_class: measurement
