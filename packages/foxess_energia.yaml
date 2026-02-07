@@ -1,0 +1,105 @@
+# packages/foxess_energia.yaml
+# Gotowe do podpięcia pod panel Energia (Grid, Solar, Battery)
+# Wszystkie sensory bazują na sensorach z foxess_modbus.yaml
+
+template:
+  # ────────────────────────────────────────────────
+  # PANELE SŁONECZNE (Solar) – produkcja PV
+  # ────────────────────────────────────────────────
+  - sensor:
+      - name: FoxESS PV Produkcja Całkowita
+        unique_id: foxess_pv_produkcja_calkowita
+        state: "{{ states('sensor.foxess_246_pv_total_energy') | float(0) }}"
+        unit_of_measurement: kWh
+        device_class: energy
+        state_class: total_increasing
+
+      - name: FoxESS PV Produkcja Dzisiaj
+        unique_id: foxess_pv_produkcja_dzisiaj
+        state: "{{ states('sensor.foxess_247_total_pv_power_today') | float(0) }}"
+        unit_of_measurement: kWh
+        device_class: energy
+        state_class: total_increasing
+
+  # ────────────────────────────────────────────────
+  # DOMOWY MAGAZYN ENERGII (Battery) – ładowanie / rozładowanie
+  # ────────────────────────────────────────────────
+  - sensor:
+      - name: FoxESS Bateria Ładowanie Całkowite
+        unique_id: foxess_bateria_ladowanie_calkowite
+        state: "{{ states('sensor.foxess_248_total_charging_capacity') | float(0) }}"
+        unit_of_measurement: kWh
+        device_class: energy
+        state_class: total_increasing
+
+      - name: FoxESS Bateria Ładowanie Dzisiaj
+        unique_id: foxess_bateria_ladowanie_dzisiaj
+        state: "{{ states('sensor.foxess_249_todays_total_charging_capacity') | float(0) }}"
+        unit_of_measurement: kWh
+        device_class: energy
+        state_class: total_increasing
+
+      - name: FoxESS Bateria Rozładowanie Całkowite
+        unique_id: foxess_bateria_rozladowanie_calkowite
+        state: "{{ states('sensor.foxess_250_total_discharge_energy') | float(0) }}"
+        unit_of_measurement: kWh
+        device_class: energy
+        state_class: total_increasing
+
+      - name: FoxESS Bateria Rozładowanie Dzisiaj
+        unique_id: foxess_bateria_rozladowanie_dzisiaj
+        state: "{{ states('sensor.foxess_251_todays_total_discharge_energy') | float(0) }}"
+        unit_of_measurement: kWh
+        device_class: energy
+        state_class: total_increasing
+
+      - name: FoxESS Bateria Stan Naładowania
+        unique_id: foxess_bateria_soc
+        state: "{{ states('sensor.foxess_244_system_soc') | float(0) }}"
+        unit_of_measurement: "%"
+        device_class: battery
+        state_class: measurement
+
+  # ────────────────────────────────────────────────
+  # SIEĆ ELEKTRYCZNA (Grid) – import / eksport
+  # ────────────────────────────────────────────────
+  - sensor:
+      - name: FoxESS Import z Sieci Całkowity
+        unique_id: foxess_import_calkowity
+        state: "{{ states('sensor.foxess_254_total_power_taken') | float(0) }}"
+        unit_of_measurement: kWh
+        device_class: energy
+        state_class: total_increasing
+
+      - name: FoxESS Zużycie z Sieci Dzisiaj
+        unique_id: foxess_zuzycie_sieci_dzisiaj
+        state: "{{ states('sensor.foxess_255_todays_total_electricity_consumption') | float(0) }}"
+        unit_of_measurement: kWh
+        device_class: energy
+        state_class: total_increasing
+
+      # Jeśli masz osobny eksport (czasem jest w innym rejestrze lub ujemny w 181)
+      - name: FoxESS Eksport do Sieci Całkowity
+        unique_id: foxess_eksport_calkowity
+        state: "{{ max(0, states('sensor.foxess_181_meter_active_power') | float(0)) }}"  # jeśli eksport dodatni
+        unit_of_measurement: kWh
+        device_class: energy
+        state_class: total_increasing
+
+  # ────────────────────────────────────────────────
+  # OBCIĄŻENIE DOMU (Load) – do sekcji Dom
+  # ────────────────────────────────────────────────
+  - sensor:
+      - name: FoxESS Dom Zużycie Całkowite
+        unique_id: foxess_dom_zuzycie_calkowite
+        state: "{{ states('sensor.foxess_260_total_load_energy') | float(0) }}"
+        unit_of_measurement: kWh
+        device_class: energy
+        state_class: total_increasing
+
+      - name: FoxESS Dom Zużycie Dzisiaj
+        unique_id: foxess_dom_zuzycie_dzisiaj
+        state: "{{ states('sensor.foxess_261_total_load_energy_today') | float(0) }}"
+        unit_of_measurement: kWh
+        device_class: energy
+        state_class: total_increasing
