@@ -2360,7 +2360,6 @@ foxess:
             {% set raw = states('sensor.foxess_004_master_version') | int(0) %}
             {% set val = "%4x" % raw | int(0) %}
             {{ val[0:2] }}.{{ val[2:4] }}
-          unit_of_measurement: ""
           icon: "mdi:chip"
 
         - name: FoxESS Slave Version
@@ -2369,7 +2368,6 @@ foxess:
             {% set raw = states('sensor.foxess_005_slave_version') | int(0) %}
             {% set val = "%4x" % raw | int(0) %}
             {{ val[0:2] }}.{{ val[2:4] }}
-          unit_of_measurement: ""
           icon: "mdi:chip"
 
         - name: FoxESS Manager Version
@@ -2378,7 +2376,6 @@ foxess:
             {% set raw = states('sensor.foxess_006_manager_version') | int(0) %}
             {% set val = "%4x" % raw | int(0) %}
             {{ val[0:2] }}.{{ val[2:4] }}
-          unit_of_measurement: ""
           icon: "mdi:chip"
 
         - name: FoxESS Protocol Version
@@ -2387,8 +2384,4 @@ foxess:
             {% set raw = states('sensor.foxess_121_protocol_version') | int(0) %}
             {% set val = "%8x" % raw | int(0) %}
             {{ val[0:2] }}.{{ val[2:4] }}.{{ val[4:6] }}.{{ val[6:8] }}
-          unit_of_measurement: ""
           icon: "mdi:chip"
-
-
-
