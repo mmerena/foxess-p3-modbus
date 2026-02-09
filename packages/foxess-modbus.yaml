@@ -2463,9 +2463,9 @@ foxess:
           state_class: total_increasing
           scan_interval: 300
 
-    # =============================================================================
-    # NASTAWY RW (zapis) – rejestry 271 i 309
-    # =============================================================================
+        # =============================================================================
+        # NASTAWY RW (zapis) – rejestry 271 i 309
+        # =============================================================================
 
         - name: FoxESS 46001 Remote Control Raw
           unique_id: foxess_46001_remote_control_raw
@@ -2481,6 +2481,99 @@ foxess:
           address: 48000
           data_type: uint16
           precision: 0
+          scan_interval: 60
+
+        # ────────────────────────────────────────────────────────────────
+        # Blok 10 rejestrów holding od 48000 – do rozkodowywania w template
+        # ────────────────────────────────────────────────────────────────
+        - name: "FoxESS 48000-48009 Time & Control Raw Block"
+          slave: 247
+          address: 48000                    # pierwszy rejestr
+          input_type: holding               # holding registers (można zapisywać)
+          data_type: custom
+          structure: ">10H"                 # big-endian, 10 × unsigned 16-bit (H = uint16)
+          count: 10                         # odczytujemy 10 rejestrów naraz
+          scan_interval: 60
+
+        - name: "FoxESS 48010-48019 Time & Control Raw Block"
+          slave: 247
+          address: 48010                    # pierwszy rejestr
+          input_type: holding               # holding registers (można zapisywać)
+          data_type: custom
+          structure: ">10H"                 # big-endian, 10 × unsigned 16-bit (H = uint16)
+          count: 10                         # odczytujemy 10 rejestrów naraz
+          scan_interval: 60
+
+        - name: "FoxESS 48020-48029 Time & Control Raw Block"
+          slave: 247
+          address: 48020                    # pierwszy rejestr
+          input_type: holding               # holding registers (można zapisywać)
+          data_type: custom
+          structure: ">10H"                 # big-endian, 10 × unsigned 16-bit (H = uint16)
+          count: 10                         # odczytujemy 10 rejestrów naraz
+          scan_interval: 60
+
+        - name: "FoxESS 48030-48039 Time & Control Raw Block"
+          slave: 247
+          address: 48030                    # pierwszy rejestr
+          input_type: holding               # holding registers (można zapisywać)
+          data_type: custom
+          structure: ">10H"                 # big-endian, 10 × unsigned 16-bit (H = uint16)
+          count: 10                         # odczytujemy 10 rejestrów naraz
+          scan_interval: 60
+
+        - name: "FoxESS 48040-48049 Time & Control Raw Block"
+          slave: 247
+          address: 48040                    # pierwszy rejestr
+          input_type: holding               # holding registers (można zapisywać)
+          data_type: custom
+          structure: ">10H"                 # big-endian, 10 × unsigned 16-bit (H = uint16)
+          count: 10                         # odczytujemy 10 rejestrów naraz
+          scan_interval: 60
+
+        - name: "FoxESS 48050-48059 Time & Control Raw Block"
+          slave: 247
+          address: 48050                    # pierwszy rejestr
+          input_type: holding               # holding registers (można zapisywać)
+          data_type: custom
+          structure: ">10H"                 # big-endian, 10 × unsigned 16-bit (H = uint16)
+          count: 10                         # odczytujemy 10 rejestrów naraz
+          scan_interval: 60
+
+        - name: "FoxESS 48060-48069 Time & Control Raw Block"
+          slave: 247
+          address: 48060                    # pierwszy rejestr
+          input_type: holding               # holding registers (można zapisywać)
+          data_type: custom
+          structure: ">10H"                 # big-endian, 10 × unsigned 16-bit (H = uint16)
+          count: 10                         # odczytujemy 10 rejestrów naraz
+          scan_interval: 60
+
+        - name: "FoxESS 48070-48079 Time & Control Raw Block"
+          slave: 247
+          address: 48070                    # pierwszy rejestr
+          input_type: holding               # holding registers (można zapisywać)
+          data_type: custom
+          structure: ">10H"                 # big-endian, 10 × unsigned 16-bit (H = uint16)
+          count: 10                         # odczytujemy 10 rejestrów naraz
+          scan_interval: 60
+
+        - name: "FoxESS 48080-48089 Time & Control Raw Block"
+          slave: 247
+          address: 48080                    # pierwszy rejestr
+          input_type: holding               # holding registers (można zapisywać)
+          data_type: custom
+          structure: ">10H"                 # big-endian, 10 × unsigned 16-bit (H = uint16)
+          count: 10                         # odczytujemy 10 rejestrów naraz
+          scan_interval: 60
+
+        - name: "FoxESS 48090-48099 Time & Control Raw Block"
+          slave: 247
+          address: 48090                    # pierwszy rejestr
+          input_type: holding               # holding registers (można zapisywać)
+          data_type: custom
+          structure: ">10H"                 # big-endian, 10 × unsigned 16-bit (H = uint16)
+          count: 10                         # odczytujemy 10 rejestrów naraz
           scan_interval: 60
 
       switch:
