@@ -2486,6 +2486,7 @@ foxess:
         # ────────────────────────────────────────────────────────────────
         # Blok 10 rejestrów holding od 48000 – do rozkodowywania w template
         # ────────────────────────────────────────────────────────────────
+
         - name: "FoxESS 48000-48009 Time & Control Raw Block"
           slave: 247
           address: 48000                    # pierwszy rejestr
