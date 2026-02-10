@@ -2475,19 +2475,12 @@ foxess:
           precision: 0
           scan_interval: 60
 
-        - name: FoxESS 48000 Time Mode Flag Raw
-          unique_id: foxess_48000_time_mode_flag_raw
-          slave: 247
-          address: 48000
-          data_type: uint16
-          precision: 0
-          scan_interval: 60
-
         # ────────────────────────────────────────────────────────────────
         # Blok 10 rejestrów holding od 48000 – do rozkodowywania w template
         # ────────────────────────────────────────────────────────────────
 
-        - name: "FoxESS 48000-48009 Time & Control Raw Block"
+        - name: FoxESS 48000-48009 Time & Control Raw Block
+          unique_id: foxess_48000_48009_time_control_raw_block
           slave: 247
           address: 48000                    # pierwszy rejestr
           input_type: holding               # holding registers (można zapisywać)
@@ -2496,7 +2489,8 @@ foxess:
           count: 10                         # odczytujemy 10 rejestrów naraz
           scan_interval: 60
 
-        - name: "FoxESS 48010-48019 Time & Control Raw Block"
+        - name: FoxESS 48010-48019 Time & Control Raw Block
+          unique_id: foxess_48010_48019_time_control_raw_block
           slave: 247
           address: 48010                    # pierwszy rejestr
           input_type: holding               # holding registers (można zapisywać)
@@ -2505,7 +2499,8 @@ foxess:
           count: 10                         # odczytujemy 10 rejestrów naraz
           scan_interval: 60
 
-        - name: "FoxESS 48020-48029 Time & Control Raw Block"
+        - name: FoxESS 48020-48029 Time & Control Raw Block
+          unique_id: foxess_48020_48029_time_control_raw_block
           slave: 247
           address: 48020                    # pierwszy rejestr
           input_type: holding               # holding registers (można zapisywać)
@@ -2514,7 +2509,8 @@ foxess:
           count: 10                         # odczytujemy 10 rejestrów naraz
           scan_interval: 60
 
-        - name: "FoxESS 48030-48039 Time & Control Raw Block"
+        - name: FoxESS 48030-48039 Time & Control Raw Block
+          unique_id: foxess_48030_48039_time_control_raw_block
           slave: 247
           address: 48030                    # pierwszy rejestr
           input_type: holding               # holding registers (można zapisywać)
@@ -2523,7 +2519,8 @@ foxess:
           count: 10                         # odczytujemy 10 rejestrów naraz
           scan_interval: 60
 
-        - name: "FoxESS 48040-48049 Time & Control Raw Block"
+        - name: FoxESS 48040-48049 Time & Control Raw Block
+          unique_id: foxess_48040_48049_time_control_raw_block
           slave: 247
           address: 48040                    # pierwszy rejestr
           input_type: holding               # holding registers (można zapisywać)
@@ -2532,7 +2529,8 @@ foxess:
           count: 10                         # odczytujemy 10 rejestrów naraz
           scan_interval: 60
 
-        - name: "FoxESS 48050-48059 Time & Control Raw Block"
+        - name: FoxESS 48050-48059 Time & Control Raw Block
+          unique_id: foxess_48050_48059_time_control_raw_block
           slave: 247
           address: 48050                    # pierwszy rejestr
           input_type: holding               # holding registers (można zapisywać)
@@ -2541,7 +2539,8 @@ foxess:
           count: 10                         # odczytujemy 10 rejestrów naraz
           scan_interval: 60
 
-        - name: "FoxESS 48060-48069 Time & Control Raw Block"
+        - name: FoxESS 48060-48069 Time & Control Raw Block
+          unique_id: foxess_48060_48069_time_control_raw_block
           slave: 247
           address: 48060                    # pierwszy rejestr
           input_type: holding               # holding registers (można zapisywać)
@@ -2550,7 +2549,8 @@ foxess:
           count: 10                         # odczytujemy 10 rejestrów naraz
           scan_interval: 60
 
-        - name: "FoxESS 48070-48079 Time & Control Raw Block"
+        - name: FoxESS 48070-48079 Time & Control Raw Block
+          unique_id: foxess_48070_48079_time_control_raw_block
           slave: 247
           address: 48070                    # pierwszy rejestr
           input_type: holding               # holding registers (można zapisywać)
@@ -2559,7 +2559,8 @@ foxess:
           count: 10                         # odczytujemy 10 rejestrów naraz
           scan_interval: 60
 
-        - name: "FoxESS 48080-48089 Time & Control Raw Block"
+        - name: FoxESS 48080-48089 Time & Control Raw Block
+          unique_id: foxess_48080_48089_time_control_raw_block
           slave: 247
           address: 48080                    # pierwszy rejestr
           input_type: holding               # holding registers (można zapisywać)
@@ -2568,7 +2569,8 @@ foxess:
           count: 10                         # odczytujemy 10 rejestrów naraz
           scan_interval: 60
 
-        - name: "FoxESS 48090-48099 Time & Control Raw Block"
+        - name: FoxESS 48090-48099 Time & Control Raw Block
+          unique_id: foxess_48090_48099_time_control_raw_block
           slave: 247
           address: 48090                    # pierwszy rejestr
           input_type: holding               # holding registers (można zapisywać)
@@ -2587,17 +2589,6 @@ foxess:
           state_on: 1
           state_off: 0
           icon: mdi:remote
-          entity_category: config
-
-        - platform: modbus
-          name: FoxESS Time Period Mode – Włączony
-          hub: foxess_modbus
-          slave: 247
-          address: 48000
-          bitmask: 1
-          state_on: 1
-          state_off: 0
-          icon: mdi:clock-outline
           entity_category: config
 
       select:
@@ -2639,11 +2630,6 @@ foxess:
             Zdalne sterowanie: {{ remote }}  
             Kierunek mocy: {{ direction }}  
             Cel sterowania: {{ target_map[target_val] }}
-
-        - name: "FoxESS Time Period Mode – Status"
-          platform: template
-          value_template: >
-            {% if states('sensor.foxess_48000_time_mode_flag_raw') | int(0) & 1 %}WŁĄCZONY{% else %}WYŁĄCZONY{% endif %}
 
   template:
     - sensor:
@@ -2688,6 +2674,492 @@ foxess:
             {% set val = states('sensor.foxess_39065_status_3') | int(0) %}
             {% if val % 2 == 1 %}mdi:transmission-tower-off{% else %}mdi:transmission-tower{% endif %}
 
+        - name: FoxESS Time Group 1 Start Time
+          unique_id: foxess_time_group_1_start_time
+          state: >
+            {% set val = states('sensor.foxess_48010_48019_time_control_raw_block').split(',')[1] | int(0) %}
+            {% set hour = val // 256 %}
+            {% set minute = val % 256 %}
+            {{ '%02d:%02d' % (hour, minute) }}
+          icon: mdi:clock-start
+
+        - name: FoxESS Time Group 1 End Time
+          unique_id: foxess_time_group_1_end_time
+          state: >
+            {% set val = states('sensor.foxess_48010_48019_time_control_raw_block').split(',')[2] | int(0) %}
+            {% set hour = val // 256 %}
+            {% set minute = val % 256 %}
+            {{ '%02d:%02d' % (hour, minute) }}
+          icon: mdi:clock-end
+
+        - name: FoxESS Time Group 1 Work Mode
+          unique_id: foxess_time_group_1_work_mode
+          state: >
+            {% set val = states('sensor.foxess_48010_48019_time_control_raw_block').split(',')[3] | int(0) %}
+            {% set modes = {1: 'Self-Use', 2: 'Feed-In', 3: 'BackUp', 4: 'Peak Shaving', 5: 'Power Station', 6: 'Force Charge', 7: 'Force Discharge'} %}
+            {{ modes.get(val, 'Unknown') }}
+          icon: mdi:power-settings
+
+        - name: FoxESS Time Group 1 Max SoC
+          unique_id: foxess_time_group_1_max_soc
+          state: >
+            {% set val = states('sensor.foxess_48010_48019_time_control_raw_block').split(',')[4] | int(0) %}
+            {{ val // 256 }}
+          unit_of_measurement: "%"
+          icon: mdi:battery-high
+
+        - name: FoxESS Time Group 1 Min SoC OnGrid
+          unique_id: foxess_time_group_1_min_soc_ongrid
+          state: >
+            {% set val = states('sensor.foxess_48010_48019_time_control_raw_block').split(',')[4] | int(0) %}
+            {{ val % 256 }}
+          unit_of_measurement: "%"
+          icon: mdi:battery-low
+
+        - name: FoxESS Time Group 1 FDSoC
+          unique_id: foxess_time_group_1_fdsoc
+          state: "{{ states('sensor.foxess_48010_48019_time_control_raw_block').split(',')[5] | int(0) }}"
+          unit_of_measurement: "%"
+          icon: mdi:battery-arrow-down
+
+        - name: FoxESS Time Group 1 FDPWR
+          unique_id: foxess_time_group_1_fdpwr
+          state: "{{ states('sensor.foxess_48010_48019_time_control_raw_block').split(',')[6] | int(0) }}"
+          unit_of_measurement: W
+          icon: mdi:lightning-bolt
+
+        - name: FoxESS Time Group 2 Start Time
+          unique_id: foxess_time_group_1_start_time
+          state: >
+            {% set val = states('sensor.foxess_48020_48029_time_control_raw_block').split(',')[1] | int(0) %}
+            {% set hour = val // 256 %}
+            {% set minute = val % 256 %}
+            {{ '%02d:%02d' % (hour, minute) }}
+          icon: mdi:clock-start
+
+        - name: FoxESS Time Group 2 End Time
+          unique_id: foxess_time_group_1_end_time
+          state: >
+            {% set val = states('sensor.foxess_48020_48029_time_control_raw_block').split(',')[2] | int(0) %}
+            {% set hour = val // 256 %}
+            {% set minute = val % 256 %}
+            {{ '%02d:%02d' % (hour, minute) }}
+          icon: mdi:clock-end
+
+        - name: FoxESS Time Group 2 Work Mode
+          unique_id: foxess_time_group_1_work_mode
+          state: >
+            {% set val = states('sensor.foxess_48020_48029_time_control_raw_block').split(',')[3] | int(0) %}
+            {% set modes = {1: 'Self-Use', 2: 'Feed-In', 3: 'BackUp', 4: 'Peak Shaving', 5: 'Power Station', 6: 'Force Charge', 7: 'Force Discharge'} %}
+            {{ modes.get(val, 'Unknown') }}
+          icon: mdi:power-settings
+
+        - name: FoxESS Time Group 2 Max SoC
+          unique_id: foxess_time_group_1_max_soc
+          state: >
+            {% set val = states('sensor.foxess_48020_48029_time_control_raw_block').split(',')[4] | int(0) %}
+            {{ val // 256 }}
+          unit_of_measurement: "%"
+          icon: mdi:battery-high
+
+        - name: FoxESS Time Group 2 Min SoC OnGrid
+          unique_id: foxess_time_group_1_min_soc_ongrid
+          state: >
+            {% set val = states('sensor.foxess_48020_48029_time_control_raw_block').split(',')[4] | int(0) %}
+            {{ val % 256 }}
+          unit_of_measurement: "%"
+          icon: mdi:battery-low
+
+        - name: FoxESS Time Group 2 FDSoC
+          unique_id: foxess_time_group_1_fdsoc
+          state: "{{ states('sensor.foxess_48020_48029_time_control_raw_block').split(',')[5] | int(0) }}"
+          unit_of_measurement: "%"
+          icon: mdi:battery-arrow-down
+
+        - name: FoxESS Time Group 2 FDPWR
+          unique_id: foxess_time_group_1_fdpwr
+          state: "{{ states('sensor.foxess_48020_48029_time_control_raw_block').split(',')[6] | int(0) }}"
+          unit_of_measurement: W
+          icon: mdi:lightning-bolt
+
+        - name: FoxESS Time Group 3 Start Time
+          unique_id: foxess_time_group_1_start_time
+          state: >
+            {% set val = states('sensor.foxess_48030_48039_time_control_raw_block').split(',')[1] | int(0) %}
+            {% set hour = val // 256 %}
+            {% set minute = val % 256 %}
+            {{ '%02d:%02d' % (hour, minute) }}
+          icon: mdi:clock-start
+
+        - name: FoxESS Time Group 3 End Time
+          unique_id: foxess_time_group_1_end_time
+          state: >
+            {% set val = states('sensor.foxess_48030_48039_time_control_raw_block').split(',')[2] | int(0) %}
+            {% set hour = val // 256 %}
+            {% set minute = val % 256 %}
+            {{ '%02d:%02d' % (hour, minute) }}
+          icon: mdi:clock-end
+
+        - name: FoxESS Time Group 3 Work Mode
+          unique_id: foxess_time_group_1_work_mode
+          state: >
+            {% set val = states('sensor.foxess_48030_48039_time_control_raw_block').split(',')[3] | int(0) %}
+            {% set modes = {1: 'Self-Use', 2: 'Feed-In', 3: 'BackUp', 4: 'Peak Shaving', 5: 'Power Station', 6: 'Force Charge', 7: 'Force Discharge'} %}
+            {{ modes.get(val, 'Unknown') }}
+          icon: mdi:power-settings
+
+        - name: FoxESS Time Group 3 Max SoC
+          unique_id: foxess_time_group_1_max_soc
+          state: >
+            {% set val = states('sensor.foxess_48030_48039_time_control_raw_block').split(',')[4] | int(0) %}
+            {{ val // 256 }}
+          unit_of_measurement: "%"
+          icon: mdi:battery-high
+
+        - name: FoxESS Time Group 3 Min SoC OnGrid
+          unique_id: foxess_time_group_1_min_soc_ongrid
+          state: >
+            {% set val = states('sensor.foxess_48030_48039_time_control_raw_block').split(',')[4] | int(0) %}
+            {{ val % 256 }}
+          unit_of_measurement: "%"
+          icon: mdi:battery-low
+
+        - name: FoxESS Time Group 3 FDSoC
+          unique_id: foxess_time_group_1_fdsoc
+          state: "{{ states('sensor.foxess_48030_48039_time_control_raw_block').split(',')[5] | int(0) }}"
+          unit_of_measurement: "%"
+          icon: mdi:battery-arrow-down
+
+        - name: FoxESS Time Group 3 FDPWR
+          unique_id: foxess_time_group_1_fdpwr
+          state: "{{ states('sensor.foxess_48030_48039_time_control_raw_block').split(',')[6] | int(0) }}"
+          unit_of_measurement: W
+          icon: mdi:lightning-bolt
+
+        - name: FoxESS Time Group 4 Start Time
+          unique_id: foxess_time_group_1_start_time
+          state: >
+            {% set val = states('sensor.foxess_48040_48049_time_control_raw_block').split(',')[1] | int(0) %}
+            {% set hour = val // 256 %}
+            {% set minute = val % 256 %}
+            {{ '%02d:%02d' % (hour, minute) }}
+          icon: mdi:clock-start
+
+        - name: FoxESS Time Group 4 End Time
+          unique_id: foxess_time_group_1_end_time
+          state: >
+            {% set val = states('sensor.foxess_48040_48049_time_control_raw_block').split(',')[2] | int(0) %}
+            {% set hour = val // 256 %}
+            {% set minute = val % 256 %}
+            {{ '%02d:%02d' % (hour, minute) }}
+          icon: mdi:clock-end
+
+        - name: FoxESS Time Group 4 Work Mode
+          unique_id: foxess_time_group_1_work_mode
+          state: >
+            {% set val = states('sensor.foxess_48040_48049_time_control_raw_block').split(',')[3] | int(0) %}
+            {% set modes = {1: 'Self-Use', 2: 'Feed-In', 3: 'BackUp', 4: 'Peak Shaving', 5: 'Power Station', 6: 'Force Charge', 7: 'Force Discharge'} %}
+            {{ modes.get(val, 'Unknown') }}
+          icon: mdi:power-settings
+
+        - name: FoxESS Time Group 4 Max SoC
+          unique_id: foxess_time_group_1_max_soc
+          state: >
+            {% set val = states('sensor.foxess_48040_48049_time_control_raw_block').split(',')[4] | int(0) %}
+            {{ val // 256 }}
+          unit_of_measurement: "%"
+          icon: mdi:battery-high
+
+        - name: FoxESS Time Group 4 Min SoC OnGrid
+          unique_id: foxess_time_group_1_min_soc_ongrid
+          state: >
+            {% set val = states('sensor.foxess_48040_48049_time_control_raw_block').split(',')[4] | int(0) %}
+            {{ val % 256 }}
+          unit_of_measurement: "%"
+          icon: mdi:battery-low
+
+        - name: FoxESS Time Group 4 FDSoC
+          unique_id: foxess_time_group_1_fdsoc
+          state: "{{ states('sensor.foxess_48040_48049_time_control_raw_block').split(',')[5] | int(0) }}"
+          unit_of_measurement: "%"
+          icon: mdi:battery-arrow-down
+
+        - name: FoxESS Time Group 4 FDPWR
+          unique_id: foxess_time_group_1_fdpwr
+          state: "{{ states('sensor.foxess_48040_48049_time_control_raw_block').split(',')[6] | int(0) }}"
+          unit_of_measurement: W
+          icon: mdi:lightning-bolt
+
+        - name: FoxESS Time Group 5 Start Time
+          unique_id: foxess_time_group_1_start_time
+          state: >
+            {% set val = states('sensor.foxess_48050_48059_time_control_raw_block').split(',')[1] | int(0) %}
+            {% set hour = val // 256 %}
+            {% set minute = val % 256 %}
+            {{ '%02d:%02d' % (hour, minute) }}
+          icon: mdi:clock-start
+
+        - name: FoxESS Time Group 5 End Time
+          unique_id: foxess_time_group_1_end_time
+          state: >
+            {% set val = states('sensor.foxess_48050_48059_time_control_raw_block').split(',')[2] | int(0) %}
+            {% set hour = val // 256 %}
+            {% set minute = val % 256 %}
+            {{ '%02d:%02d' % (hour, minute) }}
+          icon: mdi:clock-end
+
+        - name: FoxESS Time Group 5 Work Mode
+          unique_id: foxess_time_group_1_work_mode
+          state: >
+            {% set val = states('sensor.foxess_48050_48059_time_control_raw_block').split(',')[3] | int(0) %}
+            {% set modes = {1: 'Self-Use', 2: 'Feed-In', 3: 'BackUp', 4: 'Peak Shaving', 5: 'Power Station', 6: 'Force Charge', 7: 'Force Discharge'} %}
+            {{ modes.get(val, 'Unknown') }}
+          icon: mdi:power-settings
+
+        - name: FoxESS Time Group 5 Max SoC
+          unique_id: foxess_time_group_1_max_soc
+          state: >
+            {% set val = states('sensor.foxess_48050_48059_time_control_raw_block').split(',')[4] | int(0) %}
+            {{ val // 256 }}
+          unit_of_measurement: "%"
+          icon: mdi:battery-high
+
+        - name: FoxESS Time Group 5 Min SoC OnGrid
+          unique_id: foxess_time_group_1_min_soc_ongrid
+          state: >
+            {% set val = states('sensor.foxess_48050_48059_time_control_raw_block').split(',')[4] | int(0) %}
+            {{ val % 256 }}
+          unit_of_measurement: "%"
+          icon: mdi:battery-low
+
+        - name: FoxESS Time Group 5 FDSoC
+          unique_id: foxess_time_group_1_fdsoc
+          state: "{{ states('sensor.foxess_48050_48059_time_control_raw_block').split(',')[5] | int(0) }}"
+          unit_of_measurement: "%"
+          icon: mdi:battery-arrow-down
+
+        - name: FoxESS Time Group 5 FDPWR
+          unique_id: foxess_time_group_1_fdpwr
+          state: "{{ states('sensor.foxess_48050_48059_time_control_raw_block').split(',')[6] | int(0) }}"
+          unit_of_measurement: W
+          icon: mdi:lightning-bolt
+
+        - name: FoxESS Time Group 6 Start Time
+          unique_id: foxess_time_group_1_start_time
+          state: >
+            {% set val = states('sensor.foxess_48060_48069_time_control_raw_block').split(',')[1] | int(0) %}
+            {% set hour = val // 256 %}
+            {% set minute = val % 256 %}
+            {{ '%02d:%02d' % (hour, minute) }}
+          icon: mdi:clock-start
+
+        - name: FoxESS Time Group 6 End Time
+          unique_id: foxess_time_group_1_end_time
+          state: >
+            {% set val = states('sensor.foxess_48060_48069_time_control_raw_block').split(',')[2] | int(0) %}
+            {% set hour = val // 256 %}
+            {% set minute = val % 256 %}
+            {{ '%02d:%02d' % (hour, minute) }}
+          icon: mdi:clock-end
+
+        - name: FoxESS Time Group 6 Work Mode
+          unique_id: foxess_time_group_1_work_mode
+          state: >
+            {% set val = states('sensor.foxess_48060_48069_time_control_raw_block').split(',')[3] | int(0) %}
+            {% set modes = {1: 'Self-Use', 2: 'Feed-In', 3: 'BackUp', 4: 'Peak Shaving', 5: 'Power Station', 6: 'Force Charge', 7: 'Force Discharge'} %}
+            {{ modes.get(val, 'Unknown') }}
+          icon: mdi:power-settings
+
+        - name: FoxESS Time Group 6 Max SoC
+          unique_id: foxess_time_group_1_max_soc
+          state: >
+            {% set val = states('sensor.foxess_48060_48069_time_control_raw_block').split(',')[4] | int(0) %}
+            {{ val // 256 }}
+          unit_of_measurement: "%"
+          icon: mdi:battery-high
+
+        - name: FoxESS Time Group 6 Min SoC OnGrid
+          unique_id: foxess_time_group_1_min_soc_ongrid
+          state: >
+            {% set val = states('sensor.foxess_48060_48069_time_control_raw_block').split(',')[4] | int(0) %}
+            {{ val % 256 }}
+          unit_of_measurement: "%"
+          icon: mdi:battery-low
+
+        - name: FoxESS Time Group 6 FDSoC
+          unique_id: foxess_time_group_1_fdsoc
+          state: "{{ states('sensor.foxess_48060_48069_time_control_raw_block').split(',')[5] | int(0) }}"
+          unit_of_measurement: "%"
+          icon: mdi:battery-arrow-down
+
+        - name: FoxESS Time Group 6 FDPWR
+          unique_id: foxess_time_group_1_fdpwr
+          state: "{{ states('sensor.foxess_48060_48069_time_control_raw_block').split(',')[6] | int(0) }}"
+          unit_of_measurement: W
+          icon: mdi:lightning-bolt
+
+        - name: FoxESS Time Group 7 Start Time
+          unique_id: foxess_time_group_1_start_time
+          state: >
+            {% set val = states('sensor.foxess_48070_48079_time_control_raw_block').split(',')[1] | int(0) %}
+            {% set hour = val // 256 %}
+            {% set minute = val % 256 %}
+            {{ '%02d:%02d' % (hour, minute) }}
+          icon: mdi:clock-start
+
+        - name: FoxESS Time Group 7 End Time
+          unique_id: foxess_time_group_1_end_time
+          state: >
+            {% set val = states('sensor.foxess_48070_48079_time_control_raw_block').split(',')[2] | int(0) %}
+            {% set hour = val // 256 %}
+            {% set minute = val % 256 %}
+            {{ '%02d:%02d' % (hour, minute) }}
+          icon: mdi:clock-end
+
+        - name: FoxESS Time Group 7 Work Mode
+          unique_id: foxess_time_group_1_work_mode
+          state: >
+            {% set val = states('sensor.foxess_48070_48079_time_control_raw_block').split(',')[3] | int(0) %}
+            {% set modes = {1: 'Self-Use', 2: 'Feed-In', 3: 'BackUp', 4: 'Peak Shaving', 5: 'Power Station', 6: 'Force Charge', 7: 'Force Discharge'} %}
+            {{ modes.get(val, 'Unknown') }}
+          icon: mdi:power-settings
+
+        - name: FoxESS Time Group 7 Max SoC
+          unique_id: foxess_time_group_1_max_soc
+          state: >
+            {% set val = states('sensor.foxess_48070_48079_time_control_raw_block').split(',')[4] | int(0) %}
+            {{ val // 256 }}
+          unit_of_measurement: "%"
+          icon: mdi:battery-high
+
+        - name: FoxESS Time Group 7 Min SoC OnGrid
+          unique_id: foxess_time_group_1_min_soc_ongrid
+          state: >
+            {% set val = states('sensor.foxess_48070_48079_time_control_raw_block').split(',')[4] | int(0) %}
+            {{ val % 256 }}
+          unit_of_measurement: "%"
+          icon: mdi:battery-low
+
+        - name: FoxESS Time Group 7 FDSoC
+          unique_id: foxess_time_group_1_fdsoc
+          state: "{{ states('sensor.foxess_48070_48079_time_control_raw_block').split(',')[5] | int(0) }}"
+          unit_of_measurement: "%"
+          icon: mdi:battery-arrow-down
+
+        - name: FoxESS Time Group 7 FDPWR
+          unique_id: foxess_time_group_1_fdpwr
+          state: "{{ states('sensor.foxess_48070_48079_time_control_raw_block').split(',')[6] | int(0) }}"
+          unit_of_measurement: W
+          icon: mdi:lightning-bolt
+
+        - name: FoxESS Time Group 8 Start Time
+          unique_id: foxess_time_group_1_start_time
+          state: >
+            {% set val = states('sensor.foxess_48080_48089_time_control_raw_block').split(',')[1] | int(0) %}
+            {% set hour = val // 256 %}
+            {% set minute = val % 256 %}
+            {{ '%02d:%02d' % (hour, minute) }}
+          icon: mdi:clock-start
+
+        - name: FoxESS Time Group 8 End Time
+          unique_id: foxess_time_group_1_end_time
+          state: >
+            {% set val = states('sensor.foxess_48080_48089_time_control_raw_block').split(',')[2] | int(0) %}
+            {% set hour = val // 256 %}
+            {% set minute = val % 256 %}
+            {{ '%02d:%02d' % (hour, minute) }}
+          icon: mdi:clock-end
+
+        - name: FoxESS Time Group 8 Work Mode
+          unique_id: foxess_time_group_1_work_mode
+          state: >
+            {% set val = states('sensor.foxess_48080_48089_time_control_raw_block').split(',')[3] | int(0) %}
+            {% set modes = {1: 'Self-Use', 2: 'Feed-In', 3: 'BackUp', 4: 'Peak Shaving', 5: 'Power Station', 6: 'Force Charge', 7: 'Force Discharge'} %}
+            {{ modes.get(val, 'Unknown') }}
+          icon: mdi:power-settings
+
+        - name: FoxESS Time Group 8 Max SoC
+          unique_id: foxess_time_group_1_max_soc
+          state: >
+            {% set val = states('sensor.foxess_48080_48089_time_control_raw_block').split(',')[4] | int(0) %}
+            {{ val // 256 }}
+          unit_of_measurement: "%"
+          icon: mdi:battery-high
+
+        - name: FoxESS Time Group 8 Min SoC OnGrid
+          unique_id: foxess_time_group_1_min_soc_ongrid
+          state: >
+            {% set val = states('sensor.foxess_48080_48089_time_control_raw_block').split(',')[4] | int(0) %}
+            {{ val % 256 }}
+          unit_of_measurement: "%"
+          icon: mdi:battery-low
+
+        - name: FoxESS Time Group 8 FDSoC
+          unique_id: foxess_time_group_1_fdsoc
+          state: "{{ states('sensor.foxess_48080_48089_time_control_raw_block').split(',')[5] | int(0) }}"
+          unit_of_measurement: "%"
+          icon: mdi:battery-arrow-down
+
+        - name: FoxESS Time Group 8 FDPWR
+          unique_id: foxess_time_group_1_fdpwr
+          state: "{{ states('sensor.foxess_48080_48089_time_control_raw_block').split(',')[6] | int(0) }}"
+          unit_of_measurement: W
+          icon: mdi:lightning-bolt
+
+        - name: FoxESS Time Group 9 Start Time
+          unique_id: foxess_time_group_1_start_time
+          state: >
+            {% set val = states('sensor.foxess_48090_48099_time_control_raw_block').split(',')[1] | int(0) %}
+            {% set hour = val // 256 %}
+            {% set minute = val % 256 %}
+            {{ '%02d:%02d' % (hour, minute) }}
+          icon: mdi:clock-start
+
+        - name: FoxESS Time Group 9 End Time
+          unique_id: foxess_time_group_1_end_time
+          state: >
+            {% set val = states('sensor.foxess_48090_48099_time_control_raw_block').split(',')[2] | int(0) %}
+            {% set hour = val // 256 %}
+            {% set minute = val % 256 %}
+            {{ '%02d:%02d' % (hour, minute) }}
+          icon: mdi:clock-end
+
+        - name: FoxESS Time Group 9 Work Mode
+          unique_id: foxess_time_group_1_work_mode
+          state: >
+            {% set val = states('sensor.foxess_48090_48099_time_control_raw_block').split(',')[3] | int(0) %}
+            {% set modes = {1: 'Self-Use', 2: 'Feed-In', 3: 'BackUp', 4: 'Peak Shaving', 5: 'Power Station', 6: 'Force Charge', 7: 'Force Discharge'} %}
+            {{ modes.get(val, 'Unknown') }}
+          icon: mdi:power-settings
+
+        - name: FoxESS Time Group 9 Max SoC
+          unique_id: foxess_time_group_1_max_soc
+          state: >
+            {% set val = states('sensor.foxess_48090_48099_time_control_raw_block').split(',')[4] | int(0) %}
+            {{ val // 256 }}
+          unit_of_measurement: "%"
+          icon: mdi:battery-high
+
+        - name: FoxESS Time Group 9 Min SoC OnGrid
+          unique_id: foxess_time_group_1_min_soc_ongrid
+          state: >
+            {% set val = states('sensor.foxess_48090_48099_time_control_raw_block').split(',')[4] | int(0) %}
+            {{ val % 256 }}
+          unit_of_measurement: "%"
+          icon: mdi:battery-low
+
+        - name: FoxESS Time Group 9 FDSoC
+          unique_id: foxess_time_group_1_fdsoc
+          state: "{{ states('sensor.foxess_48090_48099_time_control_raw_block').split(',')[5] | int(0) }}"
+          unit_of_measurement: "%"
+          icon: mdi:battery-arrow-down
+
+        - name: FoxESS Time Group 9 FDPWR
+          unique_id: foxess_time_group_1_fdpwr
+          state: "{{ states('sensor.foxess_48090_48099_time_control_raw_block').split(',')[6] | int(0) }}"
+          unit_of_measurement: W
+          icon: mdi:lightning-bolt
+
     - binary_sensor:
         - name: FoxESS Status 1 Standby
           unique_id: foxess_status_1_standby
@@ -2718,3 +3190,63 @@ foxess:
             {% else %}
               mdi:check-circle-outline
             {% endif %}
+
+        - name: FoxESS Time Mode Flag
+          unique_id: foxess_time_mode_flag
+          state: "{{ (states('sensor.foxess_48000_48009_time_control_raw_block').split(',')[0] | int(0) % 2) == 1 }}"
+          device_class: running
+          icon: "{{ 'mdi:clock-check' if (states('sensor.foxess_48000_48009_time_control_raw_block').split(',')[0] | int(0) % 2) == 1 else 'mdi:clock-alert-outline' }}"
+
+        - name: FoxESS Time Group 1 Enabled
+          unique_id: foxess_time_group_1_enabled
+          state: "{{ (states('sensor.foxess_48010_48019_time_control_raw_block').split(',')[0] | int(0) % 2) == 1 }}"
+          device_class: running
+          icon: "{{ 'mdi:clock-check' if (states('sensor.foxess_48010_48019_time_control_raw_block').split(',')[0] | int(0) % 2) == 1 else 'mdi:clock-alert-outline' }}"
+
+        - name: FoxESS Time Group 2 Enabled
+          unique_id: foxess_time_group_1_enabled
+          state: "{{ (states('sensor.foxess_48020_48029_time_control_raw_block').split(',')[0] | int(0) % 2) == 1 }}"
+          device_class: running
+          icon: "{{ 'mdi:clock-check' if (states('sensor.foxess_48020_48029_time_control_raw_block').split(',')[0] | int(0) % 2) == 1 else 'mdi:clock-alert-outline' }}"
+
+        - name: FoxESS Time Group 3 Enabled
+          unique_id: foxess_time_group_1_enabled
+          state: "{{ (states('sensor.foxess_48030_48039_time_control_raw_block').split(',')[0] | int(0) % 2) == 1 }}"
+          device_class: running
+          icon: "{{ 'mdi:clock-check' if (states('sensor.foxess_48030_48039_time_control_raw_block').split(',')[0] | int(0) % 2) == 1 else 'mdi:clock-alert-outline' }}"
+
+        - name: FoxESS Time Group 4 Enabled
+          unique_id: foxess_time_group_1_enabled
+          state: "{{ (states('sensor.foxess_48040_48049_time_control_raw_block').split(',')[0] | int(0) % 2) == 1 }}"
+          device_class: running
+          icon: "{{ 'mdi:clock-check' if (states('sensor.foxess_48040_48049_time_control_raw_block').split(',')[0] | int(0) % 2) == 1 else 'mdi:clock-alert-outline' }}"
+
+        - name: FoxESS Time Group 5 Enabled
+          unique_id: foxess_time_group_1_enabled
+          state: "{{ (states('sensor.foxess_48050_48059_time_control_raw_block').split(',')[0] | int(0) % 2) == 1 }}"
+          device_class: running
+          icon: "{{ 'mdi:clock-check' if (states('sensor.foxess_48050_48059_time_control_raw_block').split(',')[0] | int(0) % 2) == 1 else 'mdi:clock-alert-outline' }}"
+
+        - name: FoxESS Time Group 6 Enabled
+          unique_id: foxess_time_group_1_enabled
+          state: "{{ (states('sensor.foxess_48060_48069_time_control_raw_block').split(',')[0] | int(0) % 2) == 1 }}"
+          device_class: running
+          icon: "{{ 'mdi:clock-check' if (states('sensor.foxess_48060_48069_time_control_raw_block').split(',')[0] | int(0) % 2) == 1 else 'mdi:clock-alert-outline' }}"
+
+        - name: FoxESS Time Group 7 Enabled
+          unique_id: foxess_time_group_1_enabled
+          state: "{{ (states('sensor.foxess_48070_48079_time_control_raw_block').split(',')[0] | int(0) % 2) == 1 }}"
+          device_class: running
+          icon: "{{ 'mdi:clock-check' if (states('sensor.foxess_48070_48079_time_control_raw_block').split(',')[0] | int(0) % 2) == 1 else 'mdi:clock-alert-outline' }}"
+
+        - name: FoxESS Time Group 8 Enabled
+          unique_id: foxess_time_group_1_enabled
+          state: "{{ (states('sensor.foxess_48080_48089_time_control_raw_block').split(',')[0] | int(0) % 2) == 1 }}"
+          device_class: running
+          icon: "{{ 'mdi:clock-check' if (states('sensor.foxess_48080_48089_time_control_raw_block').split(',')[0] | int(0) % 2) == 1 else 'mdi:clock-alert-outline' }}"
+
+        - name: FoxESS Time Group 9 Enabled
+          unique_id: foxess_time_group_1_enabled
+          state: "{{ (states('sensor.foxess_48090_48099_time_control_raw_block').split(',')[0] | int(0) % 2) == 1 }}"
+          device_class: running
+          icon: "{{ 'mdi:clock-check' if (states('sensor.foxess_48090_48099_time_control_raw_block').split(',')[0] | int(0) % 2) == 1 else 'mdi:clock-alert-outline' }}"
