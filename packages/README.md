@@ -5,12 +5,12 @@
  └── packages/
       ├── foxess/
       │     ├── 00_modbus.yaml
-      │     ├── 10_sensors_identity.yaml
-      │     ├── 20_sensors_runtime.yaml
-      │     ├── 30_control_registers.yaml
-      │     ├── 40_helpers.yaml
+      │     ├── 10_sensors_modbus.yaml
+      │     ├── 20_templates.yaml
+      │     ├── 30_helpers.yaml
+      │     ├── 40_switches.yaml
       │     ├── 50_scripts.yaml
-      │     ├── 60_automations_sync.yaml
+      │     ├── 60_automations.yaml
       │     └── 90_debug.yaml
 ```
 
@@ -31,7 +31,7 @@ modbus:
     message_wait_milliseconds: 30
 ```
 
-10_sensors_identity.yaml
+10_sensors_modbus.yaml
 ```yaml
 modbus:
   - name: foxess_modbus
@@ -44,17 +44,6 @@ modbus:
         data_type: string
         count: 16
         scan_interval: 3600
-```
-
-20_sensors_runtime.yaml
-```yaml
-```
-
-30_control_registers.yaml
-```yaml
-modbus:
-  - name: foxess_modbus
-    sensors:
 
       - name: FoxESS 46001 Remote Control Raw
         unique_id: foxess_46001_remote_control_raw
@@ -73,7 +62,11 @@ modbus:
         scan_interval: 30
 ```
 
-40_helpers.yaml
+20_templates.yaml
+```yaml
+```
+
+30_helpers.yaml
 ```yaml
 input_select:
   foxess_46001_controlled_target:
@@ -104,11 +97,15 @@ input_number:
     step: 1
 ```
 
+40_switches.yaml
+```yaml
+```
+
 50_scripts.yaml
 ```yaml
 ```
 
-60_automations_sync.yaml
+60_automations.yaml
 ```yaml
 ```
 
