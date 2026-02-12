@@ -64,6 +64,27 @@ modbus:
 
 20_templates.yaml
 ```yaml
+template:
+
+  - sensor:
+      - name: FoxESS Remote Enable Bit
+        state: >
+          {{ states('sensor.foxess_46001_remote_control_raw') | int(0) % 2 }}
+
+  - binary_sensor:
+      - name: FoxESS Remote Enabled
+        state: >
+          {{ (states('sensor.foxess_46001_remote_control_raw') | int(0)) % 2 == 1 }}
+
+  - select:
+      - name: FoxESS 49203 Work Mode
+        state: >
+          {% set v = states('sensor.foxess_49203_work_mode_raw') | int(0) %}
+          {% if v == 6 %}Force Charge{% elif v == 7 %}Force Discharge{% else %}Other{% endif %}
+        options:
+          - Other
+          - Force Charge
+          - Force Discharge
 ```
 
 30_helpers.yaml
@@ -99,6 +120,17 @@ input_number:
 
 40_switches.yaml
 ```yaml
+switch:
+  - platform: template
+    switches:
+
+      foxess_46001_remote_enable:
+        value_template: >
+          {{ (states('sensor.foxess_46001_remote_control_raw') | int(0)) % 2 == 1 }}
+        turn_on:
+          service: script.foxess_46001_write_safe
+        turn_off:
+          service: script.foxess_46001_write_safe
 ```
 
 50_scripts.yaml
