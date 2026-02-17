@@ -1,0 +1,47 @@
+- sensor:
+
+    - name: FoxESS Master Version
+      unique_id: foxess_master_version
+      state: >
+        {% set raw = states('sensor.foxess_36001_master_version') | int(0) %}
+        {% set hexv = "%4X" % raw %}
+        {{ hexv[0:2] }}.{{ hexv[2:4] }}
+      icon: mdi:chip
+
+    - name: FoxESS Slave Version
+      unique_id: foxess_slave_version
+      state: >
+        {% set raw = states('sensor.foxess_36002_slave_version') | int(0) %}
+        {% set hexv = "%4X" % raw %}
+        {{ hexv[0:2] }}.{{ hexv[2:4] }}
+      icon: mdi:chip
+
+    - name: FoxESS Manager Version
+      unique_id: foxess_manager_version
+      state: >
+        {% set raw = states('sensor.foxess_36003_manager_version') | int(0) %}
+        {% set hexv = "%4X" % raw %}
+        {{ hexv[0:2] }}.{{ hexv[2:4] }}
+      icon: mdi:chip
+
+    - name: FoxESS Protocol Version
+      unique_id: foxess_protocol_version
+      state: >
+        {% set raw = states('sensor.foxess_39000_protocol_version') | int(0) %}
+        {% set hexv = "%8X" % raw %}
+        {{ hexv[0:2] }}.{{ hexv[2:4] }}.{{ hexv[4:6] }}.{{ hexv[6:8] }}
+      icon: mdi:chip
+
+    - name: FoxESS Status 3
+      unique_id: foxess_status_3
+      state: >
+        {% set val = states('sensor.foxess_39065_status_3') | int(0) %}
+        {% if val % 2 == 1 %}OFF-GRID{% else %}ON-GRID{% endif %}
+      icon: >
+        {% set val = states('sensor.foxess_39065_status_3') | int(0) %}
+        {% if val % 2 == 1 %}mdi:transmission-tower-off{% else %}mdi:transmission-tower{% endif %}
+
+    - name: FoxESS Remote Enable Bit
+      unique_id: foxess_remote_enable_bit
+      state: >
+        {{ states('sensor.foxess_46001_remote_control_raw') | int(0) % 2 }}
