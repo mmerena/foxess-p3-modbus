@@ -32,6 +32,8 @@
         {{ hexv[0:2] }}.{{ hexv[2:4] }}.{{ hexv[4:6] }}.{{ hexv[6:8] }}
       icon: mdi:chip
 
+- sensor:
+
     - name: FoxESS Status 3
       unique_id: foxess_status_3
       state: >
@@ -45,3 +47,962 @@
       unique_id: foxess_remote_enable_bit
       state: >
         {{ states('sensor.foxess_46001_remote_control_raw') | int(0) % 2 }}
+
+- sensor:
+
+    - name: FoxESS Time Period Mode Flag
+      unique_id: foxess_time_period_mode_flag_state
+      state: >
+        {% set raw = states('sensor.foxess_48000_48009_time_control_raw_block') %}
+        {% if raw not in ['unknown','unavailable',''] %}
+          {% set v = raw.split(',')[0] | float | int %}
+          {{ 'Enabled' if v == 1 else 'Disabled' }}
+        {% else %}
+          unknown
+        {% endif %}
+      icon: mdi:calendar-clock
+
+- sensor:
+
+    - name: FoxESS Time Group 1 Block
+      unique_id: foxess_time_group_1_block
+      state: >
+        {% set raw = states('sensor.foxess_48010_48019_time_control_raw_block') %}
+        {% if raw not in ['unknown','unavailable',''] %}
+          ok
+        {% else %}
+          unavailable
+        {% endif %}
+      attributes:
+        regs: >
+          {% set raw = states('sensor.foxess_48010_48019_time_control_raw_block') %}
+          {% if raw not in ['unknown','unavailable',''] %}
+            {{ raw.split(',') | map('float') | map('int') | list }}
+          {% else %}
+            []
+          {% endif %}
+
+    - name: FoxESS Time Group 1 Flag
+      unique_id: foxess_time_group_1_flag_state
+      state: >
+        {% set r = state_attr('sensor.foxess_time_group_1_block','regs') %}
+        {{ 'Enabled' if r and r[0] == 1 else 'Disabled' }}
+      icon: mdi:toggle-switch
+
+    - name: FoxESS Time Group 1 Start Time
+      unique_id: foxess_time_group_1_start_time_state
+      state: >
+        {% set r = state_attr('sensor.foxess_time_group_1_block','regs') %}
+        {% if r and r|length > 1 %}
+          {% set v = r[1] %}
+          {{ '%02d:%02d' % (v // 256, v % 256) }}
+        {% else %} unknown {% endif %}
+      icon: mdi:clock-start
+
+    - name: FoxESS Time Group 1 End Time
+      unique_id: foxess_time_group_1_end_time_state
+      state: >
+        {% set r = state_attr('sensor.foxess_time_group_1_block','regs') %}
+        {% if r and r|length > 2 %}
+          {% set v = r[2] %}
+          {{ '%02d:%02d' % (v // 256, v % 256) }}
+        {% else %} unknown {% endif %}
+      icon: mdi:clock-end
+
+    - name: FoxESS Time Group 1 Work Mode
+      unique_id: foxess_time_group_1_work_mode_state
+      state: >
+        {% set r = state_attr('sensor.foxess_time_group_1_block','regs') %}
+        {% if r and r|length > 3 %}
+          {% set v = r[3] %}
+          {% if v == 1 %} Self-Use
+          {% elif v == 2 %} Feed-In
+          {% elif v == 3 %} BackUp
+          {% elif v == 4 %} Peak Shaving
+          {% elif v == 5 %} Power Station
+          {% elif v == 6 %} Force Charge
+          {% elif v == 7 %} Force Discharge
+          {% else %} Unknown ({{ v }})
+          {% endif %}
+        {% else %} unknown {% endif %}
+      icon: mdi:cog-outline
+
+    - name: FoxESS Time Group 1 MaxSoC
+      unique_id: foxess_time_group_1_maxsoc_state
+      unit_of_measurement: "%"
+      state: >
+        {% set r = state_attr('sensor.foxess_time_group_1_block','regs') %}
+        {% if r and r|length > 4 %}
+          {{ r[4] // 256 }}
+        {% else %} unknown {% endif %}
+      icon: mdi:battery-high
+
+    - name: FoxESS Time Group 1 MinSoC OnGrid
+      unique_id: foxess_time_group_1_minsoc_ongrid_state
+      unit_of_measurement: "%"
+      state: >
+        {% set r = state_attr('sensor.foxess_time_group_1_block','regs') %}
+        {% if r and r|length > 4 %}
+          {{ r[4] % 256 }}
+        {% else %} unknown {% endif %}
+      icon: mdi:battery-medium
+
+    - name: FoxESS Time Group 1 FDSOC
+      unique_id: foxess_time_group_1_fdsoc_state
+      unit_of_measurement: "%"
+      state: >
+        {% set r = state_attr('sensor.foxess_time_group_1_block','regs') %}
+        {% if r and r|length > 5 %}
+          {{ r[5] }}
+        {% else %} unknown {% endif %}
+      icon: mdi:battery-lock
+
+    - name: FoxESS Time Group 1 FDPWR
+      unique_id: foxess_time_group_1_fdpwr_state
+      unit_of_measurement: "W"
+      state: >
+        {% set r = state_attr('sensor.foxess_time_group_1_block','regs') %}
+        {% if r and r|length > 6 %}
+          {{ r[6] }}
+        {% else %} unknown {% endif %}
+      icon: mdi:flash
+
+- sensor:
+
+    - name: FoxESS Time Group 2 Block
+      unique_id: foxess_time_group_2_block
+      state: >
+        {% set raw = states('sensor.foxess_48020_48029_time_control_raw_block') %}
+        {% if raw not in ['unknown','unavailable',''] %}
+          ok
+        {% else %}
+          unavailable
+        {% endif %}
+      attributes:
+        regs: >
+          {% set raw = states('sensor.foxess_48020_48029_time_control_raw_block') %}
+          {% if raw not in ['unknown','unavailable',''] %}
+            {{ raw.split(',') | map('float') | map('int') | list }}
+          {% else %}
+            []
+          {% endif %}
+
+    - name: FoxESS Time Group 2 Flag
+      unique_id: foxess_time_group_2_flag_state
+      state: >
+        {% set r = state_attr('sensor.foxess_time_group_2_block','regs') %}
+        {{ 'Enabled' if r and r[0] == 1 else 'Disabled' }}
+      icon: mdi:toggle-switch
+
+    - name: FoxESS Time Group 2 Start Time
+      unique_id: foxess_time_group_2_start_time_state
+      state: >
+        {% set r = state_attr('sensor.foxess_time_group_2_block','regs') %}
+        {% if r and r|length > 1 %}
+          {% set v = r[1] %}
+          {{ '%02d:%02d' % (v // 256, v % 256) }}
+        {% else %} unknown {% endif %}
+      icon: mdi:clock-start
+
+    - name: FoxESS Time Group 2 End Time
+      unique_id: foxess_time_group_2_end_time_state
+      state: >
+        {% set r = state_attr('sensor.foxess_time_group_2_block','regs') %}
+        {% if r and r|length > 2 %}
+          {% set v = r[2] %}
+          {{ '%02d:%02d' % (v // 256, v % 256) }}
+        {% else %} unknown {% endif %}
+      icon: mdi:clock-end
+
+    - name: FoxESS Time Group 2 Work Mode
+      unique_id: foxess_time_group_2_work_mode_state
+      state: >
+        {% set r = state_attr('sensor.foxess_time_group_2_block','regs') %}
+        {% if r and r|length > 3 %}
+          {% set v = r[3] %}
+          {% if v == 1 %} Self-Use
+          {% elif v == 2 %} Feed-In
+          {% elif v == 3 %} BackUp
+          {% elif v == 4 %} Peak Shaving
+          {% elif v == 5 %} Power Station
+          {% elif v == 6 %} Force Charge
+          {% elif v == 7 %} Force Discharge
+          {% else %} Unknown ({{ v }})
+          {% endif %}
+        {% else %} unknown {% endif %}
+      icon: mdi:cog-outline
+
+    - name: FoxESS Time Group 2 MaxSoC
+      unique_id: foxess_time_group_2_maxsoc_state
+      unit_of_measurement: "%"
+      state: >
+        {% set r = state_attr('sensor.foxess_time_group_2_block','regs') %}
+        {% if r and r|length > 4 %}
+          {{ r[4] // 256 }}
+        {% else %} unknown {% endif %}
+      icon: mdi:battery-high
+
+    - name: FoxESS Time Group 2 MinSoC OnGrid
+      unique_id: foxess_time_group_2_minsoc_ongrid_state
+      unit_of_measurement: "%"
+      state: >
+        {% set r = state_attr('sensor.foxess_time_group_2_block','regs') %}
+        {% if r and r|length > 4 %}
+          {{ r[4] % 256 }}
+        {% else %} unknown {% endif %}
+      icon: mdi:battery-medium
+
+    - name: FoxESS Time Group 2 FDSOC
+      unique_id: foxess_time_group_2_fdsoc_state
+      unit_of_measurement: "%"
+      state: >
+        {% set r = state_attr('sensor.foxess_time_group_2_block','regs') %}
+        {% if r and r|length > 5 %}
+          {{ r[5] }}
+        {% else %} unknown {% endif %}
+      icon: mdi:battery-lock
+
+    - name: FoxESS Time Group 2 FDPWR
+      unique_id: foxess_time_group_2_fdpwr_state
+      unit_of_measurement: "W"
+      state: >
+        {% set r = state_attr('sensor.foxess_time_group_2_block','regs') %}
+        {% if r and r|length > 6 %}
+          {{ r[6] }}
+        {% else %} unknown {% endif %}
+      icon: mdi:flash
+
+- sensor:
+
+    - name: FoxESS Time Group 3 Block
+      unique_id: foxess_time_group_3_block
+      state: >
+        {% set raw = states('sensor.foxess_48030_48039_time_control_raw_block') %}
+        {% if raw not in ['unknown','unavailable',''] %}
+          ok
+        {% else %}
+          unavailable
+        {% endif %}
+      attributes:
+        regs: >
+          {% set raw = states('sensor.foxess_48030_48039_time_control_raw_block') %}
+          {% if raw not in ['unknown','unavailable',''] %}
+            {{ raw.split(',') | map('float') | map('int') | list }}
+          {% else %}
+            []
+          {% endif %}
+
+    - name: FoxESS Time Group 3 Flag
+      unique_id: foxess_time_group_3_flag_state
+      state: >
+        {% set r = state_attr('sensor.foxess_time_group_3_block','regs') %}
+        {{ 'Enabled' if r and r[0] == 1 else 'Disabled' }}
+      icon: mdi:toggle-switch
+
+    - name: FoxESS Time Group 3 Start Time
+      unique_id: foxess_time_group_3_start_time_state
+      state: >
+        {% set r = state_attr('sensor.foxess_time_group_3_block','regs') %}
+        {% if r and r|length > 1 %}
+          {% set v = r[1] %}
+          {{ '%02d:%02d' % (v // 256, v % 256) }}
+        {% else %} unknown {% endif %}
+      icon: mdi:clock-start
+
+    - name: FoxESS Time Group 3 End Time
+      unique_id: foxess_time_group_3_end_time_state
+      state: >
+        {% set r = state_attr('sensor.foxess_time_group_3_block','regs') %}
+        {% if r and r|length > 2 %}
+          {% set v = r[2] %}
+          {{ '%02d:%02d' % (v // 256, v % 256) }}
+        {% else %} unknown {% endif %}
+      icon: mdi:clock-end
+
+    - name: FoxESS Time Group 3 Work Mode
+      unique_id: foxess_time_group_3_work_mode_state
+      state: >
+        {% set r = state_attr('sensor.foxess_time_group_3_block','regs') %}
+        {% if r and r|length > 3 %}
+          {% set v = r[3] %}
+          {% if v == 1 %} Self-Use
+          {% elif v == 2 %} Feed-In
+          {% elif v == 3 %} BackUp
+          {% elif v == 4 %} Peak Shaving
+          {% elif v == 5 %} Power Station
+          {% elif v == 6 %} Force Charge
+          {% elif v == 7 %} Force Discharge
+          {% else %} Unknown ({{ v }})
+          {% endif %}
+        {% else %} unknown {% endif %}
+      icon: mdi:cog-outline
+
+    - name: FoxESS Time Group 3 MaxSoC
+      unique_id: foxess_time_group_3_maxsoc_state
+      unit_of_measurement: "%"
+      state: >
+        {% set r = state_attr('sensor.foxess_time_group_3_block','regs') %}
+        {% if r and r|length > 4 %}
+          {{ r[4] // 256 }}
+        {% else %} unknown {% endif %}
+      icon: mdi:battery-high
+
+    - name: FoxESS Time Group 3 MinSoC OnGrid
+      unique_id: foxess_time_group_3_minsoc_ongrid_state
+      unit_of_measurement: "%"
+      state: >
+        {% set r = state_attr('sensor.foxess_time_group_3_block','regs') %}
+        {% if r and r|length > 4 %}
+          {{ r[4] % 256 }}
+        {% else %} unknown {% endif %}
+      icon: mdi:battery-medium
+
+    - name: FoxESS Time Group 3 FDSOC
+      unique_id: foxess_time_group_3_fdsoc_state
+      unit_of_measurement: "%"
+      state: >
+        {% set r = state_attr('sensor.foxess_time_group_3_block','regs') %}
+        {% if r and r|length > 5 %}
+          {{ r[5] }}
+        {% else %} unknown {% endif %}
+      icon: mdi:battery-lock
+
+    - name: FoxESS Time Group 3 FDPWR
+      unique_id: foxess_time_group_3_fdpwr_state
+      unit_of_measurement: "W"
+      state: >
+        {% set r = state_attr('sensor.foxess_time_group_3_block','regs') %}
+        {% if r and r|length > 6 %}
+          {{ r[6] }}
+        {% else %} unknown {% endif %}
+      icon: mdi:flash
+
+- sensor:
+
+    - name: FoxESS Time Group 4 Block
+      unique_id: foxess_time_group_4_block
+      state: >
+        {% set raw = states('sensor.foxess_48040_48049_time_control_raw_block') %}
+        {% if raw not in ['unknown','unavailable',''] %}
+          ok
+        {% else %}
+          unavailable
+        {% endif %}
+      attributes:
+        regs: >
+          {% set raw = states('sensor.foxess_48040_48049_time_control_raw_block') %}
+          {% if raw not in ['unknown','unavailable',''] %}
+            {{ raw.split(',') | map('float') | map('int') | list }}
+          {% else %}
+            []
+          {% endif %}
+
+    - name: FoxESS Time Group 4 Flag
+      unique_id: foxess_time_group_4_flag_state
+      state: >
+        {% set r = state_attr('sensor.foxess_time_group_4_block','regs') %}
+        {{ 'Enabled' if r and r[0] == 1 else 'Disabled' }}
+      icon: mdi:toggle-switch
+
+    - name: FoxESS Time Group 4 Start Time
+      unique_id: foxess_time_group_4_start_time_state
+      state: >
+        {% set r = state_attr('sensor.foxess_time_group_4_block','regs') %}
+        {% if r and r|length > 1 %}
+          {% set v = r[1] %}
+          {{ '%02d:%02d' % (v // 256, v % 256) }}
+        {% else %} unknown {% endif %}
+      icon: mdi:clock-start
+
+    - name: FoxESS Time Group 4 End Time
+      unique_id: foxess_time_group_4_end_time_state
+      state: >
+        {% set r = state_attr('sensor.foxess_time_group_4_block','regs') %}
+        {% if r and r|length > 2 %}
+          {% set v = r[2] %}
+          {{ '%02d:%02d' % (v // 256, v % 256) }}
+        {% else %} unknown {% endif %}
+      icon: mdi:clock-end
+
+    - name: FoxESS Time Group 4 Work Mode
+      unique_id: foxess_time_group_4_work_mode_state
+      state: >
+        {% set r = state_attr('sensor.foxess_time_group_4_block','regs') %}
+        {% if r and r|length > 3 %}
+          {% set v = r[3] %}
+          {% if v == 1 %} Self-Use
+          {% elif v == 2 %} Feed-In
+          {% elif v == 3 %} BackUp
+          {% elif v == 4 %} Peak Shaving
+          {% elif v == 5 %} Power Station
+          {% elif v == 6 %} Force Charge
+          {% elif v == 7 %} Force Discharge
+          {% else %} Unknown ({{ v }})
+          {% endif %}
+        {% else %} unknown {% endif %}
+      icon: mdi:cog-outline
+
+    - name: FoxESS Time Group 4 MaxSoC
+      unique_id: foxess_time_group_4_maxsoc_state
+      unit_of_measurement: "%"
+      state: >
+        {% set r = state_attr('sensor.foxess_time_group_4_block','regs') %}
+        {% if r and r|length > 4 %}
+          {{ r[4] // 256 }}
+        {% else %} unknown {% endif %}
+      icon: mdi:battery-high
+
+    - name: FoxESS Time Group 4 MinSoC OnGrid
+      unique_id: foxess_time_group_4_minsoc_ongrid_state
+      unit_of_measurement: "%"
+      state: >
+        {% set r = state_attr('sensor.foxess_time_group_4_block','regs') %}
+        {% if r and r|length > 4 %}
+          {{ r[4] % 256 }}
+        {% else %} unknown {% endif %}
+      icon: mdi:battery-medium
+
+    - name: FoxESS Time Group 4 FDSOC
+      unique_id: foxess_time_group_4_fdsoc_state
+      unit_of_measurement: "%"
+      state: >
+        {% set r = state_attr('sensor.foxess_time_group_4_block','regs') %}
+        {% if r and r|length > 5 %}
+          {{ r[5] }}
+        {% else %} unknown {% endif %}
+      icon: mdi:battery-lock
+
+    - name: FoxESS Time Group 4 FDPWR
+      unique_id: foxess_time_group_4_fdpwr_state
+      unit_of_measurement: "W"
+      state: >
+        {% set r = state_attr('sensor.foxess_time_group_4_block','regs') %}
+        {% if r and r|length > 6 %}
+          {{ r[6] }}
+        {% else %} unknown {% endif %}
+      icon: mdi:flash
+
+    - name: FoxESS Time Group 5 Block
+      unique_id: foxess_time_group_5_block
+      state: >
+        {% set raw = states('sensor.foxess_48050_48059_time_control_raw_block') %}
+        {% if raw not in ['unknown','unavailable',''] %}
+          ok
+        {% else %}
+          unavailable
+        {% endif %}
+      attributes:
+        regs: >
+          {% set raw = states('sensor.foxess_48050_48059_time_control_raw_block') %}
+          {% if raw not in ['unknown','unavailable',''] %}
+            {{ raw.split(',') | map('float') | map('int') | list }}
+          {% else %}
+            []
+          {% endif %}
+
+- sensor:
+
+    - name: FoxESS Time Group 5 Flag
+      unique_id: foxess_time_group_5_flag_state
+      state: >
+        {% set r = state_attr('sensor.foxess_time_group_5_block','regs') %}
+        {{ 'Enabled' if r and r[0] == 1 else 'Disabled' }}
+      icon: mdi:toggle-switch
+
+    - name: FoxESS Time Group 5 Start Time
+      unique_id: foxess_time_group_5_start_time_state
+      state: >
+        {% set r = state_attr('sensor.foxess_time_group_5_block','regs') %}
+        {% if r and r|length > 1 %}
+          {% set v = r[1] %}
+          {{ '%02d:%02d' % (v // 256, v % 256) }}
+        {% else %} unknown {% endif %}
+      icon: mdi:clock-start
+
+    - name: FoxESS Time Group 5 End Time
+      unique_id: foxess_time_group_5_end_time_state
+      state: >
+        {% set r = state_attr('sensor.foxess_time_group_5_block','regs') %}
+        {% if r and r|length > 2 %}
+          {% set v = r[2] %}
+          {{ '%02d:%02d' % (v // 256, v % 256) }}
+        {% else %} unknown {% endif %}
+      icon: mdi:clock-end
+
+    - name: FoxESS Time Group 5 Work Mode
+      unique_id: foxess_time_group_5_work_mode_state
+      state: >
+        {% set r = state_attr('sensor.foxess_time_group_5_block','regs') %}
+        {% if r and r|length > 3 %}
+          {% set v = r[3] %}
+          {% if v == 1 %} Self-Use
+          {% elif v == 2 %} Feed-In
+          {% elif v == 3 %} BackUp
+          {% elif v == 4 %} Peak Shaving
+          {% elif v == 5 %} Power Station
+          {% elif v == 6 %} Force Charge
+          {% elif v == 7 %} Force Discharge
+          {% else %} Unknown ({{ v }})
+          {% endif %}
+        {% else %} unknown {% endif %}
+      icon: mdi:cog-outline
+
+    - name: FoxESS Time Group 5 MaxSoC
+      unique_id: foxess_time_group_5_maxsoc_state
+      unit_of_measurement: "%"
+      state: >
+        {% set r = state_attr('sensor.foxess_time_group_5_block','regs') %}
+        {% if r and r|length > 4 %}
+          {{ r[4] // 256 }}
+        {% else %} unknown {% endif %}
+      icon: mdi:battery-high
+
+    - name: FoxESS Time Group 5 MinSoC OnGrid
+      unique_id: foxess_time_group_5_minsoc_ongrid_state
+      unit_of_measurement: "%"
+      state: >
+        {% set r = state_attr('sensor.foxess_time_group_5_block','regs') %}
+        {% if r and r|length > 4 %}
+          {{ r[4] % 256 }}
+        {% else %} unknown {% endif %}
+      icon: mdi:battery-medium
+
+    - name: FoxESS Time Group 5 FDSOC
+      unique_id: foxess_time_group_5_fdsoc_state
+      unit_of_measurement: "%"
+      state: >
+        {% set r = state_attr('sensor.foxess_time_group_5_block','regs') %}
+        {% if r and r|length > 5 %}
+          {{ r[5] }}
+        {% else %} unknown {% endif %}
+      icon: mdi:battery-lock
+
+    - name: FoxESS Time Group 5 FDPWR
+      unique_id: foxess_time_group_5_fdpwr_state
+      unit_of_measurement: "W"
+      state: >
+        {% set r = state_attr('sensor.foxess_time_group_5_block','regs') %}
+        {% if r and r|length > 6 %}
+          {{ r[6] }}
+        {% else %} unknown {% endif %}
+      icon: mdi:flash
+
+- sensor:
+
+    - name: FoxESS Time Group 6 Block
+      unique_id: foxess_time_group_6_block
+      state: >
+        {% set raw = states('sensor.foxess_48060_48069_time_control_raw_block') %}
+        {% if raw not in ['unknown','unavailable',''] %}
+          ok
+        {% else %}
+          unavailable
+        {% endif %}
+      attributes:
+        regs: >
+          {% set raw = states('sensor.foxess_48060_48069_time_control_raw_block') %}
+          {% if raw not in ['unknown','unavailable',''] %}
+            {{ raw.split(',') | map('float') | map('int') | list }}
+          {% else %}
+            []
+          {% endif %}
+
+    - name: FoxESS Time Group 6 Flag
+      unique_id: foxess_time_group_6_flag_state
+      state: >
+        {% set r = state_attr('sensor.foxess_time_group_6_block','regs') %}
+        {{ 'Enabled' if r and r[0] == 1 else 'Disabled' }}
+      icon: mdi:toggle-switch
+
+    - name: FoxESS Time Group 6 Start Time
+      unique_id: foxess_time_group_6_start_time_state
+      state: >
+        {% set r = state_attr('sensor.foxess_time_group_6_block','regs') %}
+        {% if r and r|length > 1 %}
+          {% set v = r[1] %}
+          {{ '%02d:%02d' % (v // 256, v % 256) }}
+        {% else %} unknown {% endif %}
+      icon: mdi:clock-start
+
+    - name: FoxESS Time Group 6 End Time
+      unique_id: foxess_time_group_6_end_time_state
+      state: >
+        {% set r = state_attr('sensor.foxess_time_group_6_block','regs') %}
+        {% if r and r|length > 2 %}
+          {% set v = r[2] %}
+          {{ '%02d:%02d' % (v // 256, v % 256) }}
+        {% else %} unknown {% endif %}
+      icon: mdi:clock-end
+
+    - name: FoxESS Time Group 6 Work Mode
+      unique_id: foxess_time_group_6_work_mode_state
+      state: >
+        {% set r = state_attr('sensor.foxess_time_group_6_block','regs') %}
+        {% if r and r|length > 3 %}
+          {% set v = r[3] %}
+          {% if v == 1 %} Self-Use
+          {% elif v == 2 %} Feed-In
+          {% elif v == 3 %} BackUp
+          {% elif v == 4 %} Peak Shaving
+          {% elif v == 5 %} Power Station
+          {% elif v == 6 %} Force Charge
+          {% elif v == 7 %} Force Discharge
+          {% else %} Unknown ({{ v }})
+          {% endif %}
+        {% else %} unknown {% endif %}
+      icon: mdi:cog-outline
+
+    - name: FoxESS Time Group 6 MaxSoC
+      unique_id: foxess_time_group_6_maxsoc_state
+      unit_of_measurement: "%"
+      state: >
+        {% set r = state_attr('sensor.foxess_time_group_6_block','regs') %}
+        {% if r and r|length > 4 %}
+          {{ r[4] // 256 }}
+        {% else %} unknown {% endif %}
+      icon: mdi:battery-high
+
+    - name: FoxESS Time Group 6 MinSoC OnGrid
+      unique_id: foxess_time_group_6_minsoc_ongrid_state
+      unit_of_measurement: "%"
+      state: >
+        {% set r = state_attr('sensor.foxess_time_group_6_block','regs') %}
+        {% if r and r|length > 4 %}
+          {{ r[4] % 256 }}
+        {% else %} unknown {% endif %}
+      icon: mdi:battery-medium
+
+    - name: FoxESS Time Group 6 FDSOC
+      unique_id: foxess_time_group_6_fdsoc_state
+      unit_of_measurement: "%"
+      state: >
+        {% set r = state_attr('sensor.foxess_time_group_6_block','regs') %}
+        {% if r and r|length > 5 %}
+          {{ r[5] }}
+        {% else %} unknown {% endif %}
+      icon: mdi:battery-lock
+
+    - name: FoxESS Time Group 6 FDPWR
+      unique_id: foxess_time_group_6_fdpwr_state
+      unit_of_measurement: "W"
+      state: >
+        {% set r = state_attr('sensor.foxess_time_group_6_block','regs') %}
+        {% if r and r|length > 6 %}
+          {{ r[6] }}
+        {% else %} unknown {% endif %}
+      icon: mdi:flash
+
+- sensor:
+
+    - name: FoxESS Time Group 7 Block
+      unique_id: foxess_time_group_7_block
+      state: >
+        {% set raw = states('sensor.foxess_48070_48079_time_control_raw_block') %}
+        {% if raw not in ['unknown','unavailable',''] %}
+          ok
+        {% else %}
+          unavailable
+        {% endif %}
+      attributes:
+        regs: >
+          {% set raw = states('sensor.foxess_48070_48079_time_control_raw_block') %}
+          {% if raw not in ['unknown','unavailable',''] %}
+            {{ raw.split(',') | map('float') | map('int') | list }}
+          {% else %}
+            []
+          {% endif %}
+
+    - name: FoxESS Time Group 7 Flag
+      unique_id: foxess_time_group_7_flag_state
+      state: >
+        {% set r = state_attr('sensor.foxess_time_group_7_block','regs') %}
+        {{ 'Enabled' if r and r[0] == 1 else 'Disabled' }}
+      icon: mdi:toggle-switch
+
+    - name: FoxESS Time Group 7 Start Time
+      unique_id: foxess_time_group_7_start_time_state
+      state: >
+        {% set r = state_attr('sensor.foxess_time_group_7_block','regs') %}
+        {% if r and r|length > 1 %}
+          {% set v = r[1] %}
+          {{ '%02d:%02d' % (v // 256, v % 256) }}
+        {% else %} unknown {% endif %}
+      icon: mdi:clock-start
+
+    - name: FoxESS Time Group 7 End Time
+      unique_id: foxess_time_group_7_end_time_state
+      state: >
+        {% set r = state_attr('sensor.foxess_time_group_7_block','regs') %}
+        {% if r and r|length > 2 %}
+          {% set v = r[2] %}
+          {{ '%02d:%02d' % (v // 256, v % 256) }}
+        {% else %} unknown {% endif %}
+      icon: mdi:clock-end
+
+    - name: FoxESS Time Group 7 Work Mode
+      unique_id: foxess_time_group_7_work_mode_state
+      state: >
+        {% set r = state_attr('sensor.foxess_time_group_7_block','regs') %}
+        {% if r and r|length > 3 %}
+          {% set v = r[3] %}
+          {% if v == 1 %} Self-Use
+          {% elif v == 2 %} Feed-In
+          {% elif v == 3 %} BackUp
+          {% elif v == 4 %} Peak Shaving
+          {% elif v == 5 %} Power Station
+          {% elif v == 6 %} Force Charge
+          {% elif v == 7 %} Force Discharge
+          {% else %} Unknown ({{ v }})
+          {% endif %}
+        {% else %} unknown {% endif %}
+      icon: mdi:cog-outline
+
+    - name: FoxESS Time Group 7 MaxSoC
+      unique_id: foxess_time_group_7_maxsoc_state
+      unit_of_measurement: "%"
+      state: >
+        {% set r = state_attr('sensor.foxess_time_group_7_block','regs') %}
+        {% if r and r|length > 4 %}
+          {{ r[4] // 256 }}
+        {% else %} unknown {% endif %}
+      icon: mdi:battery-high
+
+    - name: FoxESS Time Group 7 MinSoC OnGrid
+      unique_id: foxess_time_group_7_minsoc_ongrid_state
+      unit_of_measurement: "%"
+      state: >
+        {% set r = state_attr('sensor.foxess_time_group_7_block','regs') %}
+        {% if r and r|length > 4 %}
+          {{ r[4] % 256 }}
+        {% else %} unknown {% endif %}
+      icon: mdi:battery-medium
+
+    - name: FoxESS Time Group 7 FDSOC
+      unique_id: foxess_time_group_7_fdsoc_state
+      unit_of_measurement: "%"
+      state: >
+        {% set r = state_attr('sensor.foxess_time_group_7_block','regs') %}
+        {% if r and r|length > 5 %}
+          {{ r[5] }}
+        {% else %} unknown {% endif %}
+      icon: mdi:battery-lock
+
+    - name: FoxESS Time Group 7 FDPWR
+      unique_id: foxess_time_group_7_fdpwr_state
+      unit_of_measurement: "W"
+      state: >
+        {% set r = state_attr('sensor.foxess_time_group_7_block','regs') %}
+        {% if r and r|length > 6 %}
+          {{ r[6] }}
+        {% else %} unknown {% endif %}
+      icon: mdi:flash
+
+- sensor:
+
+    - name: FoxESS Time Group 8 Block
+      unique_id: foxess_time_group_8_block
+      state: >
+        {% set raw = states('sensor.foxess_48080_48089_time_control_raw_block') %}
+        {% if raw not in ['unknown','unavailable',''] %}
+          ok
+        {% else %}
+          unavailable
+        {% endif %}
+      attributes:
+        regs: >
+          {% set raw = states('sensor.foxess_48080_48089_time_control_raw_block') %}
+          {% if raw not in ['unknown','unavailable',''] %}
+            {{ raw.split(',') | map('float') | map('int') | list }}
+          {% else %}
+            []
+          {% endif %}
+
+    - name: FoxESS Time Group 8 Flag
+      unique_id: foxess_time_group_8_flag_state
+      state: >
+        {% set r = state_attr('sensor.foxess_time_group_8_block','regs') %}
+        {{ 'Enabled' if r and r[0] == 1 else 'Disabled' }}
+      icon: mdi:toggle-switch
+
+    - name: FoxESS Time Group 8 Start Time
+      unique_id: foxess_time_group_8_start_time_state
+      state: >
+        {% set r = state_attr('sensor.foxess_time_group_8_block','regs') %}
+        {% if r and r|length > 1 %}
+          {% set v = r[1] %}
+          {{ '%02d:%02d' % (v // 256, v % 256) }}
+        {% else %} unknown {% endif %}
+      icon: mdi:clock-start
+
+    - name: FoxESS Time Group 8 End Time
+      unique_id: foxess_time_group_8_end_time_state
+      state: >
+        {% set r = state_attr('sensor.foxess_time_group_8_block','regs') %}
+        {% if r and r|length > 2 %}
+          {% set v = r[2] %}
+          {{ '%02d:%02d' % (v // 256, v % 256) }}
+        {% else %} unknown {% endif %}
+      icon: mdi:clock-end
+
+    - name: FoxESS Time Group 8 Work Mode
+      unique_id: foxess_time_group_8_work_mode_state
+      state: >
+        {% set r = state_attr('sensor.foxess_time_group_8_block','regs') %}
+        {% if r and r|length > 3 %}
+          {% set v = r[3] %}
+          {% if v == 1 %} Self-Use
+          {% elif v == 2 %} Feed-In
+          {% elif v == 3 %} BackUp
+          {% elif v == 4 %} Peak Shaving
+          {% elif v == 5 %} Power Station
+          {% elif v == 6 %} Force Charge
+          {% elif v == 7 %} Force Discharge
+          {% else %} Unknown ({{ v }})
+          {% endif %}
+        {% else %} unknown {% endif %}
+      icon: mdi:cog-outline
+
+    - name: FoxESS Time Group 8 MaxSoC
+      unique_id: foxess_time_group_8_maxsoc_state
+      unit_of_measurement: "%"
+      state: >
+        {% set r = state_attr('sensor.foxess_time_group_8_block','regs') %}
+        {% if r and r|length > 4 %}
+          {{ r[4] // 256 }}
+        {% else %} unknown {% endif %}
+      icon: mdi:battery-high
+
+    - name: FoxESS Time Group 8 MinSoC OnGrid
+      unique_id: foxess_time_group_8_minsoc_ongrid_state
+      unit_of_measurement: "%"
+      state: >
+        {% set r = state_attr('sensor.foxess_time_group_8_block','regs') %}
+        {% if r and r|length > 4 %}
+          {{ r[4] % 256 }}
+        {% else %} unknown {% endif %}
+      icon: mdi:battery-medium
+
+    - name: FoxESS Time Group 8 FDSOC
+      unique_id: foxess_time_group_8_fdsoc_state
+      unit_of_measurement: "%"
+      state: >
+        {% set r = state_attr('sensor.foxess_time_group_8_block','regs') %}
+        {% if r and r|length > 5 %}
+          {{ r[5] }}
+        {% else %} unknown {% endif %}
+      icon: mdi:battery-lock
+
+    - name: FoxESS Time Group 8 FDPWR
+      unique_id: foxess_time_group_8_fdpwr_state
+      unit_of_measurement: "W"
+      state: >
+        {% set r = state_attr('sensor.foxess_time_group_8_block','regs') %}
+        {% if r and r|length > 6 %}
+          {{ r[6] }}
+        {% else %} unknown {% endif %}
+      icon: mdi:flash
+
+- sensor:
+
+    - name: FoxESS Time Group 9 Block
+      unique_id: foxess_time_group_9_block
+      state: >
+        {% set raw = states('sensor.foxess_48090_48099_time_control_raw_block') %}
+        {% if raw not in ['unknown','unavailable',''] %}
+          ok
+        {% else %}
+          unavailable
+        {% endif %}
+      attributes:
+        regs: >
+          {% set raw = states('sensor.foxess_48090_48099_time_control_raw_block') %}
+          {% if raw not in ['unknown','unavailable',''] %}
+            {{ raw.split(',') | map('float') | map('int') | list }}
+          {% else %}
+            []
+          {% endif %}
+
+    - name: FoxESS Time Group 9 Flag
+      unique_id: foxess_time_group_9_flag_state
+      state: >
+        {% set r = state_attr('sensor.foxess_time_group_9_block','regs') %}
+        {{ 'Enabled' if r and r[0] == 1 else 'Disabled' }}
+      icon: mdi:toggle-switch
+
+    - name: FoxESS Time Group 9 Start Time
+      unique_id: foxess_time_group_9_start_time_state
+      state: >
+        {% set r = state_attr('sensor.foxess_time_group_9_block','regs') %}
+        {% if r and r|length > 1 %}
+          {% set v = r[1] %}
+          {{ '%02d:%02d' % (v // 256, v % 256) }}
+        {% else %} unknown {% endif %}
+      icon: mdi:clock-start
+
+    - name: FoxESS Time Group 9 End Time
+      unique_id: foxess_time_group_9_end_time_state
+      state: >
+        {% set r = state_attr('sensor.foxess_time_group_9_block','regs') %}
+        {% if r and r|length > 2 %}
+          {% set v = r[2] %}
+          {{ '%02d:%02d' % (v // 256, v % 256) }}
+        {% else %} unknown {% endif %}
+      icon: mdi:clock-end
+
+    - name: FoxESS Time Group 9 Work Mode
+      unique_id: foxess_time_group_9_work_mode_state
+      state: >
+        {% set r = state_attr('sensor.foxess_time_group_9_block','regs') %}
+        {% if r and r|length > 3 %}
+          {% set v = r[3] %}
+          {% if v == 1 %} Self-Use
+          {% elif v == 2 %} Feed-In
+          {% elif v == 3 %} BackUp
+          {% elif v == 4 %} Peak Shaving
+          {% elif v == 5 %} Power Station
+          {% elif v == 6 %} Force Charge
+          {% elif v == 7 %} Force Discharge
+          {% else %} Unknown ({{ v }})
+          {% endif %}
+        {% else %} unknown {% endif %}
+      icon: mdi:cog-outline
+
+    - name: FoxESS Time Group 9 MaxSoC
+      unique_id: foxess_time_group_9_maxsoc_state
+      unit_of_measurement: "%"
+      state: >
+        {% set r = state_attr('sensor.foxess_time_group_9_block','regs') %}
+        {% if r and r|length > 4 %}
+          {{ r[4] // 256 }}
+        {% else %} unknown {% endif %}
+      icon: mdi:battery-high
+
+    - name: FoxESS Time Group 9 MinSoC OnGrid
+      unique_id: foxess_time_group_9_minsoc_ongrid_state
+      unit_of_measurement: "%"
+      state: >
+        {% set r = state_attr('sensor.foxess_time_group_9_block','regs') %}
+        {% if r and r|length > 4 %}
+          {{ r[4] % 256 }}
+        {% else %} unknown {% endif %}
+      icon: mdi:battery-medium
+
+    - name: FoxESS Time Group 9 FDSOC
+      unique_id: foxess_time_group_9_fdsoc_state
+      unit_of_measurement: "%"
+      state: >
+        {% set r = state_attr('sensor.foxess_time_group_9_block','regs') %}
+        {% if r and r|length > 5 %}
+          {{ r[5] }}
+        {% else %} unknown {% endif %}
+      icon: mdi:battery-lock
+
+    - name: FoxESS Time Group 9 FDPWR
+      unique_id: foxess_time_group_9_fdpwr_state
+      unit_of_measurement: "W"
+      state: >
+        {% set r = state_attr('sensor.foxess_time_group_9_block','regs') %}
+        {% if r and r|length > 6 %}
+          {{ r[6] }}
+        {% else %} unknown {% endif %}
+      icon: mdi:flash
