@@ -1,5 +1,5 @@
 # ============================================================
-# FoxESS Modbus Sensors (wersja ostateczna)
+# FoxESS Modbus Sensors (final version)
 # ============================================================
 
 - name: foxess_modbus
@@ -22,8 +22,8 @@
       count: 16
       scan_interval: 3600
 
-    - name: FoxESS 30016 Serial Number
-      unique_id: foxess_30016_serial_number
+    - name: FoxESS 30016 SN
+      unique_id: foxess_30016_sn
       slave: 247
       address: 30016
       data_type: string
